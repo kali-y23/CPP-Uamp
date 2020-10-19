@@ -24,11 +24,24 @@ void MyDb::checkDir() {
 void MyDb::createIfNotExist() {
     QSqlQuery query(QSqlDatabase::database("myDb"));
 
-    if (!query.exec("SELECT * FROM files")) {
-        query.exec("CREATE TABLE files (name varchar(255), path varchar(255));");
-        qDebug() << "Create new Db";
+    if (!query.exec("SELECT * FROM playlist_content")) {
+        query.exec("create table if not exists songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                                                      name varchar(255),\
+                                                      path varchar(255));\
+                    ");
+        query.exec("create table if not exists playlists (id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                                                          name varchar(255));\
+                    ");
+        query.exec("create table if not exists playlist_content (id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                                                                 playlist_id INTEGER,\
+                                                                 song_id INTEGER,\
+                                                                 FOREIGN KEY (playlist_id) REFERENCES playlists (id),\
+                                                                 FOREIGN KEY (song_id) REFERENCES songs (id));\
+                    ");
+
+        qDebug() << "Creating new Db";
     }
     else {
-        qDebug() << "Open existing Db";
+        qDebug() << "Opening existing Db";
     }
 }
