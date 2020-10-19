@@ -32,32 +32,3 @@ QTableView
 	alternate-background-color: #565656;
   	background-color: #696969;
 }
-
-QTreeView
-{
-  	background-color: #696969;
-}
-
-QHeaderView::section {
- 	background-color: #565656;
-}
-
-QScrollBar {
- 	background-color: #565656;
-}
-
-QTableView::item:selected {
-	background-color: DarkOrange;
-}
-
-MyCursor {
- 	background-color: DarkOrange;
-}
-
-myTreeWidget {
- 	background-color: #696969;
-}
-
-myTreeScroll {
-    background-color: #696969;
-}

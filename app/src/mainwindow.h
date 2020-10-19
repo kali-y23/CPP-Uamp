@@ -6,6 +6,7 @@
 #include <QtWidgets>
 
 #include "qplayer.h"
+#include "mediator.h"
 
 class QPlayer;
 
@@ -28,9 +29,13 @@ private:
     QTableView *view_songs;
     QPlayer *player;
 
+    Mediator *mediator = new Mediator;
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void paintEvent(QPaintEvent *) override;
 
 private:
     void initToolbar();
