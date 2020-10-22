@@ -32,3 +32,12 @@ QTableView
 	alternate-background-color: #565656;
   	background-color: #696969;
 }
+
+
+#sidebar {
+    color: #1E1D1D;
+	background-color: DarkOrange;
+	font-weight: bold;
+	font-size: 44px;
+	border-radius: 5px;
+}

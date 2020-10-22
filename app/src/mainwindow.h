@@ -1,42 +1,23 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-
 #include <QtWidgets>
 
-#include "qplayer.h"
-#include "mediator.h"
+#include "component.h"
 
-class QPlayer;
+class Component;
+class Mediator;
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Component
 {
     Q_OBJECT
 
 private:
-    QWidget *central_widget;
-
-    QHBoxLayout *layout_outer;
-    QVBoxLayout *layout_inner;
-    QSplitter *splitter;
-
     QToolBar *toolBar;
-    QMenuBar *menuBar;
 
-    QWidget *sidebar_widget;
-    QWidget *content_widget;
-    QTableView *view_songs;
-    QPlayer *player;
-
-    Mediator *mediator = new Mediator;
+    void initToolbar();
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Mediator *mediator, QWidget *parent = nullptr);
     ~MainWindow();
 
-    void paintEvent(QPaintEvent *) override;
-
-private:
-    void initToolbar();
 };

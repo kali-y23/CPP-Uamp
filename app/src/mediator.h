@@ -5,9 +5,28 @@
 
 #include <QtWidgets>
 
-#include "mediator.h"
+#include "mainwindow.h"
+#include "login.h"
+#include "general.h"
 
-class Mediator
+class MainWindow;
+class LoginScreen;
+class GeneralScreen;
+
+class Mediator : public QObject
 {
+    Q_OBJECT
 
+private:
+    MainWindow *mainWindow;
+    LoginScreen *loginScreen;
+    // RegistrationScreen *registrationS
+    GeneralScreen *generalScreen;
+
+public:
+    Mediator();
+    ~Mediator();
+
+public slots:
+    void signIn();
 };
