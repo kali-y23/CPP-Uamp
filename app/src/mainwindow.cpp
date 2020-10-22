@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     sidebar_widget = new QWidget(central_widget);
     content_widget = new QWidget(central_widget);
 
-
     initToolbar();
     menuBar = new QMenuBar(this);
 
@@ -22,11 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
     splitter->addWidget(content_widget);
     splitter->setSizes({150, 700});
 
+    layout_inner = new QVBoxLayout(content_widget);
+    player = new QPlayer(content_widget);
+    view_songs = new QTableView(content_widget);
+    layout_inner->addWidget(player);
+    layout_inner->addWidget(view_songs);
 }
 
 MainWindow::~MainWindow()
 {
-
 
 }
 

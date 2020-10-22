@@ -12,7 +12,7 @@ set(TARGET uamp)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-set(SOURCES main.cpp src/mainwindow.cpp)
+set(SOURCES main.cpp src/mainwindow.cpp src/qplayer.cpp src/qsuperbutton.cpp)
 set(HEADERS src/mainwindow.h)
 set(UI Forms/mainwindow.ui)
 
