@@ -5,7 +5,9 @@
 
 enum class ButtonType {
     Play,
-    Loop
+    Loop,
+    Shuffle,
+    Playlist
 };
 
 class QSuperButton : public QToolButton {
@@ -21,6 +23,8 @@ public:
 private:
     void createPlayList(void);
     void createLoopList(void);
+    void createShuffleList(void);
+    void createPlaylistList(void);
 
 public slots:
     void click();

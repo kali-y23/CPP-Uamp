@@ -8,23 +8,38 @@ class QSuperButton;
 class QPlayer : public QWidget {
     Q_OBJECT
 
-    QProgressBar *progress_bar_song;
-    QProgressBar *progress_bar_sound;
+    QHBoxLayout *main;
+    QHBoxLayout *left;
+    QGridLayout *center;
+    QHBoxLayout *right;
+
+    QWidget *player_widget;
+
+    QSlider *slider_song;
+    QSlider *slider_sound;
 
     QSuperButton *button_play;
-    QSuperButton *button_next;
-    QSuperButton *button_prev;
+    QToolButton *button_next;
+    QToolButton *button_prev;
+    QToolButton *button_skip_fwd;
+    QToolButton *button_skip_bck;
     QSuperButton *button_shuffle;
     QSuperButton *button_loop;
+    QSuperButton *button_playlist;
 
+    QLabel *label_start_time;
+    QLabel *label_end_time;
     QLabel *label_title;
     QLabel *label_artist;
 
-    QIcon *icon_quiet;
-    QIcon *icon_loud;
+    QLabel *icon_quiet;
+    QLabel *icon_loud;
+
+    QLineEdit *edit_search;
 public:
     QPlayer(QWidget *parent = nullptr);
     ~QPlayer();
 
-
+private:
+    void setupLayouts(void);
 };

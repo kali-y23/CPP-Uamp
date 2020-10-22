@@ -3,5 +3,18 @@
         <file>qmain.qss</file>
         <file>play.png</file>
         <file>pause.png</file>
+        <file>next.png</file>
+        <file>prev.png</file>
+        <file>skip_fwd.png</file>
+        <file>skip_back.png</file>
+        <file>quiet.png</file>
+        <file>loud.png</file>
+        <file>repeat.png</file>
+        <file>repeat_on.png</file>
+        <file>repeat_one.png</file>
+        <file>shuffle.png</file>
+        <file>shuffle_on.png</file>
+        <file>playlist.png</file>
+        <file>playlist_on.png</file>
     </qresource>
 </RCC>
