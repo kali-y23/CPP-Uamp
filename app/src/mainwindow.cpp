@@ -1,36 +1,16 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-                        QMainWindow(parent)
+MainWindow::MainWindow(Mediator *mediator, QWidget *parent) :
+                        QMainWindow(parent), Component(mediator)
 {
-    central_widget = new QWidget(this);
-    setCentralWidget(central_widget);
-    setGeometry(200, 200, 1800, 1000);
-
-    // sidebar_widget = new QSideBar(central_widget);
-    content_widget = new QWidget(central_widget);
-
+    setCentralWidget(new QWidget(this));
+    layoutOuter = new QStackedLayout(centralWidget());
+    resize(1200, 700);
     initToolbar();
-    menuBar = new QMenuBar(this);
-
-    layout_outer = new QHBoxLayout(central_widget);
-    splitter = new QSplitter(central_widget);
-    layout_outer->addWidget(splitter);
-
-    // splitter->addWidget(sidebar_widget);
-    splitter->addWidget(content_widget);
-    splitter->setSizes({150, 700});
-
-    layout_inner = new QVBoxLayout(content_widget);
-    player = new QPlayer(content_widget);
-    view_songs = new QTableView(content_widget);
-    layout_inner->addWidget(player);
-    layout_inner->addWidget(view_songs);
 }
 
 MainWindow::~MainWindow()
 {
-
 }
 
 void MainWindow::initToolbar() {
@@ -42,12 +22,23 @@ void MainWindow::initToolbar() {
     toolBar->addAction("foo");
     toolBar->addAction("bar");
     addToolBar(Qt::LeftToolBarArea, toolBar);
+    toolBar->hide();
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+void MainWindow::setWidget(QWidget *widget, bool tool) {
+    layoutOuter->setCurrentWidget(widget);
+    if (tool) {
+        toolBar->show();
+    }
+    else {
+        toolBar->hide();
+    }
 }
+
+// void MainWindow::paintEvent(QPaintEvent *)
+// {
+//     QStyleOption opt;
+//     opt.init(this);
+//     QPainter p(this);
+//     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+// }
