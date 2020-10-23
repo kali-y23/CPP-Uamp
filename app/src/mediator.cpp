@@ -6,6 +6,8 @@ Mediator::Mediator() : QObject() {
     generalScreen = new GeneralScreen(this);
     mainWindow->setCentralWidget(loginScreen);
     mainWindow->show();
+    //reinterpret_cast<const QObject *> (mediator)
+    connect(this, SIGNAL(signIn(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
 }
 
 Mediator::~Mediator() {
@@ -13,5 +15,5 @@ Mediator::~Mediator() {
 }
 
 void Mediator::signIn() {
-    mainWindow->setCentralWidget(generalScreen);
+    emit signIn(generalScreen, true);
 }

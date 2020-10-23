@@ -11,7 +11,7 @@ class LoginScreen : public QWidget, public Component
     Q_OBJECT
 
 private:
-    QVBoxLayout *layoutOuter;
+    QGridLayout *layoutOuter;
     QLineEdit *loginField;
     QLineEdit *passwordField;
     QPushButton *signInButton;

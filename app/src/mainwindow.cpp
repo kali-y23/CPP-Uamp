@@ -3,7 +3,7 @@
 MainWindow::MainWindow(Mediator *mediator, QWidget *parent) :
                         QMainWindow(parent), Component(mediator)
 {
-    setGeometry(200, 200, 1800, 1000);
+    resize(1200, 700);
     initToolbar();
 }
 
@@ -21,4 +21,15 @@ void MainWindow::initToolbar() {
     toolBar->addAction("foo");
     toolBar->addAction("bar");
     addToolBar(Qt::LeftToolBarArea, toolBar);
+    toolBar->hide();
+}
+
+void MainWindow::setWidget(QWidget *widget, bool tool) {
+    setCentralWidget(widget);
+    if (tool) {
+        toolBar->show();
+    }
+    else {
+        toolBar->hide();
+    }
 }

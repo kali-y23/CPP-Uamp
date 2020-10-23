@@ -29,4 +29,7 @@ public:
 
 public slots:
     void signIn();
+
+signals:
+    void signIn(QWidget *widget, bool tool);
 };
