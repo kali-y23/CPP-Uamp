@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(central_widget);
     setGeometry(200, 200, 1800, 1000);
 
-    sidebar_widget = new QWidget(central_widget);
+    // sidebar_widget = new QSideBar(central_widget);
     content_widget = new QWidget(central_widget);
 
     initToolbar();
@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     splitter = new QSplitter(central_widget);
     layout_outer->addWidget(splitter);
 
-    splitter->addWidget(sidebar_widget);
+    // splitter->addWidget(sidebar_widget);
     splitter->addWidget(content_widget);
     splitter->setSizes({150, 700});
 

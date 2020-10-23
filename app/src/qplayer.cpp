@@ -37,7 +37,7 @@ QPlayer::QPlayer(QWidget *parent) {
 
     player_widget = new QWidget();
     player_widget->setObjectName("Player");
-    player_widget->setMinimumSize(200, 200);
+
     setupLayouts();
 
     icon_quiet->setPixmap(QPixmap(":/quiet.png").scaled(30, 30));
@@ -63,11 +63,11 @@ QPlayer::QPlayer(QWidget *parent) {
 
     center->addWidget(button_shuffle, 0, 0, 1, 1);
     center->addWidget(button_loop, 0, 3, 1, 1);
-    center->addWidget(label_title, 0, 1, 2, 1, Qt::AlignCenter);
-    center->addWidget(label_artist, 1, 1, 2, 2, Qt::AlignCenter);
+    center->addWidget(label_title, 0, 1, 1, 2, Qt::AlignCenter);
+    center->addWidget(label_artist, 1, 1, 1, 2, Qt::AlignCenter);
     center->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
     center->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
-    center->addWidget(slider_song, 3, 0, 5, 5);
+    center->addWidget(slider_song, 3, 0, 1, 5);
 
     right->addSpacing(100);
     right->addWidget(icon_quiet);

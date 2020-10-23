@@ -7,8 +7,10 @@
 
 #include "qplayer.h"
 #include "mediator.h"
+#include "qsidebar.h"
 
 class QPlayer;
+class QSideBar;
 
 class MainWindow : public QMainWindow
 {
@@ -24,7 +26,7 @@ private:
     QToolBar *toolBar;
     QMenuBar *menuBar;
 
-    QWidget *sidebar_widget;
+    QSideBar *sidebar_widget;
     QWidget *content_widget;
     QTableView *view_songs;
     QPlayer *player;
