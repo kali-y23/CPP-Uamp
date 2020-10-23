@@ -7,10 +7,12 @@
 
 #include "mainwindow.h"
 #include "login.h"
+#include "registration.h"
 #include "general.h"
 
 class MainWindow;
 class LoginScreen;
+class RegistrationScreen;
 class GeneralScreen;
 
 class Mediator : public QObject
@@ -20,7 +22,7 @@ class Mediator : public QObject
 private:
     MainWindow *mainWindow;
     LoginScreen *loginScreen;
-    // RegistrationScreen *registrationS
+    RegistrationScreen *registrationScreen;
     GeneralScreen *generalScreen;
 
 public:
@@ -29,7 +31,9 @@ public:
 
 public slots:
     void signIn();
+    void registrationOpen();
+    void backToSignIn();
 
 signals:
-    void signIn(QWidget *widget, bool tool);
+    void changeWidget(QWidget *widget, bool tool);
 };

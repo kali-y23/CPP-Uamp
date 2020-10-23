@@ -3,6 +3,8 @@
 MainWindow::MainWindow(Mediator *mediator, QWidget *parent) :
                         QMainWindow(parent), Component(mediator)
 {
+    setCentralWidget(new QWidget(this));
+    layoutOuter = new QStackedLayout(centralWidget());
     resize(1200, 700);
     initToolbar();
 }
@@ -25,7 +27,7 @@ void MainWindow::initToolbar() {
 }
 
 void MainWindow::setWidget(QWidget *widget, bool tool) {
-    setCentralWidget(widget);
+    layoutOuter->setCurrentWidget(widget);
     if (tool) {
         toolBar->show();
     }

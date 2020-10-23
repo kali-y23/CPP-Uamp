@@ -12,8 +12,8 @@ set(TARGET uamp)
 
 find_package(Qt5 COMPONENTS Widgets Sql REQUIRED)
 
-set(SOURCES main.cpp src/mainwindow.cpp src/mediator.cpp src/myDb.cpp src/component.cpp src/login.cpp src/general.cpp)
-set(HEADERS src/mainwindow.h src/mediator.h src/myDb.h src/component.h src/login.h src/general.h)
+set(SOURCES main.cpp src/mainwindow.cpp src/mediator.cpp src/myDb.cpp src/component.cpp src/login.cpp src/general.cpp  src/registration.cpp)
+set(HEADERS src/mainwindow.h src/mediator.h src/myDb.h src/component.h src/login.h src/general.h  src/registrtion.h)
 set(UI Forms/mainwindow.ui)
 
 qt5_add_resources(SOURCES resources/resources.qrc)

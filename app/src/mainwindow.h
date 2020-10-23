@@ -20,6 +20,8 @@ public:
     explicit MainWindow(Mediator *mediator, QWidget *parent = nullptr);
     ~MainWindow();
 
+    QStackedLayout *layoutOuter;
+
 public slots:
     void setWidget(QWidget *widget, bool tool);
 
