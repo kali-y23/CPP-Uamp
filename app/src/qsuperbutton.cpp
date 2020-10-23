@@ -8,7 +8,7 @@ QSuperButton::QSuperButton(ButtonType type, QWidget *parent) {
 
     if (type == ButtonType::Loop) {
         createLoopList();
-        setIconSize({20, 20});
+        setIconSize({30, 30});
     }
     else if (type == ButtonType::Play) {
         createPlayList();
@@ -16,7 +16,7 @@ QSuperButton::QSuperButton(ButtonType type, QWidget *parent) {
     }
     else if (type == ButtonType::Shuffle) {
         createShuffleList();
-        setIconSize({20, 20});
+        setIconSize({30, 30});
     }
     else if (type == ButtonType::Playlist) {
         createPlaylistList();

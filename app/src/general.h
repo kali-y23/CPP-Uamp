@@ -16,10 +16,8 @@ class GeneralScreen : public QWidget, public Component
     Q_OBJECT
 
 private:
-    QWidget *central_widget;
-
-    QHBoxLayout *layout_outer;
-    QVBoxLayout *layout_inner;
+    QVBoxLayout *layout_outer;
+    QHBoxLayout *layout_inner;
     QSplitter *splitter;
 
     QMenuBar *menuBar;
