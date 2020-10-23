@@ -28,6 +28,13 @@ void Mediator::registrationOpen() {
     emit changeWidget(registrationScreen, false);
 }
 
+void Mediator::registrationTry() {
+    emit registrationTry(registrationScreen->getLogin(),
+                         registrationScreen->getPassword(),
+                         registrationScreen->getPasswordRepeat()
+                        );
+}
+
 void Mediator::backToSignIn() {
     emit changeWidget(loginScreen, false);
 }

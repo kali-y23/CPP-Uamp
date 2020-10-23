@@ -32,8 +32,10 @@ public:
 public slots:
     void signIn();
     void registrationOpen();
+    void registrationTry();
     void backToSignIn();
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
+    void registrationTry(QString login, QString password, QString passwordRepeat);
 };

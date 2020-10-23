@@ -35,9 +35,27 @@ RegistrationScreen::RegistrationScreen(const Mediator *mediator_, QWidget *paren
     registrationButton->setMinimumHeight(50);
 
     connect(signInButton, SIGNAL(clicked()), reinterpret_cast<const QObject *> (mediator), SLOT(backToSignIn()));
+    connect(registrationButton, SIGNAL(clicked()), reinterpret_cast<const QObject *> (mediator), SLOT(registrationTry()));
 }
 
 RegistrationScreen::~RegistrationScreen()
 {
 
+}
+
+Qstring RegistrationScreen::getLogin(){
+    return loginField->text();
+}
+
+Qstring RegistrationScreen::getPassword() {
+    return passwordField->text();
+}
+Qstring RegistrationScreen::getPasswordRepeat(){
+    return passwordRepeatField->text();
+}
+
+void RegistrationScreen::clearData() {
+    loginField->clear();
+    passwordField->clear();
+    passwordRepeatField->clear();
 }
