@@ -5,11 +5,13 @@
 #include "component.h"
 #include "qplayer.h"
 #include "qsidebar.h"
+#include "mytable.h"
 
 class Component;
 class Mediator;
 class QPlayer;
 class QSideBar;
+class MyTable;
 
 class GeneralScreen : public QWidget, public Component
 {
@@ -26,7 +28,7 @@ private:
 
     QSideBar *sidebar_widget;
     QWidget *content_widget;
-    QTableView *view_songs;
+    MyTable *view_songs;
     QPlayer *player;
 
 public:

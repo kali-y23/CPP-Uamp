@@ -19,7 +19,7 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
 
     layout_inner = new QVBoxLayout(content_widget);
     player = new QPlayer(content_widget);
-    view_songs = new QTableView(content_widget);
+    view_songs = new MyTable(mediator, content_widget);
     layout_inner->addWidget(player);
     layout_inner->addWidget(view_songs);
 }
