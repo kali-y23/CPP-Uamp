@@ -9,11 +9,13 @@
 #include "login.h"
 #include "registration.h"
 #include "general.h"
+#include "user.h"
 
 class MainWindow;
 class LoginScreen;
 class RegistrationScreen;
 class GeneralScreen;
+class User;
 
 class Mediator : public QObject
 {
@@ -21,9 +23,12 @@ class Mediator : public QObject
 
 private:
     MainWindow *mainWindow;
+
     LoginScreen *loginScreen;
     RegistrationScreen *registrationScreen;
     GeneralScreen *generalScreen;
+
+    User *user;
 
 public:
     Mediator();

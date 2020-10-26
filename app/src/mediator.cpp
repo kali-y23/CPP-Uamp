@@ -21,6 +21,9 @@ Mediator::~Mediator() {
 }
 
 void Mediator::signIn() {
+    user = new User(this);
+    user->setId(0);
+    user->setLogin("Test");
     emit changeWidget(generalScreen, true);
 }
 

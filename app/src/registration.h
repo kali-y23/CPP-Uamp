@@ -22,9 +22,9 @@ public:
     explicit RegistrationScreen(const Mediator *mediator_, QWidget *parent = nullptr);
     ~RegistrationScreen();
 
-    Qstring getLogin();
-    Qstring getPassword();
-    Qstring getPasswordRepeat();
+    QString getLogin();
+    QString getPassword();
+    QString getPasswordRepeat();
 
     void clearData();
 };

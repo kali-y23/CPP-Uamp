@@ -43,14 +43,14 @@ RegistrationScreen::~RegistrationScreen()
 
 }
 
-Qstring RegistrationScreen::getLogin(){
+QString RegistrationScreen::getLogin(){
     return loginField->text();
 }
 
-Qstring RegistrationScreen::getPassword() {
+QString RegistrationScreen::getPassword() {
     return passwordField->text();
 }
-Qstring RegistrationScreen::getPasswordRepeat(){
+QString RegistrationScreen::getPasswordRepeat(){
     return passwordRepeatField->text();
 }
 
