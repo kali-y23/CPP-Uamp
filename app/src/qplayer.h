@@ -9,9 +9,8 @@ class QPlayer : public QWidget {
     Q_OBJECT
 
     QHBoxLayout *main;
-    QHBoxLayout *left;
-    QGridLayout *center;
-    QHBoxLayout *right;
+    QHBoxLayout *left; // TODO: REFACTOR!!!
+    QGridLayout *center; // TODO: REFACTOR!!!
 
     QWidget *player_widget;
 

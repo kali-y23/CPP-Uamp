@@ -5,7 +5,8 @@
 class QSideBar : public QWidget {
     Q_OBJECT
 
-    QStackedLayout *layout_main;
+    QStackedLayout *layout_stacked;
+    QVBoxLayout *layout_main;
 
     QWidget *widget_treeview;
     QVBoxLayout *layout_treeview;
@@ -16,8 +17,7 @@ public:
     QSideBar(QWidget *parent = nullptr);
     ~QSideBar();
 
-    void hideTreeView();
-    void showTreeView();
+    void switchToTreeView();
 
 private:
     void setupTreeView();

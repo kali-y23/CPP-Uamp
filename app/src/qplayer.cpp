@@ -3,11 +3,7 @@
 #include <iostream>
 
 QPlayer::QPlayer(QWidget *parent) {
-    
-
-    // progress_bar_song = new QSlider(box);
-    // QSlider *progress_bar_sound;
-
+    setMaximumHeight(130);
     button_play = new QSuperButton(ButtonType::Play);
     button_prev = new QToolButton();
     button_next = new QToolButton();
@@ -37,6 +33,7 @@ QPlayer::QPlayer(QWidget *parent) {
 
     player_widget = new QWidget();
     player_widget->setObjectName("Player");
+    player_widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     setupLayouts();
 
@@ -52,13 +49,16 @@ QPlayer::QPlayer(QWidget *parent) {
 
     edit_search = new QLineEdit();
     edit_search->setPlaceholderText("Search");
+    edit_search->setMinimumWidth(100);
+    edit_search->setMaximumWidth(300);
 
+    left->addSpacing(30);
     left->addWidget(button_prev);
     left->addWidget(button_skip_bck);
     left->addWidget(button_play);
     left->addWidget(button_skip_fwd);
     left->addWidget(button_next);
-    left->addSpacing(100);
+    left->addSpacing(80);
     left->addWidget(player_widget);
 
     center->addWidget(button_shuffle, 0, 0, 1, 1);
@@ -69,23 +69,20 @@ QPlayer::QPlayer(QWidget *parent) {
     center->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
     center->addWidget(slider_song, 3, 0, 1, 5);
 
-    right->addSpacing(100);
-    right->addWidget(icon_quiet);
-    right->addWidget(slider_sound);
-    right->addWidget(icon_loud);
-    right->addSpacing(30);
-    right->addWidget(edit_search);
-    right->addSpacing(30);
-    right->addWidget(button_playlist);
+    left->addSpacing(80);
+    left->addWidget(icon_quiet);
+    left->addWidget(slider_sound);
+    left->addWidget(icon_loud);
+    left->addSpacing(30);
+    left->addWidget(edit_search);
+    left->addSpacing(30);
+    left->addWidget(button_playlist);
+    left->addSpacing(30);
 
 }
 
 QPlayer::~QPlayer() {
     delete main;
-
-    // delete left;
-    // delete center;
-    // delete right;
 }
 
 void QPlayer::setupLayouts() {
@@ -93,9 +90,6 @@ void QPlayer::setupLayouts() {
 
     left = new QHBoxLayout();
     center = new QGridLayout(player_widget);
-    right = new QHBoxLayout();
 
     main->addLayout(left);
-    // main->addLayout(center);
-    main->addLayout(right);
 }

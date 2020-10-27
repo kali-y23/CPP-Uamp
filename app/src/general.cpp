@@ -3,25 +3,25 @@
 GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
                         QWidget(parent), Component(mediator)
 {
-    // sidebar_widget = new QSideBar(central_widget);
-    // sidebar_widget->setObjectName("sidebar");
-    content_widget = new QWidget(central_widget);
-
+    player = new QPlayer(this);
     menuBar = new QMenuBar(this);
+    content_widget = new QWidget(this);
+    layout_outer = new QVBoxLayout(this);
 
-    layout_outer = new QHBoxLayout(this);
-    splitter = new QSplitter(this);
-    layout_outer->addWidget(splitter);
+    layout_outer->addWidget(player);
+    layout_outer->addWidget(content_widget);
 
-    // splitter->addWidget(sidebar_widget);
-    splitter->addWidget(content_widget);
-    splitter->setSizes({150, 700});
+    layout_inner = new QHBoxLayout(content_widget);
+    splitter = new QSplitter;
+    layout_inner->addWidget(splitter);
 
-    layout_inner = new QVBoxLayout(content_widget);
-    player = new QPlayer(content_widget);
+    sidebar_widget = new QSideBar(content_widget);
+    sidebar_widget->setObjectName("sidebar");
     view_songs = new MyTable(mediator, content_widget);
-    layout_inner->addWidget(player);
-    layout_inner->addWidget(view_songs);
+
+    splitter->addWidget(sidebar_widget);
+    splitter->addWidget(view_songs);
+    splitter->setSizes({150, 700});
 }
 
 GeneralScreen::~GeneralScreen()
