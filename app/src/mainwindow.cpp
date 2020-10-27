@@ -14,15 +14,18 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initToolbar() {
+    action_sign_out = new QAction("Sign Out");
     toolBar = new QToolBar(this);
+
     toolBar->setAllowedAreas(Qt::LeftToolBarArea);
     toolBar->setFloatable(false);
     toolBar->setOrientation(Qt::Vertical);
     toolBar->setMovable(false);
-    toolBar->addAction("foo");
-    toolBar->addAction("bar");
+    toolBar->addAction(action_sign_out);
     addToolBar(Qt::LeftToolBarArea, toolBar);
     toolBar->hide();
+
+    QObject::connect(action_sign_out, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
 }
 
 void MainWindow::setWidget(QWidget *widget, bool tool) {

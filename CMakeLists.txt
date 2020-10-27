@@ -13,3 +13,4 @@ set(TARGET utext)
 project(${TARGET} LANGUAGES CXX)
 
 add_subdirectory(app)
+add_subdirectory(3dparty/taglib)

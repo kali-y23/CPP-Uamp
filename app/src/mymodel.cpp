@@ -92,7 +92,7 @@ void MyModel::setNewData(QVector<Tags>&& data) {
     emit layoutChanged();
 }
 
-void MyModel::addData(Tags&& data) {
+void MyModel::addData(const Tags& data) {
     m_data.push_back(data);
     emit layoutChanged();
 }

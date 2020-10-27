@@ -12,7 +12,7 @@ class MyModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
-    QVector<QString> m_headers = {"Name", "Audio file path"};
+    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number", "Audio file path"};
     QVector<Tags> m_data;
     bool editable = false;
     int m_cols = m_headers.size();
@@ -48,7 +48,7 @@ public:
 
     void setNewData(QVector<Tags>&& data);
 
-    void addData(Tags&& data);
+    void addData(const Tags& data);
 
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 };

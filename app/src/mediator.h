@@ -11,6 +11,7 @@
 #include "registration.h"
 #include "general.h"
 #include "user.h"
+#include "libraryManager.h"
 
 class MainWindow;
 class LoginScreen;
@@ -24,6 +25,8 @@ class Mediator : public QObject
 
 private:
     MainWindow *mainWindow;
+
+    LibraryManager *libraryManager;
 
     LoginScreen *loginScreen;
     RegistrationScreen *registrationScreen;
@@ -41,7 +44,12 @@ public slots:
     void registrationTry();
     void backToSignIn();
 
+    // void loadSongsFromDB();
+    void initImport(const QString& path);
+    void slotAddSong(const Tags& tags);
+
 signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
+    void addSongsToLibrary(const QString& path);
 };

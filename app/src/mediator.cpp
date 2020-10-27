@@ -1,6 +1,7 @@
 #include "mediator.h"
 
 Mediator::Mediator() : QObject() {
+    libraryManager = new LibraryManager(this);
     mainWindow = new MainWindow(this);
     loginScreen = new LoginScreen(this);
     mainWindow->layoutOuter->addWidget(loginScreen);
@@ -13,9 +14,7 @@ Mediator::Mediator() : QObject() {
     mainWindow->show();
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
-
-    Tags tags("aaaa", "/Users/mlibovych/Desktop/P.I.M.P..mp3", true);
-    generalScreen->getView()->getModel()->addData(std::move(tags));
+    connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
 }
 
 
@@ -43,4 +42,13 @@ void Mediator::registrationTry() {
 
 void Mediator::backToSignIn() {
     emit changeWidget(loginScreen, false);
+}
+
+void Mediator::initImport(const QString& path) {
+    emit addSongsToLibrary(path);
+}
+
+void Mediator::slotAddSong(const Tags& tags) {
+    // Tags tags("aaaa", "/Users/mlibovych/Desktop/P.I.M.P..mp3", true);
+    generalScreen->getView()->getModel()->addData(tags);
 }

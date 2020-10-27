@@ -1,19 +1,7 @@
 #include "qsidebar.h"
-//     QWidget *widget_treeview;
-//     QFileSystemModel *model_filesystem;
-//     QTreeView *tree_view;
 
-// public:
-//     QSideBar(QWidget *parent = nullptr);
-//     ~QSideBar();
-
-//     hideTreeView();
-//     showTreeView();
-
-// private:
-//     setupTreeView();
-
-QSideBar::QSideBar(QWidget *parent) {
+QSideBar::QSideBar(const Mediator *mediator, QWidget *parent) : 
+                   QWidget(parent), Component(mediator) {
     layout_main = new QVBoxLayout(this);
     layout_stacked = new QStackedLayout;
 
@@ -38,12 +26,11 @@ void QSideBar::switchToTreeView() {
 void QSideBar::setupTreeView() {
     widget_treeview = new QWidget;
     layout_treeview = new QVBoxLayout(widget_treeview);
-    model_filesystem = new QFileSystemModel;
-    tree_view = new QTreeView;
+    tree_view = new MyTreeView(mediator);
 
-    model_filesystem->setRootPath(QDir::currentPath());
-    tree_view->setModel(model_filesystem);
+    QLabel *label = new QLabel("  Choose a song or a directory with songs");
+    layout_treeview->addWidget(label);
     layout_treeview->addWidget(tree_view);
 }
 
-
+// void QAbstractItemView::mouseDoubleClickEvent(QMouseEvent *event)

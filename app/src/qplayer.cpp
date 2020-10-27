@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-QPlayer::QPlayer(QWidget *parent) {
-    setMaximumHeight(130);
+QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator) {
+    setMaximumHeight(140);
     button_play = new QSuperButton(ButtonType::Play);
     button_prev = new QToolButton();
     button_next = new QToolButton();
@@ -52,32 +52,32 @@ QPlayer::QPlayer(QWidget *parent) {
     edit_search->setMinimumWidth(100);
     edit_search->setMaximumWidth(300);
 
-    left->addSpacing(30);
-    left->addWidget(button_prev);
-    left->addWidget(button_skip_bck);
-    left->addWidget(button_play);
-    left->addWidget(button_skip_fwd);
-    left->addWidget(button_next);
-    left->addSpacing(80);
-    left->addWidget(player_widget);
+    main->addSpacing(30);
+    main->addWidget(button_prev);
+    main->addWidget(button_skip_bck);
+    main->addWidget(button_play);
+    main->addWidget(button_skip_fwd);
+    main->addWidget(button_next);
+    main->addSpacing(80);
+    main->addWidget(player_widget);
 
-    center->addWidget(button_shuffle, 0, 0, 1, 1);
-    center->addWidget(button_loop, 0, 3, 1, 1);
-    center->addWidget(label_title, 0, 1, 1, 2, Qt::AlignCenter);
-    center->addWidget(label_artist, 1, 1, 1, 2, Qt::AlignCenter);
-    center->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
-    center->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
-    center->addWidget(slider_song, 3, 0, 1, 5);
+    player->addWidget(button_shuffle, 0, 0, 1, 1);
+    player->addWidget(button_loop, 0, 3, 1, 1);
+    player->addWidget(label_title, 0, 1, 1, 2, Qt::AlignCenter);
+    player->addWidget(label_artist, 1, 1, 1, 2, Qt::AlignCenter);
+    player->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
+    player->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
+    player->addWidget(slider_song, 3, 0, 1, 5);
 
-    left->addSpacing(80);
-    left->addWidget(icon_quiet);
-    left->addWidget(slider_sound);
-    left->addWidget(icon_loud);
-    left->addSpacing(30);
-    left->addWidget(edit_search);
-    left->addSpacing(30);
-    left->addWidget(button_playlist);
-    left->addSpacing(30);
+    main->addSpacing(80);
+    main->addWidget(icon_quiet);
+    main->addWidget(slider_sound);
+    main->addWidget(icon_loud);
+    main->addSpacing(30);
+    main->addWidget(edit_search);
+    main->addSpacing(30);
+    main->addWidget(button_playlist);
+    main->addSpacing(30);
 
 }
 
@@ -87,9 +87,6 @@ QPlayer::~QPlayer() {
 
 void QPlayer::setupLayouts() {
     main = new QHBoxLayout(this);
+    player = new QGridLayout(player_widget);
 
-    left = new QHBoxLayout();
-    center = new QGridLayout(player_widget);
-
-    main->addLayout(left);
 }

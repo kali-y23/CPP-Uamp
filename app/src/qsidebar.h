@@ -1,8 +1,14 @@
 #pragma once
 
-#include "mainwindow.h"
+#include <QtWidgets>
 
-class QSideBar : public QWidget {
+#include "component.h"
+#include "mytreeview.h"
+
+class MyTreeView;
+class Component;
+
+class QSideBar : public QWidget, public Component {
     Q_OBJECT
 
     QStackedLayout *layout_stacked;
@@ -10,11 +16,10 @@ class QSideBar : public QWidget {
 
     QWidget *widget_treeview;
     QVBoxLayout *layout_treeview;
-    QFileSystemModel *model_filesystem;
-    QTreeView *tree_view;
+    MyTreeView *tree_view;
 
 public:
-    QSideBar(QWidget *parent = nullptr);
+    QSideBar(const Mediator *mediator, QWidget *parent = nullptr);
     ~QSideBar();
 
     void switchToTreeView();

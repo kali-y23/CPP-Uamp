@@ -20,7 +20,7 @@ ___
  [Qt](https://www.qt.io)
 
 ### Installation:
-    1. git clone https://github.com/mlibovych/CPP-uamp
+    1. git clone --recursive https://github.com/mlibovych/CPP-Uamp
     2. cmake . -Bbuild -Wdev -Werror=dev && cmake --build ./build
 
 ### How to use?

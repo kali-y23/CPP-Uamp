@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow, public Component
 
 private:
     QToolBar *toolBar;
+    QAction *action_sign_out;
 
     void initToolbar();
 
@@ -29,5 +30,4 @@ public:
 
 public slots:
     void setWidget(QWidget *widget, bool tool);
-
 };
