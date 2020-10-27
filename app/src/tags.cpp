@@ -1,6 +1,6 @@
 #include "tags.h"
 
-Tags::Tags(std::string& file, std::string& path, bool read) {
+Tags::Tags(const std::string& file, const std::string& path, bool read) {
     name = file;
     fullPath = path;
 }

@@ -13,6 +13,9 @@ Mediator::Mediator() : QObject() {
     mainWindow->show();
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
+
+    Tags tags("aaaa", "/Users/mlibovych/Desktop/P.I.M.P..mp3", true);
+    generalScreen->getView()->getModel()->addData(std::move(tags));
 }
 
 

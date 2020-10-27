@@ -15,7 +15,7 @@
 class Tags {
     std::string name, fullPath;
 public:
-    Tags(std::string& file, std::string& path, bool read);
+    Tags(const std::string& file, const std::string& path, bool read);
 
     QVariant getTag(int column) const;
 

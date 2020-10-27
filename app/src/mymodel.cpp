@@ -92,6 +92,11 @@ void MyModel::setNewData(QVector<Tags>&& data) {
     emit layoutChanged();
 }
 
+void MyModel::addData(Tags&& data) {
+    m_data.push_back(data);
+    emit layoutChanged();
+}
+
 void MyModel::sort(int column, Qt::SortOrder order) {
     std::sort(m_data.begin(), m_data.end(), [column, order](Tags row1, Tags row2) {
         if (order == Qt::AscendingOrder) {

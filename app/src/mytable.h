@@ -18,4 +18,7 @@ public:
     explicit MyTable(Mediator *mediator, QWidget *parent = nullptr);
     ~MyTable();
 
+    MyModel* getModel() {
+        return m_model;
+    }
 };

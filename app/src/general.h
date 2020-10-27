@@ -35,4 +35,8 @@ public:
     explicit GeneralScreen(Mediator *mediator, QWidget *parent = nullptr);
     ~GeneralScreen();
 
+    MyTable* getView() {
+        return view_songs;
+    }
+
 };

@@ -48,5 +48,7 @@ public:
 
     void setNewData(QVector<Tags>&& data);
 
+    void addData(Tags&& data);
+
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 };
