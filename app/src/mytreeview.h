@@ -1,7 +1,9 @@
 #pragma once
 
-#include "component.h"
 #include <QtWidgets>
+
+#include "component.h"
+#include "mediator.h"
 
 
 class Component;

@@ -22,6 +22,10 @@ Mediator::~Mediator() {
     //
 }
 
+LibraryManager * Mediator::getLibraryManager() const {
+    return libraryManager;
+}
+
 void Mediator::signIn() {
     user = new User(this);
     user->setId(0);

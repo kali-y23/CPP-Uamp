@@ -38,6 +38,8 @@ public:
     Mediator();
     ~Mediator();
 
+    LibraryManager * getLibraryManager() const;
+
 public slots:
     void signIn();
     void registrationOpen();

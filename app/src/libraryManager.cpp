@@ -4,12 +4,20 @@ LibraryManager::LibraryManager(Mediator *mediator) : Component(mediator) {
     QObject::connect(this, SIGNAL(addSongToTreeView(const Tags&)), reinterpret_cast<QObject *>(mediator), SLOT(slotAddSong(const Tags&)));
 }
 
+LibraryManager::~LibraryManager() {
+    delete m_ptxtMask;
+}
+
+QLineEdit * LibraryManager::getMask() const {
+    return m_ptxtMask;
+}
+
 void LibraryManager::addSongsToLibrary(const QString& path) {
     QFileInfo info(path);
 
     if (info.isDir()) {
         QDir dir(path);
-        QList<QFileInfo> dirs = dir.entryInfoList(QDir::Files);
+        QList<QFileInfo> dirs = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
 
         for (const QFileInfo& finf : dirs) {
             // tags = processSong(finf.absoluteFilePath());

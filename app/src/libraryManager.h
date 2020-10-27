@@ -8,8 +8,13 @@
 class LibraryManager : public QObject, public Component {
     Q_OBJECT
 
+    QLineEdit *m_ptxtMask = new QLineEdit("*.mp3");
+
 public:
     LibraryManager(Mediator *mediator);
+    ~LibraryManager();
+
+    QLineEdit * getMask() const;
 
 private:
     void processSong(const QString& path) const;

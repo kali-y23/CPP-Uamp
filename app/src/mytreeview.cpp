@@ -3,6 +3,8 @@
 MyTreeView::MyTreeView(const Mediator *mediator) : Component(mediator) {
     model_filesystem = new QFileSystemModel();
     model_filesystem->setRootPath(QDir::homePath());
+    model_filesystem->setNameFilters(mediator->getLibraryManager()->getMask()->text().split(" "));
+    model_filesystem->setNameFilterDisables(false);
 
     setModel(model_filesystem);
     setRootIndex(model_filesystem->index(QDir::homePath()));
