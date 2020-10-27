@@ -3,7 +3,7 @@
 GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
                         QWidget(parent), Component(mediator)
 {
-    player = new QPlayer(this);
+    player = new QPlayer(mediator, this);
     menuBar = new QMenuBar(this);
     content_widget = new QWidget(this);
     layout_outer = new QVBoxLayout(this);
@@ -15,7 +15,7 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     splitter = new QSplitter;
     layout_inner->addWidget(splitter);
 
-    sidebar_widget = new QSideBar(content_widget);
+    sidebar_widget = new QSideBar(mediator, content_widget);
     sidebar_widget->setObjectName("sidebar");
     view_songs = new QTableView(content_widget);
 

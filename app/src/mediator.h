@@ -34,6 +34,9 @@ public slots:
     void registrationOpen();
     void backToSignIn();
 
+    // void loadSongsFromDB();
+    // void addSongsToLibrary();
+
 signals:
     void changeWidget(QWidget *widget, bool tool);
 };

@@ -1,16 +1,18 @@
 #pragma once
 
-#include "mainwindow.h"
+#include <QtWidgets>
+
+#include "component.h"
 #include "qsuperbutton.h"
 
 class QSuperButton;
+class Component;
 
-class QPlayer : public QWidget {
+class QPlayer : public QWidget, public Component {
     Q_OBJECT
 
     QHBoxLayout *main;
-    QHBoxLayout *left; // TODO: REFACTOR!!!
-    QGridLayout *center; // TODO: REFACTOR!!!
+    QGridLayout *player;
 
     QWidget *player_widget;
 
@@ -36,7 +38,7 @@ class QPlayer : public QWidget {
 
     QLineEdit *edit_search;
 public:
-    QPlayer(QWidget *parent = nullptr);
+    QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
 
 private:
