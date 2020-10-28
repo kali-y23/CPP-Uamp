@@ -6,7 +6,12 @@
 #include <QSqlQuery>
 #include <QtWidgets>
 
-class MyDb
+#include "component.h"
+
+class Component;
+class Mediator;
+
+class MyDb : public Component
 {
     const QString appPath;
     const QString dbPath;
@@ -16,5 +21,5 @@ class MyDb
     void checkDir();
     void createIfNotExist();
 public:
-    MyDb();
+    MyDb(const Mediator *mediator_);
 };

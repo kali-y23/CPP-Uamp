@@ -1,8 +1,8 @@
 #include "myDb.h"
 
-MyDb::MyDb() : appPath(QDir::homePath() + "/.uamp/"),
-               dbPath(appPath + "myDb"),
-               db(QSqlDatabase::addDatabase("QSQLITE", "myDb"))
+MyDb::MyDb(const Mediator *mediator_) : Component(mediator_), appPath(QDir::homePath() + "/.uamp/"),
+                                        dbPath(appPath + "myDb"),
+                                        db(QSqlDatabase::addDatabase("QSQLITE", "myDb"))
 {
     checkDir();
     db.setDatabaseName(dbPath);

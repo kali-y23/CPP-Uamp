@@ -28,3 +28,7 @@ GeneralScreen::~GeneralScreen()
 {
 
 }
+
+void GeneralScreen::showInView(const Tags& tags) {
+    getView()->getModel()->addData(tags);
+}

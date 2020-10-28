@@ -37,4 +37,7 @@ public:
         return view_songs;
     }
 
+public slots:
+    void showInView(const Tags& tags);
+
 };

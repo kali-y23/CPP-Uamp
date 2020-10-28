@@ -12,12 +12,14 @@
 #include "general.h"
 #include "user.h"
 #include "libraryManager.h"
+#include "myDb.h"
 
 class MainWindow;
 class LoginScreen;
 class RegistrationScreen;
 class GeneralScreen;
 class User;
+class MyDb;
 
 class Mediator : public QObject
 {
@@ -32,13 +34,13 @@ private:
     RegistrationScreen *registrationScreen;
     GeneralScreen *generalScreen;
 
-    User *user;
-
 public:
     Mediator();
     ~Mediator();
 
+    User *user;
     LibraryManager * getLibraryManager() const;
+    MyDb *db;
 
 public slots:
     void signIn();
@@ -54,4 +56,5 @@ signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
     void addSongsToLibrary(const QString& path);
+    void showInLibrary(const Tags& tags);
 };

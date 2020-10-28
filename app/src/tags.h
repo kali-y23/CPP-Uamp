@@ -5,166 +5,57 @@
 #include "../../../taglib/taglib/tag.h"
 #include <../../taglib/fileref.h>
 #include <toolkit/tpropertymap.h>
+#include <id3v2tag.h>
 
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
 
+typedef char *(*TagLib_StringHandler)(const char *);
+
 class Tags {
     TagLib::String title, artist, album, genre, fullPath;
     int year, trackNumber;
     TagLib::FileRef f;
 
-    QVariant check(TagLib::String tag) const {
-        if (tag.isEmpty()) {
-            return "None";
-        }
-        return tag.toCString();
-    }
+    QVariant check(TagLib::String tag) const;
 
-    void setAllTagsView(TagLib::String str) {
-        artist = str;
-        title = str;
-        album = str;
-        genre = str;
-        year = 0;
-        trackNumber = 0;
-    }
+    void setAllTagsView(TagLib::String str);
+
 public:
-    Tags(const std::string& path) {
-        fullPath = path;
-        // if (read) {
-            f = TagLib::FileRef(path.c_str());
+    Tags(const std::string& path);
 
-            if (!f.isNull() && f.tag()) {
-                TagLib::Tag *tag = f.tag();
+    QVariant getTag(int column) const;
 
-                artist = tag->artist();
-                title = tag->title();
-                album = tag->album();
-                genre = tag->genre();
-                year = tag->year();
-                trackNumber = tag->track();
-            }
-        // }
-        // else {
-        //     setAllTagsView("You do not have permissions to read this file.");
-        // }
-    }
+    void setTag(int column, const QVariant& value);
 
-    QVariant getTag(int column) const {
-        std::vector<QVariant (Tags::*)(void) const> hash {
-            &Tags::getTitle,
-            &Tags::getArtist,
-            &Tags::getAlbum,
-            &Tags::getGenre,
-            &Tags::getYear,
-            &Tags::getTrack,
-            &Tags::getPath
-        };
-        QVariant res = std::invoke(hash[column], this);
+    QVariant getArtist() const;
 
-        return res;
-    }
+    QVariant getTitle() const;
 
-    void setTag(int column, const QVariant& value) {
-        std::vector<void (Tags::*)(const QVariant& value)> hash {
-            &Tags::setTitle,
-            &Tags::setArtist,
-            &Tags::setAlbum,
-            &Tags::setGenre,
-            &Tags::setYear,
-            &Tags::setTrack,
-            &Tags::setPath
-        };
+    QVariant getAlbum() const;
 
-        if (!f.isNull() && f.tag()) {
-            (this->*hash[column])(value);
-            f.file()->save();
-        }
-    }
+    QVariant getGenre() const;
 
-    QVariant getArtist() const {
-        return check(artist);
-    }
+    QVariant getPath() const;
 
-    QVariant getTitle() const {
-        return check(title);
-    }
+    QVariant getYear() const;
 
-    QVariant getAlbum() const {
-        return check(album);
-    }
+    QVariant getTrack() const;
 
-    QVariant getGenre() const {
-        return check(genre);
-    }
+    void setArtist(const QVariant& value);
 
-    QVariant getPath() const {
-        return check(fullPath);
-    }
+    void setTitle(const QVariant& value);
 
-    QVariant getYear() const {
-        return year;
-    }
+    void setAlbum(const QVariant& value);
 
-    QVariant getTrack() const {
-        return trackNumber;
-    }
+    void setGenre(const QVariant& value);
 
-    void setArtist(const QVariant& value) {
-        TagLib::String newValue(value.toString().toStdString());
-        TagLib::Tag *tag = f.tag();
+    void setYear(const QVariant& value);
 
-        artist = newValue;
-        tag->setArtist(newValue);
-    }
+    void setTrack(const QVariant& value);
 
-    void setTitle(const QVariant& value) {
-        TagLib::String newValue(value.toString().toStdString());
-        TagLib::Tag *tag = f.tag();
-
-        title = newValue;
-        tag->setTitle(newValue);
-    }
-
-    void setAlbum(const QVariant& value) {
-        TagLib::String newValue(value.toString().toStdString());
-        TagLib::Tag *tag = f.tag();
-
-        album = newValue;
-        tag->setAlbum(newValue);
-    }
-
-    void setGenre(const QVariant& value) {
-        TagLib::String newValue(value.toString().toStdString());
-        TagLib::Tag *tag = f.tag();
-
-        genre = newValue;
-        tag->setGenre(newValue);
-    }
-
-    void setYear(const QVariant& value) {
-        int newValue(value.toInt());
-        TagLib::Tag *tag = f.tag();
-
-        year = newValue;
-        tag->setYear(newValue);
-    }
-
-    void setTrack(const QVariant& value) {
-        int newValue(value.toInt());
-        TagLib::Tag *tag = f.tag();
-
-        trackNumber = newValue;
-        tag->setTrack(newValue);
-    }
-
-    void setPath(const QVariant& value) {
-        TagLib::String newValue(value.toString().toStdString());
-
-        fullPath = newValue;
-    }
+    void setPath(const QVariant& value);
 };
 
