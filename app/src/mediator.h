@@ -19,6 +19,7 @@ class LoginScreen;
 class RegistrationScreen;
 class GeneralScreen;
 class User;
+class LibraryManager;
 class MyDb;
 
 class Mediator : public QObject

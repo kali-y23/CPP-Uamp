@@ -8,7 +8,7 @@ LibraryManager::~LibraryManager() {
     delete m_ptxtMask;
 }
 
-QLineEdit * LibraryManager::getMask() const {
+QLineEdit *LibraryManager::getMask() const {
     return m_ptxtMask;
 }
 
@@ -20,25 +20,41 @@ void LibraryManager::addSongsToLibrary(const QString& path) {
         QList<QFileInfo> dirs = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
 
         for (const QFileInfo& finf : dirs) {
-            // tags = processSong(finf.absoluteFilePath());
-            Tags tags(finf.absoluteFilePath().toStdString());
-            emit addSongToTreeView(tags);
+            processSong(finf.absoluteFilePath());
         }
     }
     else {
-        // tags = processSong(path);
-        Tags tags(path.toStdString());
+        processSong(path);
+    }
+}
+
+void LibraryManager::processSong(const QString &path) {
+    Tags tags(path.toStdString());
+
+    if (saveToDb(tags)) {
         emit addSongToTreeView(tags);
     }
 }
 
-// Tags LibraryManager::processSong(const QString &path) {
-//     Tags tags(path.toStdString());
+bool LibraryManager::saveToDb(const Tags &tags) {
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+    char *command = new char[1024];
 
-//     return tags;
-//     // validate the song is a music file (??)
-
-//     // read tags
-
-//     // fill up the Tags struct 
-// }
+    std::sprintf(command, "SELECT * FROM songs, user_songs ON songs.path = '%s' AND user_songs.user_id = '%d' AND songs.id = user_songs.song_id;",
+                tags.getPath().toString().toStdString().c_str(), mediator->user->getId());
+    if (!query.exec(command)) {
+        qDebug() << "fail1";
+        return 0;
+    }
+    if (!query.value(0).isNull()) {
+        qDebug() << "already exists";
+        return 0;
+    }
+    query.clear();
+    std::sprintf(command, "INSERT INTO songs VALUES (%s, %s)", tags.getTitle().toString().toStdString().c_str(), tags.getPath().toString().toStdString().c_str());
+    if (!query.exec(command)) {
+        qDebug() << "fail2";
+        return 0;
+    }
+    return 1;
+}

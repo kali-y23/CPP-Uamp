@@ -31,8 +31,14 @@ void MyDb::createIfNotExist() {
                                                       password varchar(255));\
                     ");
         query.exec("create table if not exists songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\
-                                                      name varchar(255),\
+                                                      title varchar(255),\
                                                       path varchar(255));\
+                    ");
+        query.exec("create table if not exists user_songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                                                                 user_id INTEGER,\
+                                                                 song_id INTEGER,\
+                                                                 FOREIGN KEY (user_id) REFERENCES users (id),\
+                                                                 FOREIGN KEY (song_id) REFERENCES songs (id));\
                     ");
         query.exec("create table if not exists playlists (id INTEGER PRIMARY KEY AUTOINCREMENT,\
                                                           name varchar(255),\
