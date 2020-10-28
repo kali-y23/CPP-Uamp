@@ -31,12 +31,10 @@ MyTreeView::~MyTreeView() {
 void MyTreeView::mouseDoubleClickEvent(QMouseEvent *event) {
     QModelIndex index = currentIndex();
 
-    if (!model_filesystem->isDir(index)) {
+    if (!model_filesystem->isDir(index))
         action_import->triggered();
-    }
-    else {
+    else
         expand(index);
-    }
 }
 
 void MyTreeView::mousePressEvent(QMouseEvent *event) {

@@ -8,7 +8,7 @@ LibraryManager::~LibraryManager() {
     delete m_ptxtMask;
 }
 
-QLineEdit * LibraryManager::getMask() const {
+QLineEdit *LibraryManager::getMask() const {
     return m_ptxtMask;
 }
 
@@ -20,25 +20,13 @@ void LibraryManager::addSongsToLibrary(const QString& path) {
         QList<QFileInfo> dirs = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
 
         for (const QFileInfo& finf : dirs) {
-            // tags = processSong(finf.absoluteFilePath());
-            Tags tags(finf.absoluteFilePath().toStdString());
-            emit addSongToTreeView(tags);
+            Tags *tags = new Tags(finf.absoluteFilePath().toStdString());
+            // emit addToQueue(tags);
+            emit addSongToTreeView(*tags);
         }
     }
     else {
-        // tags = processSong(path);
-        Tags tags(path.toStdString());
-        emit addSongToTreeView(tags);
+        Tags *tags = new Tags(path.toStdString());
+        emit addSongToTreeView(*tags);
     }
 }
-
-// Tags LibraryManager::processSong(const QString &path) {
-//     Tags tags(path.toStdString());
-
-//     return tags;
-//     // validate the song is a music file (??)
-
-//     // read tags
-
-//     // fill up the Tags struct 
-// }

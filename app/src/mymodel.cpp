@@ -28,8 +28,8 @@ QVariant MyModel::getPath(const QModelIndex& index) const {
 }
 
 bool MyModel::setData(const QModelIndex& index,
-                const QVariant& value,
-                int nRole)
+                      const QVariant& value,
+                      int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
         m_data[index.row()].setTag(index.column(), value);

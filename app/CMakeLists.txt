@@ -24,8 +24,9 @@ find_package(Qt5 COMPONENTS Widgets Sql REQUIRED)
 
 set(SOURCES main.cpp src/mainwindow.cpp src/qplayer.cpp src/qsuperbutton.cpp
             src/mediator.cpp src/myDb.cpp src/component.cpp src/login.cpp
-            src/registration.cpp src/general.cpp src/qsidebar.cpp src/user.cpp 
-            src/mymodel.cpp src/tags.cpp src/mytable.cpp src/mytreeview.cpp src/libraryManager.cpp)
+            src/registration.cpp src/general.cpp src/qsidebar.cpp src/user.cpp
+            src/mymodel.cpp src/tags.cpp src/mytable.cpp src/mytreeview.cpp
+            src/libraryManager.cpp src/queue.cpp)
 
 qt5_add_resources(SOURCES resources/resources.qrc)
 
