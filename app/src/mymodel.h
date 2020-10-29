@@ -16,6 +16,7 @@ private:
     QVector<Tags *> m_data;
     bool editable = false;
     int m_cols = m_headers.size();
+
 public:
     void setEditable(bool flag) {
         editable = flag;
