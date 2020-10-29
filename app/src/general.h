@@ -38,6 +38,7 @@ public:
     }
 
 public slots:
-    void showInView(const Tags& tags);
+    void showInView(Tags *tags);
+    void loadSongs();
 
 };

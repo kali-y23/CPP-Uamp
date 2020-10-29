@@ -25,6 +25,9 @@ class Tags {
 
 public:
     Tags(const std::string& path);
+    Tags(const std::string& title_, const std::string& artist_,
+        const std::string& album_, const std::string& genre_,
+        int year_, int trackNumber_, const std::string& fullPath_);
 
     QVariant getTag(int column) const;
 

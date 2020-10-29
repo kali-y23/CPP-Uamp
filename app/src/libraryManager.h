@@ -19,17 +19,18 @@ class LibraryManager : public QObject, public Component {
     QLineEdit *m_ptxtMask = new QLineEdit("*.mp3");
 
     void processSong(const QString& path);
-    bool saveToDb(const Tags& tags);
+    bool saveToDb(Tags *tags);
 
 public:
     LibraryManager(Mediator *mediator);
     ~LibraryManager();
 
     QLineEdit * getMask() const;
+    QVector<Tags *> getUserSongs();
 
 public slots:
     void addSongsToLibrary(const QString& path);
 
 signals:
-    void addSongToTreeView(const Tags& tags);
+    void addSongToTreeView(Tags *tags);
 };

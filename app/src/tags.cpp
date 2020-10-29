@@ -16,26 +16,39 @@ void Tags::setAllTagsView(TagLib::String str) {
     trackNumber = 0;
 }
 
-Tags::Tags(const std::string& path) {
+Tags::Tags(const std::string& path)
+{
+    QFileInfo info(path.c_str());
+
     fullPath = path;
-    // if (read) {
-    f = TagLib::FileRef(path.c_str());
+    if (info.isReadable()) {
+        f = TagLib::FileRef(path.c_str());
 
-    if (!f.isNull() && f.tag()) {
-        TagLib::Tag *tag = f.tag();
+        if (!f.isNull() && f.tag()) {
+            TagLib::Tag *tag = f.tag();
 
-        artist = tag->artist();
-        title = tag->title();
-        album = tag->album();
-        genre = tag->genre();
-        year = tag->year();
-        trackNumber = tag->track();
+            artist = tag->artist();
+            title = tag->title();
+            album = tag->album();
+            genre = tag->genre();
+            year = tag->year();
+            trackNumber = tag->track();
+        }
     }
-    // }
-    // else {
-    //     setAllTagsView("You do not have permissions to read this file.");
-    // }
+    else {
+        setAllTagsView("You do not have permissions to read this file.");
+    }
 }
+
+Tags::Tags(const std::string& title_, const std::string& artist_,
+           const std::string& album_, const std::string& genre_,
+           int year_, int trackNumber_, const std::string& fullPath_) :
+           title(title_), artist(artist_), album(album_), genre(genre_), fullPath(fullPath_),
+           year(year_), trackNumber(trackNumber_)
+{
+
+}
+
 
 QVariant Tags::getTag(int column) const {
     std::vector<QVariant (Tags::*)(void) const> hash {

@@ -40,7 +40,7 @@ public:
     ~Mediator();
 
     User *user;
-    LibraryManager * getLibraryManager() const;
+    LibraryManager *getLibraryManager() const;
     MyDb *db;
 
 public slots:
@@ -51,11 +51,11 @@ public slots:
 
     // void loadSongsFromDB();
     void initImport(const QString& path);
-    void slotAddSong(const Tags& tags);
+    void slotAddSong(Tags *tags);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
     void addSongsToLibrary(const QString& path);
-    void showInLibrary(const Tags& tags);
+    void showInLibrary(Tags *tags);
 };

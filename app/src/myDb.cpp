@@ -32,6 +32,11 @@ void MyDb::createIfNotExist() {
                     ");
         query.exec("create table if not exists songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\
                                                       title varchar(255),\
+                                                      artist varchar(255),\
+                                                      album varchar(255),\
+                                                      genre varchar(255),\
+                                                      year INTEGER,\
+                                                      number INTEGER,\
                                                       path varchar(255));\
                     ");
         query.exec("create table if not exists user_songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\
