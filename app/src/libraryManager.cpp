@@ -40,12 +40,14 @@ bool LibraryManager::saveToDb(Tags *tags) {
     QSqlQuery query(QSqlDatabase::database("myDb"));
     char *command = new char[1024];
     int songId = 0;
+    QString filePath = QDir::homePath() + "/.uamp/" + tags->getArtist().toString() + "/" + tags->getAlbum().toString() + "/";
+    QString fileName = filePath + tags->getTitle().toString() + "." + tags->getExt();
+
 
     std::sprintf(command, "SELECT id FROM songs WHERE path = '%s';",
-                tags->getPath().toString().toStdString().c_str());
+                fileName.toStdString().c_str());
     query.exec(command);
     if (query.first() && !query.value(0).isNull()) {
-        qDebug() << "already exists";
         query.first();
         songId = query.value(0).toInt();
         std::sprintf(command, "SELECT * FROM user_songs WHERE user_id = '%d' AND song_id = '%d' AND songs.id = user_songs.song_id;",
@@ -60,6 +62,11 @@ bool LibraryManager::saveToDb(Tags *tags) {
         return 0;
     }
     else {
+        QDir appDir;
+
+        appDir.mkpath(filePath);
+        QFile::copy(tags->getPath().toString(), fileName);
+        tags->setPath(fileName);
         std::sprintf(command, "INSERT INTO songs (title, artist, album, genre, year, number, path)\
                                VALUES ('%s', '%s', '%s', '%s', '%d', '%d', '%s');",
                     tags->getTitle().toString().toStdString().c_str(), tags->getArtist().toString().toStdString().c_str(),

@@ -15,6 +15,7 @@
 typedef char *(*TagLib_StringHandler)(const char *);
 
 class Tags {
+    QString ext;
     TagLib::String title, artist, album, genre, fullPath;
     int year, trackNumber;
     TagLib::FileRef f;
@@ -28,6 +29,8 @@ public:
     Tags(const std::string& title_, const std::string& artist_,
         const std::string& album_, const std::string& genre_,
         int year_, int trackNumber_, const std::string& fullPath_);
+
+    QString getExt();
 
     QVariant getTag(int column) const;
 

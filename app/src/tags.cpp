@@ -2,7 +2,7 @@
 
 QVariant Tags::check(TagLib::String tag) const {
     if (tag.isEmpty()) {
-        return "None";
+        return "Unknown";
     }
     return tag.toCString();
 }
@@ -20,6 +20,7 @@ Tags::Tags(const std::string& path)
 {
     QFileInfo info(path.c_str());
 
+    ext = info.completeSuffix();
     fullPath = path;
     if (info.isReadable()) {
         f = TagLib::FileRef(path.c_str());
@@ -47,6 +48,10 @@ Tags::Tags(const std::string& title_, const std::string& artist_,
            year(year_), trackNumber(trackNumber_)
 {
 
+}
+
+QString Tags::getExt() {
+    return ext;
 }
 
 
