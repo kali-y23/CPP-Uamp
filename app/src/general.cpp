@@ -18,10 +18,12 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     sidebar_widget = new QSideBar(mediator, content_widget);
     sidebar_widget->setObjectName("sidebar");
     view_songs = new MyTable(mediator, content_widget);
+    queue_widget = new QueueWidget(mediator, content_widget);
 
     splitter->addWidget(sidebar_widget);
     splitter->addWidget(view_songs);
-    splitter->setSizes({150, 700});
+    splitter->addWidget(queue_widget);
+    splitter->setSizes({150, 700, 150});
 }
 
 GeneralScreen::~GeneralScreen()

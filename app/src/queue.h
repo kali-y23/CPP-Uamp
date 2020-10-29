@@ -8,10 +8,9 @@
 #ifndef QUEUE
 #define QUEUE
 
-#include <QtWidgets>
-#include <list>
+#include <deque>
+#include <algorithm>
 
-#include "component.h"
 #include "tags.h"
 
 enum class SortBy {
@@ -24,25 +23,24 @@ enum class SortBy {
 
 class Component;
 
-class Queue : public QObject, public Component {
-    Q_OBJECT
-
-    std::list<Tags *> queue;
+class Queue {
+    std::deque<Tags *> queue;
 
 public:
-    Queue(Mediator *mediator);
+    Queue();
     ~Queue();
 
-    void createQueue(const std::list<Tags *>& queue_);
+    void createQueue(const std::deque<Tags *>& queue_);
     void clearQueue(void);
 
     void addToQueue(Tags *song);
     void removeFromQueue(Tags *song);
-    void Queue::removeFromQueue(std::list<Tags *>::iterator song);
+    void removeFromQueue(std::deque<Tags *>::iterator song);
+
+    const std::deque<Tags *>& getQueue(void) const;
 
     // void shuffleSongs(Tags *song);
-
-    const std::list<Tags *>& getQueue(void) const;
+    void sortByTag(SortBy tag);
 };
 
 #endif

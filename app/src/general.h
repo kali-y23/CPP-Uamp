@@ -2,10 +2,11 @@
 
 #include <QtWidgets>
 
-#include "component.h"
+// #include "component.h"
 #include "qplayer.h"
 #include "qsidebar.h"
 #include "mytable.h"
+#include "queuewidget.h"
 
 class Component;
 class Mediator;
@@ -28,6 +29,7 @@ private:
     QWidget *content_widget;
     MyTable *view_songs;
     QPlayer *player;
+    QueueWidget *queue_widget;
 
 public:
     explicit GeneralScreen(Mediator *mediator, QWidget *parent = nullptr);
