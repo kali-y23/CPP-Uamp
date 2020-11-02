@@ -41,3 +41,7 @@ void GeneralScreen::loadSongs() {
     getView()->getModel()->setNewData(std::move(data));
     getQueue()->setQueue(data);
 }
+
+void GeneralScreen::updatePlayerData(const QModelIndex &index) {
+    getPlayer()->updateData(getView()->getModel()->rowData(index));
+}

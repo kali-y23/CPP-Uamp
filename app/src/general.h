@@ -43,8 +43,13 @@ public:
         return queue_widget;
     }
 
+    QPlayer *getPlayer() {
+        return player;
+    }
+
 public slots:
     void showInView(Tags *tags);
     void loadSongs();
+    void updatePlayerData(const QModelIndex &index);
 
 };

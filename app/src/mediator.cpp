@@ -19,6 +19,7 @@ Mediator::Mediator() : QObject() {
     connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
+    connect(this, SIGNAL(setPlayerData(const QModelIndex &)), generalScreen, SLOT(updatePlayerData(const QModelIndex &)));
 }
 
 
@@ -63,5 +64,5 @@ void Mediator::slotAddSong(Tags *tags) {
 }
 
 void Mediator::setPlaySong(const QModelIndex &index) {
-    qDebug() << generalScreen->getView()->getModel()->rowData(index)->getPath().toString();
+    emit setPlayerData(index);
 }

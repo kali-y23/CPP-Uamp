@@ -2,11 +2,16 @@
 
 #include <QtWidgets>
 
+#include "bass.h"
+
 #include "component.h"
 #include "qsuperbutton.h"
+#include "tags.h"
 
 class QSuperButton;
+class QPlayButton;
 class Component;
+class Tags;
 
 class QPlayer : public QWidget, public Component {
     Q_OBJECT
@@ -19,7 +24,7 @@ class QPlayer : public QWidget, public Component {
     QSlider *slider_song;
     QSlider *slider_sound;
 
-    QSuperButton *button_play;
+    QPlayButton *button_play;
     QToolButton *button_next;
     QToolButton *button_prev;
     QToolButton *button_skip_fwd;
@@ -37,9 +42,18 @@ class QPlayer : public QWidget, public Component {
     QLabel *icon_loud;
 
     QLineEdit *edit_search;
+
+    Tags *data;
+    HSTREAM stream;
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
+
+    void updateData(Tags *tags);
+
+public slots:
+    void playSound();
+    void stopSound();
 
 private:
     void setupLayouts(void);

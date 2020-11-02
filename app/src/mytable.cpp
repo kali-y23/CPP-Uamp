@@ -6,7 +6,7 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setModel(m_model);
     setSortingEnabled(true);
-    connect(this, SIGNAL(clicked(const QModelIndex &)), reinterpret_cast<const QObject *> (mediator), SLOT(setPlaySong(const QModelIndex &)));
+    connect(this, SIGNAL(doubleClicked(const QModelIndex &)), reinterpret_cast<const QObject *> (mediator), SLOT(setPlaySong(const QModelIndex &)));
 }
 
 MyTable::~MyTable()

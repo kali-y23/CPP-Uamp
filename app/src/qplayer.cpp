@@ -4,7 +4,7 @@
 
 QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator) {
     setMaximumHeight(140);
-    button_play = new QSuperButton(ButtonType::Play);
+    button_play = new QPlayButton(ButtonType::Play);
     button_prev = new QToolButton();
     button_next = new QToolButton();
     button_skip_fwd = new QToolButton();
@@ -79,6 +79,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addWidget(button_playlist);
     main->addSpacing(30);
 
+    connect(button_play, SIGNAL(play()), this, SLOT(playSound()));
+    connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
 }
 
 QPlayer::~QPlayer() {
@@ -89,4 +91,20 @@ void QPlayer::setupLayouts() {
     main = new QHBoxLayout(this);
     player = new QGridLayout(player_widget);
 
+}
+
+
+void QPlayer::updateData(Tags *tags) {
+    data = tags;
+    label_title->setText(data->getTitle().toString());
+    label_artist->setText(data->getArtist().toString());
+    stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+}
+
+void QPlayer::playSound() {
+    BASS_ChannelPlay(stream,FALSE);
+}
+
+void QPlayer::stopSound() {
+    BASS_ChannelStop(stream);
 }

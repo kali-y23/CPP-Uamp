@@ -60,4 +60,5 @@ signals:
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
     void loadSongs();
+    void setPlayerData(const QModelIndex &index);
 };
