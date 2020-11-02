@@ -83,8 +83,8 @@ bool LibraryManager::saveToDb(Tags *tags) {
     return 1;
 }
 
-QVector<Tags *> LibraryManager::getUserSongs() {
-    QVector<Tags *> data;
+std::deque<Tags *> LibraryManager::getUserSongs() {
+    std::deque<Tags *> data;
     QSqlQuery query(QSqlDatabase::database("myDb"));
     char *command = new char[1024];
 

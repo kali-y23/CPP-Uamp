@@ -35,8 +35,12 @@ public:
     explicit GeneralScreen(Mediator *mediator, QWidget *parent = nullptr);
     ~GeneralScreen();
 
-    MyTable* getView() {
+    MyTable *getView() {
         return view_songs;
+    }
+
+    QueueWidget *getQueue() {
+        return queue_widget;
     }
 
 public slots:

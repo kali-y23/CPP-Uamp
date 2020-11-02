@@ -36,7 +36,8 @@ void GeneralScreen::showInView(Tags *tags) {
 }
 
 void GeneralScreen::loadSongs() {
-    QVector<Tags *> data = mediator->getLibraryManager()->getUserSongs();
+    std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
+    getQueue()->setQueue(data);
 }
