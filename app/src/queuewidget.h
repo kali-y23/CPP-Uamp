@@ -17,6 +17,7 @@
 class Component;
 class Queue;
 
+
 class Element : public QListWidgetItem {
     QWidget *widget;
 
@@ -38,11 +39,26 @@ public:
 };
 
 
+
 class QueueWidget : public QListWidget, public Component {
+    unsigned int current_song;
     Queue queue;
+    std::deque<Element *> elements;
 
 public:
     QueueWidget(Mediator *mediator, QWidget *parent = nullptr);
+    ~QueueWidget();
+
+private:
+    void showQueue();
+    void clearElements();
+
+public slots:
+    void setQueue(const std::deque<Tags *>& queue_);
+    void nextSong(void);
+    void prevSong(void);
+    // void chooseFromQueue(int index);
+    // void removeFromQueue(int index);
 };
 
 #endif

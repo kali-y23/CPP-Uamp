@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets>
+#include <deque>
 
 #include "tags.h"
 
@@ -13,7 +14,7 @@ class MyModel : public QAbstractTableModel
     Q_OBJECT
 private:
     QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number"};
-    QVector<Tags *> m_data;
+    std::deque<Tags *> m_data;
     bool editable = false;
     int m_cols = m_headers.size();
 
@@ -22,7 +23,7 @@ public:
         editable = flag;
     }
 
-    MyModel(const QVector<Tags *> data, QObject* pobj = 0);
+    MyModel(const std::deque<Tags *> data, QObject* pobj = 0);
 
     QVariant data(const QModelIndex& index, int nRole) const;
 
@@ -49,7 +50,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    void setNewData(QVector<Tags *>&& data);
+    void setNewData(std::deque<Tags *>&& data);
 
     void addData(Tags *tags);
 

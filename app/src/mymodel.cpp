@@ -1,6 +1,6 @@
 #include "mymodel.h"
 
-MyModel::MyModel(const QVector<Tags *> data, QObject* pobj)
+MyModel::MyModel(const std::deque<Tags *> data, QObject* pobj)
         : QAbstractTableModel(pobj)
         , m_data(data)
 {
@@ -91,7 +91,7 @@ Qt::ItemFlags MyModel::flags(const QModelIndex& index) const
     return flags;
 }
 
-void MyModel::setNewData(QVector<Tags *>&& data) {
+void MyModel::setNewData(std::deque<Tags *>&& data) {
     m_data.clear();
     m_data = data;
     emit layoutChanged();

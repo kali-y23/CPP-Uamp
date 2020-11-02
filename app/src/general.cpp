@@ -24,7 +24,7 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     splitter->addWidget(sidebar_widget);
     splitter->addWidget(view_songs);
     splitter->addWidget(queue_widget);
-    splitter->setSizes({150, 700, 150});
+    splitter->setSizes({150, 700, 250});
 
     queue_widget->hide();
 }
@@ -39,18 +39,16 @@ void GeneralScreen::showInView(Tags *tags) {
 }
 
 void GeneralScreen::loadSongs() {
-    QVector<Tags *> data = mediator->getLibraryManager()->getUserSongs();
+    std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
+    getQueue()->setQueue(data);
 }
 
 void GeneralScreen::toggleQueue(void) {
-    if (queue_widget->isVisible()) {
-        std::cout << "hide" << std::endl;
+    if (queue_widget->isVisible())
         queue_widget->hide();
-    }
-    else {
-        std::cout << "show" << std::endl;
+    else
         queue_widget->show();
-    }
 }
+

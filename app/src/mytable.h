@@ -13,7 +13,7 @@ class Mediator;
 class MyTable : public QTableView, public Component
 {
     Q_OBJECT
-    MyModel *m_model = new MyModel(QVector<Tags *>());
+    MyModel *m_model = new MyModel(std::deque<Tags *>());
 public:
     explicit MyTable(Mediator *mediator, QWidget *parent = nullptr);
     ~MyTable();

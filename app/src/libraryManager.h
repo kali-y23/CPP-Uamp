@@ -5,6 +5,7 @@
 #include <QtWidgets>
 #include <string>
 #include <cstdio>
+#include <deque>
 
 #include "component.h"
 #include "mediator.h"
@@ -26,7 +27,7 @@ public:
     ~LibraryManager();
 
     QLineEdit * getMask() const;
-    QVector<Tags *> getUserSongs();
+    std::deque<Tags *> getUserSongs();
 
 public slots:
     void addSongsToLibrary(const QString& path);
