@@ -18,7 +18,9 @@ class MainWindow : public QMainWindow, public Component
 
 private:
     QToolBar *toolBar;
-    QAction *action_sign_out;
+    QAction *actionLibrary;
+    QAction *actionPlaylists;
+    QAction *actionSignOut;
 
     void initToolbar();
 

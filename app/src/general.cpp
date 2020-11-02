@@ -30,3 +30,13 @@ GeneralScreen::~GeneralScreen()
 {
 
 }
+
+void GeneralScreen::showInView(Tags *tags) {
+    getView()->getModel()->addData(tags);
+}
+
+void GeneralScreen::loadSongs() {
+    QVector<Tags *> data = mediator->getLibraryManager()->getUserSongs();
+
+    getView()->getModel()->setNewData(std::move(data));
+}

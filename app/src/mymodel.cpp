@@ -1,6 +1,6 @@
 #include "mymodel.h"
 
-MyModel::MyModel(const QVector<Tags> data, QObject* pobj)
+MyModel::MyModel(const QVector<Tags *> data, QObject* pobj)
         : QAbstractTableModel(pobj)
         , m_data(data)
 {
@@ -20,11 +20,16 @@ QVariant MyModel::data(const QModelIndex& index, int nRole) const
     if (index.column() >= m_cols) {
         return QVariant();
     }
-    return m_data[index.row()].getTag(index.column());
+    return m_data[index.row()]->getTag(index.column());
+}
+
+Tags *MyModel::rowData(const QModelIndex& index) const
+{
+    return m_data[index.row()];
 }
 
 QVariant MyModel::getPath(const QModelIndex& index) const {
-    return m_data[index.row()].getTag(m_cols - 1);
+    return m_data[index.row()]->getTag(m_cols - 1);
 }
 
 bool MyModel::setData(const QModelIndex& index,
@@ -32,7 +37,7 @@ bool MyModel::setData(const QModelIndex& index,
                       int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
-        m_data[index.row()].setTag(index.column(), value);
+        m_data[index.row()]->setTag(index.column(), value);
 
         emit dataChanged(index, index);
         return true;
@@ -86,23 +91,31 @@ Qt::ItemFlags MyModel::flags(const QModelIndex& index) const
     return flags;
 }
 
-void MyModel::setNewData(QVector<Tags>&& data) {
+void MyModel::setNewData(QVector<Tags *>&& data) {
     m_data.clear();
     m_data = data;
     emit layoutChanged();
 }
 
-void MyModel::addData(const Tags& data) {
+void MyModel::addData(Tags *data) {
     m_data.push_back(data);
     emit layoutChanged();
 }
 
 void MyModel::sort(int column, Qt::SortOrder order) {
-    std::sort(m_data.begin(), m_data.end(), [column, order](Tags row1, Tags row2) {
-        if (order == Qt::AscendingOrder) {
-            return row1.getTag(column).toString() > row2.getTag(column).toString();
+    std::sort(m_data.begin(), m_data.end(), [column, order](Tags *row1, Tags *row2) {
+        if (column < 4) {
+            if (order == Qt::AscendingOrder) {
+                return row1->getTag(column).toString() > row2->getTag(column).toString();
+            }
+            return row1->getTag(column).toString() < row2->getTag(column).toString();
         }
-        return row1.getTag(column).toString() < row2.getTag(column).toString();
+        else {
+            if (order == Qt::AscendingOrder) {
+                return row1->getTag(column).toInt() > row2->getTag(column).toInt();
+            }
+            return row1->getTag(column).toInt() < row2->getTag(column).toInt();
+        }
     });
     emit layoutChanged();
 }

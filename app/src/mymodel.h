@@ -12,18 +12,21 @@ class MyModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
-    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number", "Audio file path"};
-    QVector<Tags> m_data;
+    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number"};
+    QVector<Tags *> m_data;
     bool editable = false;
     int m_cols = m_headers.size();
+
 public:
     void setEditable(bool flag) {
         editable = flag;
     }
 
-    MyModel(const QVector<Tags> data, QObject* pobj = 0);
+    MyModel(const QVector<Tags *> data, QObject* pobj = 0);
 
     QVariant data(const QModelIndex& index, int nRole) const;
+
+    Tags *rowData(const QModelIndex& index) const;
 
     QVariant getPath(const QModelIndex& index) const;
 
@@ -46,9 +49,9 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    void setNewData(QVector<Tags>&& data);
+    void setNewData(QVector<Tags *>&& data);
 
-    void addData(const Tags& data);
+    void addData(Tags *tags);
 
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 };

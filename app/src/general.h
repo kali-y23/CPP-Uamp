@@ -39,4 +39,8 @@ public:
         return view_songs;
     }
 
+public slots:
+    void showInView(Tags *tags);
+    void loadSongs();
+
 };

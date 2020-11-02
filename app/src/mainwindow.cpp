@@ -14,18 +14,24 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::initToolbar() {
-    action_sign_out = new QAction("Sign Out");
+    actionLibrary = new QAction("Library");
+    actionPlaylists = new QAction("Playlists");
+    actionSignOut = new QAction("Sign Out");
     toolBar = new QToolBar(this);
 
     toolBar->setAllowedAreas(Qt::LeftToolBarArea);
     toolBar->setFloatable(false);
     toolBar->setOrientation(Qt::Vertical);
     toolBar->setMovable(false);
-    toolBar->addAction(action_sign_out);
+    toolBar->addAction(actionLibrary);
+    toolBar->addAction(actionPlaylists);
+    toolBar->addAction(actionSignOut);
     addToolBar(Qt::LeftToolBarArea, toolBar);
     toolBar->hide();
 
-    QObject::connect(action_sign_out, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
+    // connect(actionLibrary, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
+    // connect(actionPlaylists, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
+    QObject::connect(actionSignOut, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
 }
 
 void MainWindow::setWidget(QWidget *widget, bool tool) {
