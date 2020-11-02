@@ -9,6 +9,7 @@
 #define QUEUE_WIDGET
 
 #include <QtWidgets>
+#include <string>
 
 #include "queue.h"
 #include "component.h"
@@ -26,11 +27,14 @@ class Element : public QListWidgetItem {
     QLabel *labelTitle;
     QLabel *labelArtist;
 
+    std::string path;
+
 public:
     Element(const Tags &tags);
     ~Element();
 
     QWidget *getWidget(void) const;
+    std::string getPath(void) const;
 };
 
 

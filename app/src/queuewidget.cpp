@@ -3,6 +3,8 @@
 Element::Element(const Tags& tags) : QListWidgetItem() {
     widget = new QWidget;
 
+    path = tags.getPath().toString().toStdString();
+
     layoutOuter = new QHBoxLayout(widget);
     layoutInner = new QVBoxLayout();
 
@@ -24,6 +26,10 @@ Element::~Element() {
     delete widget;
     delete layoutOuter;
     delete layoutInner;
+}
+
+std::string Element::getPath(void) const {
+    return path;
 }
 
 QWidget *Element::getWidget(void) const {
