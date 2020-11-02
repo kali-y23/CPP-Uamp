@@ -47,6 +47,8 @@ private:
 
 signals:
     void toggleQueueSignal(void);
+    void nextSong();
+    void prevSong();
 
 public slots:
     void playlistButtonClicked(void);

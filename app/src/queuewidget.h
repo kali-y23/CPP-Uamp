@@ -55,8 +55,8 @@ private:
 
 public slots:
     void setQueue(const std::deque<Tags *>& queue_);
-    void nextSong(void);
-    void prevSong(void);
+    void nextSong();
+    void prevSong();
     // void chooseFromQueue(int index);
     // void removeFromQueue(int index);
 };

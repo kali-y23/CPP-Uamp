@@ -4,6 +4,9 @@
 GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
                         QWidget(parent), Component(mediator)
 {
+    view_songs = new MyTable(mediator, content_widget);
+    queue_widget = new QueueWidget(mediator, content_widget);
+
     player = new QPlayer(mediator, this);
     menuBar = new QMenuBar(this);
     content_widget = new QWidget(this);

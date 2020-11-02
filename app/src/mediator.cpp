@@ -19,7 +19,12 @@ Mediator::Mediator() : QObject() {
     connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
+
     connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
+
+    // ???
+    connect(this, SIGNAL(nextSong()), generalScreen->getQueue(), SLOT(QueueWidget::nextSong()));
+    connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
 }
 
 
@@ -65,4 +70,12 @@ void Mediator::slotAddSong(Tags *tags) {
 
 void Mediator::setPlaySong(const QModelIndex &index) {
     qDebug() << generalScreen->getView()->getModel()->rowData(index)->getPath().toString();
+}
+
+void Mediator::playNextSong() {
+    emit nextSong();
+}
+
+void Mediator::playPrevSong() {
+    emit nextSong();
 }

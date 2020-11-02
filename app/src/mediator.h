@@ -53,6 +53,8 @@ public slots:
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
     void setPlaySong(const QModelIndex &index);
+    void playNextSong();
+    void playPrevSong();
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
@@ -60,4 +62,6 @@ signals:
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
     void loadSongs();
+    void nextSong();
+    void prevSong();
 };

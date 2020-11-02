@@ -35,13 +35,13 @@ public:
     explicit GeneralScreen(Mediator *mediator, QWidget *parent = nullptr);
     ~GeneralScreen();
 
-    MyTable* getView(void) {
+    MyTable* getView(void) const {
         return view_songs;
     }
-    QueueWidget *getQueue(void) {
+    QueueWidget *getQueue(void) const {
         return queue_widget;
     }
-    QPlayer *getPlayer(void) {
+    QPlayer *getPlayer(void) const{
         return player;
     }
 

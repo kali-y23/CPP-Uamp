@@ -37,22 +37,7 @@ QWidget *Element::getWidget(void) const {
 }
 
 QueueWidget::QueueWidget(Mediator *mediator, QWidget *parent) : QListWidget(parent), Component(mediator) {
-    // Tags t1("/Users/ybondarenk/Desktop/Music/1.mp3");
-    // Tags t2("/Users/ybondarenk/Desktop/Music/2.mp3");
-    // Tags t3("/Users/ybondarenk/Desktop/Music/3.mp3");
-
-    // Element *el1 = new Element(t1);
-    // Element *el2 = new Element(t2);
-    // Element *el3 = new Element(t3);
-
-    // addItem(reinterpret_cast<QListWidgetItem *>(el1));
-    // setItemWidget(reinterpret_cast<QListWidgetItem *>(el1), el1->getWidget());
-
-    // addItem(reinterpret_cast<QListWidgetItem *>(el2));
-    // setItemWidget(reinterpret_cast<QListWidgetItem *>(el2), el2->getWidget());
-
-    // addItem(reinterpret_cast<QListWidgetItem *>(el3));
-    // setItemWidget(reinterpret_cast<QListWidgetItem *>(el3), el3->getWidget());
+    // QObject::connect(this, SIGNAL(nextSong()), mediator, SLOT(nextSong));
 }
 
 QueueWidget::~QueueWidget() {
@@ -88,7 +73,7 @@ void QueueWidget::clearElements() {
     elements.clear();
 }
 
-void QueueWidget::nextSong(void) {
+void QueueWidget::nextSong() {
     delete elements[0];
     takeItem(0);
     current_song += 1;
@@ -99,7 +84,7 @@ void QueueWidget::nextSong(void) {
     }
 }
 
-void QueueWidget::prevSong(void) {
+void QueueWidget::prevSong() {
     if (current_song > 0) {
         Element *el = new Element(*queue.getQueue()[current_song - 1]);
 
