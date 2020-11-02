@@ -79,6 +79,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addWidget(button_playlist);
     main->addSpacing(30);
 
+    QObject::connect(button_playlist, SIGNAL(clicked()), this, SLOT(playlistButtonClicked()));
+
 }
 
 QPlayer::~QPlayer() {
@@ -88,5 +90,8 @@ QPlayer::~QPlayer() {
 void QPlayer::setupLayouts() {
     main = new QHBoxLayout(this);
     player = new QGridLayout(player_widget);
+}
 
+void QPlayer::playlistButtonClicked() {
+    emit toggleQueueSignal();
 }

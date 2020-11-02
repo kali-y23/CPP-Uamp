@@ -1,4 +1,5 @@
 #include "general.h"
+#include <iostream>
 
 GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
                         QWidget(parent), Component(mediator)
@@ -24,6 +25,8 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     splitter->addWidget(view_songs);
     splitter->addWidget(queue_widget);
     splitter->setSizes({150, 700, 150});
+
+    queue_widget->hide();
 }
 
 GeneralScreen::~GeneralScreen()
@@ -39,4 +42,15 @@ void GeneralScreen::loadSongs() {
     QVector<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
+}
+
+void GeneralScreen::toggleQueue(void) {
+    if (queue_widget->isVisible()) {
+        std::cout << "hide" << std::endl;
+        queue_widget->hide();
+    }
+    else {
+        std::cout << "show" << std::endl;
+        queue_widget->show();
+    }
 }

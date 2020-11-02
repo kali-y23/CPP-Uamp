@@ -65,7 +65,6 @@ void QSuperButton::createPlaylistList(void) {
 }
 
 void QSuperButton::click() {
-    // QPushButton::click();
     if (index < list.size() - 1) {
         ++index;
     }

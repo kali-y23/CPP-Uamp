@@ -35,12 +35,18 @@ public:
     explicit GeneralScreen(Mediator *mediator, QWidget *parent = nullptr);
     ~GeneralScreen();
 
-    MyTable* getView() {
+    MyTable* getView(void) {
         return view_songs;
+    }
+    QueueWidget *getQueue(void) {
+        return queue_widget;
+    }
+    QPlayer *getPlayer(void) {
+        return player;
     }
 
 public slots:
     void showInView(Tags *tags);
     void loadSongs();
-
+    void toggleQueue(void);
 };

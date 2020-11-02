@@ -19,6 +19,7 @@ Mediator::Mediator() : QObject() {
     connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
+    connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
 }
 
 

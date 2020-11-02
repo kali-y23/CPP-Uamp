@@ -37,10 +37,17 @@ class QPlayer : public QWidget, public Component {
     QLabel *icon_loud;
 
     QLineEdit *edit_search;
+
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
 
 private:
     void setupLayouts(void);
+
+signals:
+    void toggleQueueSignal(void);
+
+public slots:
+    void playlistButtonClicked(void);
 };
