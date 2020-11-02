@@ -12,7 +12,7 @@ class MyModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
-    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number", "Audio file path"};
+    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number"};
     QVector<Tags *> m_data;
     bool editable = false;
     int m_cols = m_headers.size();

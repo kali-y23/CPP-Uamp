@@ -99,10 +99,18 @@ void MyModel::addData(Tags *data) {
 
 void MyModel::sort(int column, Qt::SortOrder order) {
     std::sort(m_data.begin(), m_data.end(), [column, order](Tags *row1, Tags *row2) {
-        if (order == Qt::AscendingOrder) {
-            return row1->getTag(column).toString() > row2->getTag(column).toString();
+        if (column < 4) {
+            if (order == Qt::AscendingOrder) {
+                return row1->getTag(column).toString() > row2->getTag(column).toString();
+            }
+            return row1->getTag(column).toString() < row2->getTag(column).toString();
         }
-        return row1->getTag(column).toString() < row2->getTag(column).toString();
+        else {
+            if (order == Qt::AscendingOrder) {
+                return row1->getTag(column).toInt() > row2->getTag(column).toInt();
+            }
+            return row1->getTag(column).toInt() < row2->getTag(column).toInt();
+        }
     });
     emit layoutChanged();
 }
