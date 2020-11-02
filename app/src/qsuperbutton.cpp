@@ -77,7 +77,6 @@ QPlayButton::QPlayButton(ButtonType type, QWidget *parent) :
             QSuperButton(type, parent)
 {
     createPlaySignalList();
-    qDebug() << signalsList.size();
 }
 
 QPlayButton::~QPlayButton() {

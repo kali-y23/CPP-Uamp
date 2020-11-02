@@ -95,10 +95,14 @@ void QPlayer::setupLayouts() {
 
 
 void QPlayer::updateData(Tags *tags) {
+    BASS_ChannelStop(stream);
     data = tags;
     label_title->setText(data->getTitle().toString());
     label_artist->setText(data->getArtist().toString());
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+    button_play->setIcon(button_play->list[1]);
+    button_play->index = 1;
+    BASS_ChannelPlay(stream,FALSE);
 }
 
 void QPlayer::playSound() {
