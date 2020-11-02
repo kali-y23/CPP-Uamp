@@ -43,12 +43,13 @@ class QPlayer : public QWidget, public Component {
 
     QLineEdit *edit_search;
 
-    Tags *data;
+    Tags *data = nullptr;
     HSTREAM stream;
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
 
+    void setData(Tags *tags);
     void updateData(Tags *tags);
 
 public slots:
