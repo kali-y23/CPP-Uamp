@@ -16,7 +16,7 @@ Mediator::Mediator() : QObject() {
     mainWindow->show();
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
-    connect(this, SIGNAL(changeWidget(QWidget *, bool)), generalScreen, SLOT(loadSongs()));
+    connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
 }
@@ -34,6 +34,8 @@ void Mediator::signIn() {
     user = new User(this);
     user->setId(0);
     user->setLogin("Test");
+
+    emit loadSongs();
     emit changeWidget(generalScreen, true);
 }
 
@@ -58,4 +60,8 @@ void Mediator::initImport(const QString& path) {
 
 void Mediator::slotAddSong(Tags *tags) {
     emit showInLibrary(tags);
+}
+
+void Mediator::setPlaySong(const QModelIndex &index) {
+    qDebug() << generalScreen->getView()->getModel()->rowData(index)->getPath().toString();
 }

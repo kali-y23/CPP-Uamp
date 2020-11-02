@@ -23,6 +23,11 @@ QVariant MyModel::data(const QModelIndex& index, int nRole) const
     return m_data[index.row()]->getTag(index.column());
 }
 
+Tags *MyModel::rowData(const QModelIndex& index) const
+{
+    return m_data[index.row()];
+}
+
 QVariant MyModel::getPath(const QModelIndex& index) const {
     return m_data[index.row()]->getTag(m_cols - 1);
 }

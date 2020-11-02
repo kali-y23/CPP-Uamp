@@ -52,10 +52,12 @@ public slots:
     // void loadSongsFromDB();
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
+    void setPlaySong(const QModelIndex &index);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
+    void loadSongs();
 };

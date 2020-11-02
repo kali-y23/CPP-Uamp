@@ -26,6 +26,8 @@ public:
 
     QVariant data(const QModelIndex& index, int nRole) const;
 
+    Tags *rowData(const QModelIndex& index) const;
+
     QVariant getPath(const QModelIndex& index) const;
 
     bool setData(const QModelIndex& index,
