@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator) {
+QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator), thr(&QPlayer::threadFunction, this) {
     setMaximumHeight(140);
     button_play = new QPlayButton(ButtonType::Play);
     button_prev = new QToolButton();
@@ -81,6 +81,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
 
     connect(button_play, SIGNAL(play()), this, SLOT(playSound()));
     connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
+    connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
 }
 
 QPlayer::~QPlayer() {
@@ -102,17 +103,49 @@ void QPlayer::setData(Tags *tags) {
 }
 
 void QPlayer::updateData(Tags *tags) {
-    BASS_ChannelStop(stream);
+    stopSound();
     setData(tags);
     button_play->setIcon(button_play->list[1]);
     button_play->index = 1;
-    BASS_ChannelPlay(stream,FALSE);
+    playSound();
 }
 
 void QPlayer::playSound() {
     BASS_ChannelPlay(stream,FALSE);
+    playing = 1;
 }
 
 void QPlayer::stopSound() {
     BASS_ChannelStop(stream);
+    playing = 0;
+}
+
+void QPlayer::setPosition(int pos) {
+    if (pos != static_cast<int>(BASS_ChannelGetPosition(stream, BASS_POS_BYTE))) {
+        BASS_ChannelSetPosition(
+            stream,
+            pos,
+            BASS_POS_BYTE
+        );
+    }
+}
+
+void QPlayer::threadFunction() {
+    //std::terminate()
+    while (1) {
+        if (playing) {
+            QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE); // the length in bytes
+            QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE); // the length in bytes
+            // double pos = BASS_ChannelBytes2Seconds(stream, len1); // the length in seconds
+            // double time = BASS_ChannelBytes2Seconds(stream, len); // the length in seconds
+
+            if (slider_song->maximum() != static_cast<int>(time)) {
+                slider_song->setMaximum(static_cast<int>(time));
+            }
+            if(!slider_song->isSliderDown()) {
+                slider_song->setValue(static_cast<int>(pos));
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
+    }
 }

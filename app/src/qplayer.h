@@ -1,6 +1,9 @@
 #pragma once
 
 #include <QtWidgets>
+#include <utility>
+#include <thread>
+#include <chrono>
 
 #include "bass.h"
 
@@ -45,6 +48,8 @@ class QPlayer : public QWidget, public Component {
 
     Tags *data = nullptr;
     HSTREAM stream;
+    bool playing = 0;
+    std::thread thr;
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
@@ -55,7 +60,11 @@ public:
 public slots:
     void playSound();
     void stopSound();
+    void setPosition(int pos);
 
 private:
     void setupLayouts(void);
+
+    void threadFunction();
+    
 };
