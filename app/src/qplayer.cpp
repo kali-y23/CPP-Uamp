@@ -81,7 +81,10 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
 
     connect(button_play, SIGNAL(play()), this, SLOT(playSound()));
     connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
+    connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
+    connect(button_skip_bck, SIGNAL(clicked()), this, SLOT(skipBck()));
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
+    connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
 }
 
 QPlayer::~QPlayer() {
@@ -99,6 +102,9 @@ void QPlayer::setData(Tags *tags) {
     data = tags;
     label_title->setText(data->getTitle().toString());
     label_artist->setText(data->getArtist().toString());
+    BASS_StreamFree(
+        stream
+    );
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
 }
 
@@ -111,7 +117,7 @@ void QPlayer::updateData(Tags *tags) {
 }
 
 void QPlayer::playSound() {
-    BASS_ChannelPlay(stream,FALSE);
+    BASS_ChannelPlay(stream, FALSE);
     playing = 1;
 }
 
@@ -121,12 +127,35 @@ void QPlayer::stopSound() {
 }
 
 void QPlayer::setPosition(int pos) {
-    if (pos != static_cast<int>(BASS_ChannelGetPosition(stream, BASS_POS_BYTE))) {
-        BASS_ChannelSetPosition(
+    QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
+    int delta = 0;
+
+    while (1) {
+        if (BASS_ChannelSetPosition(
             stream,
-            pos,
+            pos - delta,
             BASS_POS_BYTE
-        );
+        )) {
+            break;
+        }
+        delta += 20000;
+    }
+}
+
+void QPlayer::setPosition() {
+    QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
+    QWORD pos = slider_song->value();
+    int delta = 0;
+
+    while (1) {
+        if (BASS_ChannelSetPosition(
+            stream,
+            pos - delta,
+            BASS_POS_BYTE
+        )) {
+            break;
+        }
+        delta += 20000;
     }
 }
 
@@ -134,10 +163,8 @@ void QPlayer::threadFunction() {
     //std::terminate()
     while (1) {
         if (playing) {
-            QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE); // the length in bytes
-            QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE); // the length in bytes
-            // double pos = BASS_ChannelBytes2Seconds(stream, len1); // the length in seconds
-            // double time = BASS_ChannelBytes2Seconds(stream, len); // the length in seconds
+            QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
+            QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
 
             if (slider_song->maximum() != static_cast<int>(time)) {
                 slider_song->setMaximum(static_cast<int>(time));
@@ -145,7 +172,37 @@ void QPlayer::threadFunction() {
             if(!slider_song->isSliderDown()) {
                 slider_song->setValue(static_cast<int>(pos));
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            if (pos >= time) {
+                BASS_ChannelPlay(stream, FALSE);
+            }
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+}
+
+void QPlayer::skipFwd() {
+    QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
+    QWORD currentPos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
+    QWORD delta = BASS_ChannelSeconds2Bytes(stream, 10);
+    QWORD pos = currentPos + delta < time ? currentPos + delta : time - 1;
+
+    BASS_ChannelSetPosition(
+        stream,
+        pos,
+        BASS_POS_BYTE
+    );
+    slider_song->setValue(static_cast<int>(pos));
+}
+
+void QPlayer::skipBck() {
+    QWORD currentPos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
+    QWORD delta = BASS_ChannelSeconds2Bytes(stream, 10);
+    QWORD pos = delta > currentPos ? BASS_ChannelSeconds2Bytes(stream, 0) : currentPos - delta;
+
+    BASS_ChannelSetPosition(
+        stream,
+        pos,
+        BASS_POS_BYTE
+    );
+    slider_song->setValue(static_cast<int>(pos));
 }

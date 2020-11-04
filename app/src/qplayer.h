@@ -50,6 +50,7 @@ class QPlayer : public QWidget, public Component {
     HSTREAM stream;
     bool playing = 0;
     std::thread thr;
+
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
     ~QPlayer();
@@ -61,10 +62,12 @@ public slots:
     void playSound();
     void stopSound();
     void setPosition(int pos);
+    void setPosition();
+    void skipFwd();
+    void skipBck();
 
 private:
     void setupLayouts(void);
-
     void threadFunction();
-    
+
 };
