@@ -24,8 +24,6 @@ Element::Element(const Tags& tags) : QListWidgetItem() {
 
 Element::~Element() {
     delete widget;
-    delete layoutOuter;
-    delete layoutInner;
 }
 
 std::string Element::getPath(void) const {
@@ -56,7 +54,6 @@ void QueueWidget::showQueue() {
 
     for (auto it = queue_.begin() + current_song; it != queue_.end(); ++it) {
         Element *el = new Element(**it);
-
         addItem(reinterpret_cast<QListWidgetItem *>(el));
         setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());
         elements.push_back(el);
@@ -74,22 +71,23 @@ void QueueWidget::clearElements() {
 }
 
 void QueueWidget::nextSong() {
-    delete elements[0];
-    takeItem(0);
-    current_song += 1;
+    if (elements.empty())
+        return;
 
-    if (current_song >= elements.size()) {
-        current_song = 0;
-        showQueue();
-    }
+    takeItem(0);
+    delete elements[0];
+    elements.pop_front();
+    current_song += 1;
 }
 
 void QueueWidget::prevSong() {
-    if (current_song > 0) {
+    if (current_song > 0 && queue.getQueueSize() > 0) {
         Element *el = new Element(*queue.getQueue()[current_song - 1]);
 
-        addItem(reinterpret_cast<QListWidgetItem *>(el));
+        insertItem(0, reinterpret_cast<QListWidgetItem *>(el));
         setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());
         elements.push_front(el);
+
+        current_song -= 1;
     }
 }

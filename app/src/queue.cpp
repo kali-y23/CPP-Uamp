@@ -48,6 +48,10 @@ const std::deque<Tags *>& Queue::getQueue(void) const {
     return queue;
 }
 
+int Queue::getQueueSize(void) const {
+    return queue.size();
+}
+
 // void Queue::shuffleSongs(Tags *song) {
 
 // }
@@ -79,6 +83,7 @@ void Queue::sortByTag(SortBy tag) {
         });
     }
 }
+
 
 
 

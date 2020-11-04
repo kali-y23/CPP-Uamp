@@ -41,6 +41,8 @@ public:
 
 
 class QueueWidget : public QListWidget, public Component {
+    Q_OBJECT
+
     unsigned int current_song;
     Queue queue;
     std::deque<Element *> elements;

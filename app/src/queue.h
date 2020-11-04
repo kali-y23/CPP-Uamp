@@ -38,6 +38,7 @@ public:
     void removeFromQueue(std::deque<Tags *>::iterator song);
 
     const std::deque<Tags *>& getQueue(void) const;
+    int getQueueSize(void) const;
 
     // void shuffleSongs(Tags *song);
     void sortByTag(SortBy tag);
