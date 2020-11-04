@@ -155,7 +155,7 @@ void QPlayer::setPosition() {
         )) {
             break;
         }
-        delta += 20000;
+        delta += 10000;
     }
 }
 

@@ -30,6 +30,10 @@ Tags::Tags(const std::string& path)
 
             artist = tag->artist();
             title = tag->title();
+            if (title.isEmpty()) {
+                QFileInfo info(path.c_str());
+                title = info.baseName().toStdString();
+            }
             album = tag->album();
             genre = tag->genre();
             year = tag->year();
