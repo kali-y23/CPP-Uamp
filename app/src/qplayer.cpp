@@ -85,6 +85,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_skip_bck, SIGNAL(clicked()), this, SLOT(skipBck()));
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
+    connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
 }
 
 QPlayer::~QPlayer() {
@@ -152,12 +153,51 @@ void QPlayer::setPosition() {
             stream,
             pos - delta,
             BASS_POS_BYTE
-        )) {
+            )) {
             break;
         }
         delta += 10000;
     }
 }
+
+std::string toStrTime(int time) {
+    std::string str = std::to_string(time);
+    if (str.length() < 2) {
+        str.insert(0, "0");
+    }
+    return str;
+}
+
+std::string transformTime(double dTime) {
+    int iTime = round(dTime);
+    int iMin = iTime / 60;
+    int iSec = iTime - iMin * 60;
+    std::string min = toStrTime(iMin);
+    std::string sec = toStrTime(iSec);
+
+    return min + ":" + sec;
+}
+
+std::string transformTime1(int time) {
+    int iMin = time / 60;
+    int iSec = time - iMin * 60;
+    std::string min = toStrTime(iMin);
+    std::string sec = toStrTime(iSec);
+
+    return min + ":" + sec;
+}
+
+void QPlayer::displayData(int pos) {
+    QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
+    double dTime = BASS_ChannelBytes2Seconds(stream, time);
+    double dPos = BASS_ChannelBytes2Seconds(stream, pos);
+    int iTime = round(dTime);
+    int iPos = round(dPos);
+
+    label_start_time->setText(transformTime(iPos).c_str());
+    label_end_time->setText(transformTime(iTime - iPos).c_str());
+}
+
 
 void QPlayer::threadFunction() {
     //std::terminate()

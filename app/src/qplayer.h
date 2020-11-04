@@ -65,6 +65,7 @@ public slots:
     void setPosition();
     void skipFwd();
     void skipBck();
+    void displayData(int pos);
 
 private:
     void setupLayouts(void);
