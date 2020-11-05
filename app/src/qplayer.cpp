@@ -104,6 +104,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), SLOT(setWidget(QWidget *, bool)));
+
+    connect(this, SIGNAL(test()), this, SLOT(test1()));
 }
 
 QPlayer::~QPlayer() {
@@ -141,9 +143,15 @@ void QPlayer::updateData(Tags *tags) {
 }
 
 void QPlayer::playSound() {
-    layoutOuter->setCurrentWidget(playerEnabled);
-    BASS_ChannelPlay(stream, FALSE);
-    playing = 1;
+    if (stream) {
+        layoutOuter->setCurrentWidget(playerEnabled);
+        BASS_ChannelPlay(stream, FALSE);
+        playing = 1;
+    }
+    else {
+        button_play->setIcon(button_play->list[0]);
+        button_play->index = 0;
+    }
 }
 
 void QPlayer::stopSound() {
@@ -215,7 +223,7 @@ void QPlayer::displayData(int pos) {
 
 void QPlayer::threadFunction() {
     while (1) {
-        if (playing) {
+        if (playing && stream) {
             QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
             QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
 
@@ -226,13 +234,24 @@ void QPlayer::threadFunction() {
                 slider_song->setValue(static_cast<int>(pos));
             }
             if (pos >= time) {
-                Tags *next_tags = new Tags(mediator->getGeneralScreen()->getQueue()->getNextSong());
-                    setWidget(playerDisabled, 1);
+                emit test();
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
+
+void QPlayer::test1() {
+    Tags *next_tags = mediator->getGeneralScreen()->getQueue()->getNextSong();
+    if(next_tags)
+        updateData(next_tags);
+    else{
+        playing = 0;
+        stream = 0;
+        setWidget(playerDisabled, 1);
+    }
+}
+
 
 void QPlayer::setWidget(QWidget *widget, bool play) {
     layoutOuter->setCurrentWidget(widget);

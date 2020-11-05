@@ -53,7 +53,7 @@ class QPlayer : public QWidget, public Component {
     QStackedLayout *layoutOuter;
 
     Tags *data = nullptr;
-    HSTREAM stream;
+    HSTREAM stream = 0;
     bool playing = 0;
     std::thread thr;
 
@@ -69,6 +69,7 @@ signals:
     void toggleQueueSignal(void);
     void nextSong();
     void prevSong();
+    void test();
 
 public slots:
     void playSound();
@@ -82,6 +83,7 @@ public slots:
     void playlistButtonClicked(void);
     void threadFunction();
     void setData(Tags *tags);
+    void test1();
 
 private:
     void setupLayouts(void);

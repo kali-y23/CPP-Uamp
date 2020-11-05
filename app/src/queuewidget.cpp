@@ -89,7 +89,6 @@ void QueueWidget::nextSong() {
     else if (repeat_mode == REPEAT_SONG) {
         return;
     }
-
     takeItem(0);
     delete elements[0];
     elements.pop_front();
