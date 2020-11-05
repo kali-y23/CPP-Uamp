@@ -22,9 +22,9 @@ Mediator::Mediator() : QObject() {
 
     connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
 
-    // ???
     connect(this, SIGNAL(nextSong()), generalScreen->getQueue(), SLOT(nextSong()));
     connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
+    connect(this, SIGNAL(repeatModeChanged(int)), generalScreen->getQueue(), SLOT(changeRepeatMode(int)));
 }
 
 
@@ -78,4 +78,8 @@ void Mediator::playNextSong() {
 
 void Mediator::playPrevSong() {
     emit prevSong();
+}
+
+void Mediator::emitRepeatModeIndex(int index) {
+    emit repeatModeChanged(index);
 }

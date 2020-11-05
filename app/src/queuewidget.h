@@ -14,9 +14,12 @@
 #include "queue.h"
 #include "component.h"
 
+#define NO_REPEAT 0
+#define REPEAT_PLAYLIST 1
+#define REPEAT_SONG 2
+
 class Component;
 class Queue;
-
 
 class Element : public QListWidgetItem {
     QWidget *widget;
@@ -46,6 +49,7 @@ class QueueWidget : public QListWidget, public Component {
     unsigned int current_song;
     Queue queue;
     std::deque<Element *> elements;
+    int repeat_mode;
 
 public:
     QueueWidget(Mediator *mediator, QWidget *parent = nullptr);
@@ -59,6 +63,7 @@ public slots:
     void setQueue(const std::deque<Tags *>& queue_);
     void nextSong();
     void prevSong();
+    void changeRepeatMode(int index);
     // void chooseFromQueue(int index);
     // void removeFromQueue(int index);
 };

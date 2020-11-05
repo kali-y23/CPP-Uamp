@@ -26,6 +26,10 @@ private:
     void createShuffleList(void);
     void createPlaylistList(void);
 
+signals:
+    void indexChanged(int index);
+
 public slots:
     void click();
+    void emitIndex();
 };

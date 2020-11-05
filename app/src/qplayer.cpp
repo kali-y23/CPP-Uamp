@@ -82,6 +82,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     QObject::connect(button_playlist, SIGNAL(clicked()), this, SLOT(playlistButtonClicked()));
     QObject::connect(button_next, SIGNAL(clicked()), mediator, SLOT(playNextSong()));
     QObject::connect(button_prev, SIGNAL(clicked()), mediator, SLOT(playPrevSong()));
+    QObject::connect(button_loop, SIGNAL(clicked()), button_loop, SLOT(emitIndex()));
+    QObject::connect(button_loop, SIGNAL(indexChanged(int)), mediator, SLOT(emitRepeatModeIndex(int)));
 }
 
 QPlayer::~QPlayer() {

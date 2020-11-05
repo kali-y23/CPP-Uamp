@@ -73,3 +73,7 @@ void QSuperButton::click() {
 
     setIcon(list[index]);
 }
+
+void QSuperButton::emitIndex() {
+    emit indexChanged(index);
+}
