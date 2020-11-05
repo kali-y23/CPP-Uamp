@@ -21,8 +21,11 @@ class QPlayer : public QWidget, public Component {
 
     QHBoxLayout *main;
     QGridLayout *player;
+    QGridLayout *label;
 
     QWidget *player_widget;
+    QWidget *playerEnabled;
+    QWidget *playerDisabled;
 
     QSlider *slider_song;
     QSlider *slider_sound;
@@ -43,8 +46,11 @@ class QPlayer : public QWidget, public Component {
 
     QLabel *icon_quiet;
     QLabel *icon_loud;
+    QLabel *label1;
+    QLabel *label2;
 
     QLineEdit *edit_search;
+    QStackedLayout *layoutOuter;
 
     Tags *data = nullptr;
     HSTREAM stream;
@@ -57,6 +63,7 @@ public:
 
     void setData(Tags *tags);
     void updateData(Tags *tags);
+    void setWidget(QWidget *widget);
 
 public slots:
     void playSound();
@@ -66,9 +73,12 @@ public slots:
     void skipFwd();
     void skipBck();
     void displayData(int pos);
+    void setWidget(QWidget *widget, bool play);
 
 private:
     void setupLayouts(void);
     void threadFunction();
 
+signals:
+    void changeWidget(QWidget *widget, bool play);
 };

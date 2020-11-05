@@ -17,7 +17,7 @@ class Mediator;
 class LibraryManager : public QObject, public Component {
     Q_OBJECT
 
-    QLineEdit *m_ptxtMask = new QLineEdit("*.mp3");
+    QLineEdit *m_ptxtMask = new QLineEdit("*.mp3 *.flac *.wav *.mp4");
 
     void processSong(const QString& path);
     bool saveToDb(Tags *tags);

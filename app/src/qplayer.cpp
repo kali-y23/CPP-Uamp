@@ -35,6 +35,15 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     player_widget->setObjectName("Player");
     player_widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
+    playerEnabled = new QWidget();
+    playerDisabled = new QWidget();
+    playerDisabled->setMaximumHeight(100);
+
+    label1 = new QLabel("ucode");
+    label1->setObjectName("label_1");
+    label2 = new QLabel("amp");
+    label2->setObjectName("label_2");
+
     setupLayouts();
 
     icon_quiet->setPixmap(QPixmap(":/quiet.png").scaled(30, 30));
@@ -69,6 +78,9 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     player->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
     player->addWidget(slider_song, 3, 0, 1, 5);
 
+    label->addWidget(label1, 0, 0, 1, 1);
+    label->addWidget(label2, 0, 1, 1, 1);
+
     main->addSpacing(80);
     main->addWidget(icon_quiet);
     main->addWidget(slider_sound);
@@ -86,6 +98,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
+    connect(this, SIGNAL(changeWidget(QWidget *, bool)), SLOT(setWidget(QWidget *, bool)));
 }
 
 QPlayer::~QPlayer() {
@@ -94,8 +107,12 @@ QPlayer::~QPlayer() {
 
 void QPlayer::setupLayouts() {
     main = new QHBoxLayout(this);
-    player = new QGridLayout(player_widget);
-
+    player = new QGridLayout(playerEnabled);
+    label = new QGridLayout(playerDisabled);
+    layoutOuter = new QStackedLayout(player_widget);
+    layoutOuter->addWidget(playerDisabled);
+    layoutOuter->addWidget(playerEnabled);
+    layoutOuter->setCurrentWidget(playerDisabled);
 }
 
 
@@ -118,6 +135,7 @@ void QPlayer::updateData(Tags *tags) {
 }
 
 void QPlayer::playSound() {
+    layoutOuter->setCurrentWidget(playerEnabled);
     BASS_ChannelPlay(stream, FALSE);
     playing = 1;
 }
@@ -168,17 +186,7 @@ std::string toStrTime(int time) {
     return str;
 }
 
-std::string transformTime(double dTime) {
-    int iTime = round(dTime);
-    int iMin = iTime / 60;
-    int iSec = iTime - iMin * 60;
-    std::string min = toStrTime(iMin);
-    std::string sec = toStrTime(iSec);
-
-    return min + ":" + sec;
-}
-
-std::string transformTime1(int time) {
+std::string transformTime(int time) {
     int iMin = time / 60;
     int iSec = time - iMin * 60;
     std::string min = toStrTime(iMin);
@@ -213,10 +221,18 @@ void QPlayer::threadFunction() {
                 slider_song->setValue(static_cast<int>(pos));
             }
             if (pos >= time) {
-                BASS_ChannelPlay(stream, FALSE);
+                // BASS_ChannelPlay(stream, FALSE);
+                emit changeWidget(playerDisabled, 1);
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+void QPlayer::setWidget(QWidget *widget, bool play) {
+    layoutOuter->setCurrentWidget(widget);
+    if (play) {
+        emit button_play->clicked();
     }
 }
 
