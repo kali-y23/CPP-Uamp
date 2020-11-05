@@ -45,8 +45,13 @@ public:
         return player;
     }
 
+    QPlayer *getPlayer() {
+        return player;
+    }
+
 public slots:
     void showInView(Tags *tags);
     void loadSongs();
     void toggleQueue(void);
+    void updatePlayerData(Tags *tags);
 };

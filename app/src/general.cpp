@@ -30,6 +30,10 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     splitter->setSizes({150, 700, 250});
 
     queue_widget->hide();
+
+    connect(view_songs, SIGNAL(sendSongToPlayer(Tags *)), this, SLOT(updatePlayerData(Tags *)));
+    connect(queue_widget, SIGNAL(sendSongToPlayer(Tags *)), this, SLOT(updatePlayerData(Tags *)));
+    connect(queue_widget, SIGNAL(sendFirstSongToPlayer(Tags *)), player, SLOT(setData(Tags *)));
 }
 
 GeneralScreen::~GeneralScreen()
@@ -55,3 +59,6 @@ void GeneralScreen::toggleQueue(void) {
         queue_widget->show();
 }
 
+void GeneralScreen::updatePlayerData(Tags *tags) {
+    getPlayer()->updateData(tags);
+}

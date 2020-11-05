@@ -21,4 +21,10 @@ public:
     MyModel* getModel() {
         return m_model;
     }
+
+signals:
+    void sendSongToPlayer(Tags *tags);
+
+public slots:
+    void sendNextSong(const QModelIndex &index);
 };

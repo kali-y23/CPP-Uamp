@@ -13,10 +13,10 @@ enum class ButtonType {
 class QSuperButton : public QToolButton {
     Q_OBJECT
 
+public:
     QList<QIcon> list;
     int index;
 
-public:
     QSuperButton(ButtonType type, QWidget *parent = nullptr);
     ~QSuperButton();
 
@@ -30,6 +30,24 @@ signals:
     void indexChanged(int index);
 
 public slots:
-    void click();
+    virtual void click();
     void emitIndex();
+};
+
+class QPlayButton : public QSuperButton {
+    Q_OBJECT
+
+    QList<void (QPlayButton::*)(void)> signalsList;
+    void createPlaySignalList(void);
+
+public:
+    QPlayButton(ButtonType type, QWidget *parent = nullptr);
+    ~QPlayButton();
+
+public slots:
+    void click() override;
+
+signals:
+    void play();
+    void stop();
 };

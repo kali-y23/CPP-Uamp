@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-    // BASS_Init (-1, 44100, BASS_DEVICE_3D , 0, NULL);
+    BASS_Init (-1, 44100, BASS_DEVICE_3D , 0, NULL);
     // HSTREAM stream;
     // stream = BASS_StreamCreateFile(FALSE, "/Users/mlibovych/Desktop/P.I.M.P..mp3", 0, 0, 0);
     // BASS_ChannelSetPosition(
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     StyleSheet = QLatin1String(File.readAll());
     app.setStyleSheet(StyleSheet);
     res = app.exec();
-    // BASS_Free();
+    BASS_Free();
 
     return res;
 }

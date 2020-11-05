@@ -3,10 +3,10 @@
 }
 
 QWidget#Player {
-	background-color: DarkOrange;
+
 }
 
-#label {
+#label_1 {
     color: #F6F4F3;
 	font-weight: bold;
 	font-size: 44px;

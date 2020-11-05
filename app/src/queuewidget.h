@@ -31,14 +31,14 @@ class Element : public QListWidgetItem {
     QLabel *labelTitle;
     QLabel *labelArtist;
 
-    std::string path;
+    Tags *tags;
 
 public:
-    Element(const Tags &tags);
+    Element(Tags *tags_);
     ~Element();
 
     QWidget *getWidget(void) const;
-    std::string getPath(void) const;
+    Tags *getTags(void) const;
 };
 
 
@@ -55,17 +55,25 @@ public:
     QueueWidget(Mediator *mediator, QWidget *parent = nullptr);
     ~QueueWidget();
 
+    Tags *getNextSong(void);
+
 private:
     void showQueue();
     void clearElements();
 
 public slots:
+    void sendNextSong(QListWidgetItem *item);
     void setQueue(const std::deque<Tags *>& queue_);
     void nextSong();
     void prevSong();
     void changeRepeatMode(int index);
     // void chooseFromQueue(int index);
     // void removeFromQueue(int index);
+
+signals:
+    void sendFirstSongToPlayer(Tags *tags);
+    void sendSongToPlayer(Tags *tags);
+
 };
 
 #endif

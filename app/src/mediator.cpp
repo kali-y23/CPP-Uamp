@@ -19,12 +19,10 @@ Mediator::Mediator() : QObject() {
     connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
-
-    connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
-
     connect(this, SIGNAL(nextSong()), generalScreen->getQueue(), SLOT(nextSong()));
     connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
     connect(this, SIGNAL(repeatModeChanged(int)), generalScreen->getQueue(), SLOT(changeRepeatMode(int)));
+    connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
 }
 
 
@@ -32,8 +30,12 @@ Mediator::~Mediator() {
     //
 }
 
-LibraryManager * Mediator::getLibraryManager() const {
+LibraryManager *Mediator::getLibraryManager() const {
     return libraryManager;
+}
+
+GeneralScreen *Mediator::getGeneralScreen() const {
+    return generalScreen;
 }
 
 void Mediator::signIn() {
@@ -68,10 +70,6 @@ void Mediator::slotAddSong(Tags *tags) {
     emit showInLibrary(tags);
 }
 
-void Mediator::setPlaySong(const QModelIndex &index) {
-    qDebug() << generalScreen->getView()->getModel()->rowData(index)->getPath().toString();
-}
-
 void Mediator::playNextSong() {
     emit nextSong();
 }
@@ -83,3 +81,4 @@ void Mediator::playPrevSong() {
 void Mediator::emitRepeatModeIndex(int index) {
     emit repeatModeChanged(index);
 }
+

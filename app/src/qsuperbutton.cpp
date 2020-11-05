@@ -70,10 +70,35 @@ void QSuperButton::click() {
     }
     else
         index = 0;
+    setIcon(list[index]);
+}
 
+QPlayButton::QPlayButton(ButtonType type, QWidget *parent) :
+            QSuperButton(type, parent)
+{
+    createPlaySignalList();
+}
+
+QPlayButton::~QPlayButton() {
+    //
+}
+
+void QPlayButton::click() {
+    if (index < signalsList.size() - 1) {
+        ++index;
+    }
+    else
+        index = 0;
+
+    emit std::invoke(signalsList[index], this);
     setIcon(list[index]);
 }
 
 void QSuperButton::emitIndex() {
     emit indexChanged(index);
+}
+
+void QPlayButton::createPlaySignalList(void) {
+    signalsList.push_back(&QPlayButton::stop);
+    signalsList.push_back(&QPlayButton::play);
 }

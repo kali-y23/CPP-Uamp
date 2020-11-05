@@ -29,6 +29,7 @@ public:
     Tags(const std::string& title_, const std::string& artist_,
         const std::string& album_, const std::string& genre_,
         int year_, int trackNumber_, const std::string& fullPath_);
+    Tags(Tags *other);
 
     QString getExt();
 

@@ -41,6 +41,7 @@ public:
 
     User *user;
     LibraryManager *getLibraryManager() const;
+    GeneralScreen *getGeneralScreen() const;
     MyDb *db;
 
 public slots:
@@ -52,7 +53,6 @@ public slots:
     // void loadSongsFromDB();
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
-    void setPlaySong(const QModelIndex &index);
     void playNextSong();
     void playPrevSong();
     void emitRepeatModeIndex(int index);
@@ -66,4 +66,5 @@ signals:
     void nextSong();
     void prevSong();
     void repeatModeChanged(int index);
+    void setPlayerData(const QModelIndex &index);
 };
