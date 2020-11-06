@@ -53,6 +53,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     slider_sound->setMinimumSize(100, 10);
     slider_sound->setMaximumSize(100, 10);
     slider_sound->setMaximum(100);
+    slider_sound->setValue(50);
     icon_quiet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     button_playlist = new QSuperButton(ButtonType::Playlist);
@@ -141,6 +142,7 @@ void QPlayer::setData(Tags *tags) {
         stream
     );
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+    // stream = BASS_MusicLoad(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, BASS_MUSIC_SURROUND, 0);
 }
 
 
