@@ -79,6 +79,7 @@ public slots:
     void stopSound();
     void setPosition(int pos);
     void setPosition();
+    void setVolume(int pos);
     void skipFwd();
     void skipBck();
     void displayData(int pos);

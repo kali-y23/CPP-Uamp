@@ -52,6 +52,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     slider_sound = new QSlider(Qt::Horizontal);
     slider_sound->setMinimumSize(100, 10);
     slider_sound->setMaximumSize(100, 10);
+    slider_sound->setMaximum(100);
     icon_quiet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     button_playlist = new QSuperButton(ButtonType::Playlist);
@@ -108,6 +109,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
     connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
     connect(button_skip_bck, SIGNAL(clicked()), this, SLOT(skipBck()));
+    connect(slider_sound, SIGNAL(sliderMoved(int)), this, SLOT(setVolume(int)));
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
@@ -152,6 +154,7 @@ void QPlayer::updateData(Tags *tags) {
 
 void QPlayer::playSound() {
     if (stream) {
+        BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, slider_sound->value() / 10);
         layoutOuter->setCurrentWidget(playerEnabled);
         BASS_ChannelPlay(stream, FALSE);
         playing = 1;
@@ -199,6 +202,11 @@ void QPlayer::setPosition() {
         delta += 10000;
     }
 }
+
+void QPlayer::setVolume(int pos) {
+    BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, pos / 10);
+}
+
 
 std::string toStrTime(int time) {
     std::string str = std::to_string(time);
