@@ -29,6 +29,9 @@ class QPlayer : public QWidget, public Component {
 
     QSlider *slider_song;
     QSlider *slider_sound;
+    QSlider *sliderTest;
+    QSlider *sliderTest1;
+    QSlider *sliderTest2;
 
     QPlayButton *button_play;
     QToolButton *button_next;

@@ -6,6 +6,13 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setModel(m_model);
     setSortingEnabled(true);
+    verticalHeader()->setVisible(false);
+    horizontalHeader()->setMinimumSectionSize(50);
+    setShowGrid(false);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    horizontalHeader()->setStretchLastSection(true);
+    setAlternatingRowColors(true);
+
     connect(this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(sendNextSong(const QModelIndex &)));
 }
 
