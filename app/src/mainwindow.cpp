@@ -44,10 +44,3 @@ void MainWindow::setWidget(QWidget *widget, bool tool) {
     }
 }
 
-// void MainWindow::paintEvent(QPaintEvent *)
-// {
-//     QStyleOption opt;
-//     opt.init(this);
-//     QPainter p(this);
-//     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-// }

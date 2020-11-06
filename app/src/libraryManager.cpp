@@ -46,17 +46,16 @@ bool LibraryManager::saveToDb(Tags *tags) {
                 fileName.toStdString().c_str());
     query.exec(command);
     if (query.first() && !query.value(0).isNull()) {
-        query.first();
         songId = query.value(0).toInt();
-        std::sprintf(command, "SELECT * FROM user_songs WHERE user_id = '%d' AND song_id = '%d' AND songs.id = user_songs.song_id;",
+        std::sprintf(command, "SELECT * FROM user_songs, songs WHERE user_id = '%d' AND song_id = '%d' AND songs.id = user_songs.song_id;",
                     mediator->user->getId(), songId);
         query.exec(command);
-        if (query.first() && !query.value(0).isNull()) {
+        if (!query.first()) {
             std::sprintf(command, "INSERT INTO user_songs (user_id, song_id) VALUES ('%d', '%d');",
                     mediator->user->getId(), songId);
             query.exec(command);
+            return 1;
         }
-
         return 0;
     }
     else {

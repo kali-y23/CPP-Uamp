@@ -12,6 +12,7 @@ class User :  public Component
 private:
     int id;
     QString login;
+    QString password;
 
 public:
     explicit User(const Mediator *mediator_);
@@ -21,8 +22,12 @@ public:
 
     void setLogin(const QString &login_);
 
+    void setPassword(const QString &password_);
+
     int getId();
 
     QString getLogin();
+
+    QString getPassword();
 
 };

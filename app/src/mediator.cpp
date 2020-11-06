@@ -3,6 +3,7 @@
 Mediator::Mediator() : QObject() {
     db = new MyDb(this);
     libraryManager = new LibraryManager(this);
+    userManager = new UserManager(this);
 
     mainWindow = new MainWindow(this);
     loginScreen = new LoginScreen(this);
@@ -23,6 +24,12 @@ Mediator::Mediator() : QObject() {
     connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
     connect(this, SIGNAL(repeatModeChanged(int)), generalScreen->getQueue(), SLOT(changeRepeatMode(int)));
     connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
+    connect(this, SIGNAL(registrationTry(const QString&, const QString&, const QString&)),
+            userManager, SLOT(addUser(const QString&, const QString&, const QString&)));
+    connect(userManager, SIGNAL(signUp()), this, SLOT(backToSignIn()));
+    connect(this, SIGNAL(signInTry(const QString&, const QString&)),
+            userManager, SLOT(checkUser(const QString&, const QString&)));
+    connect(userManager, SIGNAL(signIn(int, const QString&)), this, SLOT(signIn(int, const QString&)));
 }
 
 
@@ -38,13 +45,28 @@ GeneralScreen *Mediator::getGeneralScreen() const {
     return generalScreen;
 }
 
-void Mediator::signIn() {
+RegistrationScreen *Mediator::getRegistrationScreen() const {
+    return registrationScreen;
+}
+
+MainWindow *Mediator::getMainWindow() const {
+    return mainWindow;
+}
+
+void Mediator::signIn(int id, const QString &login) {
     user = new User(this);
-    user->setId(0);
-    user->setLogin("Test");
+    user->setId(id);
+    user->setLogin(login);
 
     emit loadSongs();
+    loginScreen->clearData();
     emit changeWidget(generalScreen, true);
+}
+
+void Mediator::signInTry() {
+    emit signInTry(loginScreen->getLogin(),
+                   loginScreen->getPassword()
+                  );
 }
 
 void Mediator::registrationOpen() {
@@ -59,6 +81,11 @@ void Mediator::registrationTry() {
 }
 
 void Mediator::backToSignIn() {
+    registrationScreen->clearData();
+    if (user != nullptr) {
+        delete user;
+        user = nullptr;
+    }
     emit changeWidget(loginScreen, false);
 }
 

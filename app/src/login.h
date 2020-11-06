@@ -21,4 +21,8 @@ public:
     explicit LoginScreen(const Mediator *mediator_, QWidget *parent = nullptr);
     ~LoginScreen();
 
+    QString getLogin();
+    QString getPassword();
+
+    void clearData();
 };

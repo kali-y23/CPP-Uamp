@@ -12,6 +12,7 @@
 #include "general.h"
 #include "user.h"
 #include "libraryManager.h"
+#include "userManager.h"
 #include "myDb.h"
 
 class MainWindow;
@@ -20,6 +21,7 @@ class RegistrationScreen;
 class GeneralScreen;
 class User;
 class LibraryManager;
+class UserManager;
 class MyDb;
 
 class Mediator : public QObject
@@ -30,6 +32,7 @@ private:
     MainWindow *mainWindow;
 
     LibraryManager *libraryManager;
+    UserManager *userManager;
 
     LoginScreen *loginScreen;
     RegistrationScreen *registrationScreen;
@@ -39,18 +42,20 @@ public:
     Mediator();
     ~Mediator();
 
-    User *user;
+    User *user = nullptr;
     LibraryManager *getLibraryManager() const;
     GeneralScreen *getGeneralScreen() const;
+    RegistrationScreen *getRegistrationScreen() const;
+    MainWindow *getMainWindow() const;
     MyDb *db;
 
 public slots:
-    void signIn();
+    void signIn(int id, const QString &login);
+    void signInTry();
     void registrationOpen();
     void registrationTry();
     void backToSignIn();
 
-    // void loadSongsFromDB();
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
     void playNextSong();
@@ -60,6 +65,7 @@ public slots:
 signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
+    void signInTry(QString login, QString password);
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
     void loadSongs();
