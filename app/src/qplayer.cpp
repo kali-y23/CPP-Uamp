@@ -87,12 +87,12 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addWidget(icon_quiet);
     main->addWidget(slider_sound);
 
-    sliderTest = new QSlider(Qt::Vertical);
-    main->addWidget(sliderTest);
-    sliderTest1 = new QSlider(Qt::Vertical);
-    main->addWidget(sliderTest1);
-    sliderTest2 = new QSlider(Qt::Vertical);
-    main->addWidget(sliderTest2);
+    // sliderTest = new QSlider(Qt::Vertical);
+    // main->addWidget(sliderTest);
+    // sliderTest1 = new QSlider(Qt::Vertical);
+    // main->addWidget(sliderTest1);
+    // sliderTest2 = new QSlider(Qt::Vertical);
+    // main->addWidget(sliderTest2);
 
     main->addWidget(icon_loud);
     main->addSpacing(30);
@@ -243,14 +243,14 @@ void QPlayer::threadFunction() {
     while (1) {
         if (playing && stream) {
 
-            float fft[512]; // fft data buffer
-            BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
-            sliderTest->setMaximum(static_cast<int>(100));
-            sliderTest1->setMaximum(static_cast<int>(100));
-            sliderTest2->setMaximum(static_cast<int>(100));
-            sliderTest->setValue(static_cast<int>(fft[0] * 100));
-            sliderTest1->setValue(static_cast<int>(fft[1] * 100));
-            sliderTest2->setValue(static_cast<int>(fft[2] * 100));
+            // float fft[512]; // fft data buffer
+            // BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
+            // sliderTest->setMaximum(static_cast<int>(100));
+            // sliderTest1->setMaximum(static_cast<int>(100));
+            // sliderTest2->setMaximum(static_cast<int>(100));
+            // sliderTest->setValue(static_cast<int>(fft[0] * 100));
+            // sliderTest1->setValue(static_cast<int>(fft[1] * 100));
+            // sliderTest2->setValue(static_cast<int>(fft[2] * 100));
 
 
             QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
@@ -263,14 +263,14 @@ void QPlayer::threadFunction() {
                 slider_song->setValue(static_cast<int>(pos));
             }
             if (pos >= time) {
-                emit test();
+                emit signalEnd();
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
-void QPlayer::test1() {
+void QPlayer::processEndSong() {
     Tags *next_tags = mediator->getGeneralScreen()->getQueue()->getNextSong();
     if(next_tags)
         updateData(next_tags);

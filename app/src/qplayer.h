@@ -29,9 +29,9 @@ class QPlayer : public QWidget, public Component {
 
     QSlider *slider_song;
     QSlider *slider_sound;
-    QSlider *sliderTest;
-    QSlider *sliderTest1;
-    QSlider *sliderTest2;
+    // QSlider *sliderTest;
+    // QSlider *sliderTest1;
+    // QSlider *sliderTest2;
 
     QPlayButton *button_play;
     QToolButton *button_next;
@@ -72,7 +72,7 @@ signals:
     void toggleQueueSignal(void);
     void nextSong();
     void prevSong();
-    void test();
+    void signalEnd();
 
 public slots:
     void playSound();
@@ -87,7 +87,7 @@ public slots:
     void playlistButtonClicked(void);
     void threadFunction();
     void setData(Tags *tags);
-    void test1();
+    void processEndSong();
 
 private:
     void setupLayouts(void);
