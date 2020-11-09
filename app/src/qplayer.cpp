@@ -54,6 +54,13 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     slider_sound->setMaximumSize(100, 10);
     slider_sound->setMaximum(100);
     slider_sound->setValue(50);
+
+    slider_bass = new QSlider(Qt::Horizontal);
+    slider_bass->setMinimumSize(100, 10);
+    slider_bass->setMaximumSize(100, 10);
+    slider_bass->setMaximum(30);
+    slider_bass->setValue(15);
+
     icon_quiet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     button_playlist = new QSuperButton(ButtonType::Playlist);
@@ -86,15 +93,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addSpacing(80);
     main->addWidget(icon_quiet);
     main->addWidget(slider_sound);
-
-    // sliderTest = new QSlider(Qt::Vertical);
-    // main->addWidget(sliderTest);
-    // sliderTest1 = new QSlider(Qt::Vertical);
-    // main->addWidget(sliderTest1);
-    // sliderTest2 = new QSlider(Qt::Vertical);
-    // main->addWidget(sliderTest2);
-
     main->addWidget(icon_loud);
+    main->addWidget(slider_bass);
     main->addSpacing(30);
     main->addWidget(edit_search);
     main->addSpacing(30);
@@ -111,12 +111,14 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
     connect(button_skip_bck, SIGNAL(clicked()), this, SLOT(skipBck()));
     connect(slider_sound, SIGNAL(sliderMoved(int)), this, SLOT(setVolume(int)));
+    connect(slider_bass, SIGNAL(sliderMoved(int)), this, SLOT(setBass(int)));
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), SLOT(setWidget(QWidget *, bool)));
 
-    connect(this, SIGNAL(test()), this, SLOT(test1()));
+    connect(this, SIGNAL(signalEnd()), this, SLOT(processEndSong()));
+    
 }
 
 QPlayer::~QPlayer() {
@@ -142,7 +144,6 @@ void QPlayer::setData(Tags *tags) {
         stream
     );
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
-    // stream = BASS_MusicLoad(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, BASS_MUSIC_SURROUND, 0);
 }
 
 
@@ -156,6 +157,7 @@ void QPlayer::updateData(Tags *tags) {
 
 void QPlayer::playSound() {
     if (stream) {
+        handle = BASS_ChannelSetFX(stream, BASS_FX_DX8_PARAMEQ, 1);
         BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, slider_sound->value() / 10);
         layoutOuter->setCurrentWidget(playerEnabled);
         BASS_ChannelPlay(stream, FALSE);
@@ -205,6 +207,14 @@ void QPlayer::setPosition() {
     }
 }
 
+void QPlayer::setBass(int pos) {
+    BASS_DX8_PARAMEQ *eq = new BASS_DX8_PARAMEQ();
+    eq->fBandwidth = 12;
+    eq->fCenter = 100;
+    eq->fGain = pos - 15;
+    BASS_FXSetParameters(handle, eq);
+}
+
 void QPlayer::setVolume(int pos) {
     BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, pos / 10);
 }
@@ -246,12 +256,7 @@ void QPlayer::threadFunction() {
             // float fft[512]; // fft data buffer
             // BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
             // sliderTest->setMaximum(static_cast<int>(100));
-            // sliderTest1->setMaximum(static_cast<int>(100));
-            // sliderTest2->setMaximum(static_cast<int>(100));
             // sliderTest->setValue(static_cast<int>(fft[0] * 100));
-            // sliderTest1->setValue(static_cast<int>(fft[1] * 100));
-            // sliderTest2->setValue(static_cast<int>(fft[2] * 100));
-
 
             QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
             QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
