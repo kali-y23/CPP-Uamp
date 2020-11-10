@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <utility>
 #include <thread>
+#include <vector>
 #include <chrono>
 
 #include "bass.h"
@@ -24,8 +25,8 @@ public:
     explicit MyItem(int x_, int y_, Qt::GlobalColor colour_, QObject *parent = 0);
     ~MyItem();
 
-    int w = 20;
-    int h = 20;
+    float w = 1;
+    float h = 0;
 
 signals:
 
@@ -86,6 +87,9 @@ class QPlayer : public QWidget, public Component {
     std::thread thr;
     HFX handle;
     BASS_DX8_PARAMEQ *eq;
+
+    std::vector<MyItem *> items;
+    QGraphicsScene *scene;
 
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);

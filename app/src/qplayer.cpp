@@ -15,14 +15,14 @@ MyItem::~MyItem()
 
 QRectF MyItem::boundingRect() const
 {
-    return QRectF(x, y, w, h);
+    return QRectF(x, y, w, -h);
 }
 
 void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setBrush(colour);
     painter->setPen(QPen(Qt::NoPen));
-    painter->drawRect(QRectF(x, y, w, h));
+    painter->drawRect(QRectF(x, y, w, -h));
     Q_UNUSED(option);
     Q_UNUSED(widget);
 }
@@ -171,15 +171,15 @@ QPlayer::~QPlayer() {
 }
 
 void QPlayer::initField() {
-    QGraphicsScene *scene = new QGraphicsScene;
+    scene = new QGraphicsScene;
     QGraphicsView *view = new QGraphicsView;
 
-    MyItem *item = new MyItem(0, 0, Qt::black);
-    scene->addItem(item);
-    item->h = 46;
-
-    scene->setSceneRect(0, 0, 200, 100);
-    view->setFixedSize(200 + 2, 100 + 2);
+    for (int i = 0; i < 512; ++i) {
+        items.push_back(new MyItem(i, 100, Qt::black));
+        scene->addItem(items[i]);
+    }
+    scene->setSceneRect(0, 0, 512, 100);
+    view->setFixedSize(512 + 2, 100 + 2);
     view->setScene(scene);
     main->addWidget(view);
 }
@@ -321,9 +321,12 @@ void QPlayer::threadFunction() {
     while (1) {
         if (playing && stream) {
 
-            // float fft[512]; // fft data buffer
-            // BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
-            // sliderTest->setValue(static_cast<int>(fft[0] * 100));
+            float fft[512]; // fft data buffer
+            BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
+            for (int i = 0; i < 512; ++i) {
+                items[i]->h = (items[i]->h + fft[i] * 250) / 2;
+            }
+            scene->update();
 
             QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
             QWORD pos = BASS_ChannelGetPosition(stream, BASS_POS_BYTE);
@@ -338,7 +341,7 @@ void QPlayer::threadFunction() {
                 emit signalEnd();
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
