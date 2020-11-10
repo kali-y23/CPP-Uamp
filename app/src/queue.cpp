@@ -26,11 +26,20 @@ void Queue::clearQueue(void) {
 }
 
 void Queue::addToQueue(Tags *song) {
-    queue.push_back(song);
+    if (shuffle) {
+        queue.push_back(song);
+        shuffleSongs(song);
+        return;
+    }
+
+    int i = 0;
+    int size = queue.size();
+
+    while (i < size) {
+        
+    }
 }
 
-// Is it technically possible to guarantee exactly the same pointer comes to this function?
-// Esp from the table view!! Think about it
 void Queue::removeFromQueue(Tags *song) {
     for (auto it = queue.begin(); it != queue.end(); ++it) {
         if (*it == song) {
@@ -58,29 +67,64 @@ int Queue::getQueueSize(void) const {
 
 void Queue::sortByTag(SortBy tag) {
     if (tag == SortBy::Title) {
-        std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
-            return a1->getTitle().toString() < a2->getTitle().toString();
-        });
+        if (order == Qt::DescendingOrder) {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getTitle().toString() < a2->getTitle().toString();
+            });
+        }
+        else {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getTitle().toString() > a2->getTitle().toString();
+            });
+        }
     }
     else if (tag == SortBy::Artist) {
-        std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
-            return a1->getArtist().toString() < a2->getTitle().toString();
-        });
+        if (order == Qt::DescendingOrder) {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getArtist().toString() < a2->getTitle().toString();
+            });
+        }
+        else {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getArtist().toString() > a2->getTitle().toString();
+            });
+        }
     }
     else if (tag == SortBy::Album) {
-        std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
-            return a1->getAlbum().toString() < a2->getTitle().toString();
-        });
+        if (order == Qt::DescendingOrder) {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getAlbum().toString() < a2->getTitle().toString();
+            });
+        }
+        else {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getAlbum().toString() > a2->getTitle().toString();
+            });
+        }
     }
     else if (tag == SortBy::Genre) {
-        std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
-            return a1->getGenre().toString() < a2->getTitle().toString();
-        });
+        if (order == Qt::DescendingOrder) {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getGenre().toString() < a2->getTitle().toString();
+            });
+        }
+        else {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getGenre().toString() > a2->getTitle().toString();
+            });
+        }
     }
     else if (tag == SortBy::Year) {
-        std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
-            return a1->getYear().toInt() < a2->getTitle().toInt();
-        });
+        if (order == Qt::DescendingOrder) {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getYear().toInt() < a2->getTitle().toInt();
+            });
+        }
+        else {
+            std::sort(queue.begin(), queue.end(), [](const Tags* a1, const Tags* a2) {
+                return a1->getYear().toInt() > a2->getTitle().toInt();
+            });
+        }
     }
 }
 

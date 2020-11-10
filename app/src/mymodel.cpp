@@ -94,6 +94,7 @@ Qt::ItemFlags MyModel::flags(const QModelIndex& index) const
 void MyModel::setNewData(std::deque<Tags *>&& data) {
     m_data.clear();
     m_data = data;
+    sort(0, Qt::DescendingOrder);
     emit layoutChanged();
 }
 

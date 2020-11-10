@@ -137,8 +137,7 @@ void QueueWidget::changeRepeatMode(int index) {
 }
 
 void QueueWidget::sendNextSong(QListWidgetItem *item) {
-    // current_song = indexFromItem(item).row();
-    // std::cout << current_song << std::endl;
-    // showQueue();
+    current_song += indexFromItem(item).row();
     emit sendSongToPlayer(reinterpret_cast<Element *>(item)->getTags());
+    showQueue();
 }

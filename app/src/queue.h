@@ -25,13 +25,14 @@ class Component;
 
 class Queue {
     std::deque<Tags *> queue;
-
+    SortBy mode = SortBy::Title;
+    Qt::SortOrder order = Qt::DescendingOrder;
+    bool shuffle = false;
 public:
     Queue();
     ~Queue();
 
     void createQueue(const std::deque<Tags *>& queue_);
-    void clearQueue(void);
 
     void addToQueue(Tags *song);
     void removeFromQueue(Tags *song);
@@ -42,6 +43,9 @@ public:
 
     // void shuffleSongs(Tags *song);
     void sortByTag(SortBy tag);
+
+private:
+    void clearQueue(void);
 };
 
 #endif
