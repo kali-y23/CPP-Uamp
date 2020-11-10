@@ -16,6 +16,31 @@ class QPlayButton;
 class Component;
 class Tags;
 
+
+class MyItem : public QObject, public QGraphicsItem
+{
+    Q_OBJECT
+public:
+    explicit MyItem(int x_, int y_, Qt::GlobalColor colour_, QObject *parent = 0);
+    ~MyItem();
+
+    int w = 20;
+    int h = 20;
+
+signals:
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+private:
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    int x;
+    int y;
+    Qt::GlobalColor colour;
+};
+
 class QPlayer : public QWidget, public Component {
     Q_OBJECT
 
@@ -32,9 +57,6 @@ class QPlayer : public QWidget, public Component {
     QSlider *slider_gain;
     QSlider *slider_bandwidth;
     QSlider *slider_center;
-    // QSlider *sliderTest;
-    // QSlider *sliderTest1;
-    // QSlider *sliderTest2;
 
     QPlayButton *button_play;
     QToolButton *button_next;
@@ -97,6 +119,10 @@ public slots:
     void setData(Tags *tags);
     void processEndSong();
 
+    void initField();
+
 private:
     void setupLayouts(void);
 };
+
+
