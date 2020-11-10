@@ -29,7 +29,9 @@ class QPlayer : public QWidget, public Component {
 
     QSlider *slider_song;
     QSlider *slider_sound;
-    QSlider *slider_bass;
+    QSlider *slider_gain;
+    QSlider *slider_bandwidth;
+    QSlider *slider_center;
     // QSlider *sliderTest;
     // QSlider *sliderTest1;
     // QSlider *sliderTest2;
@@ -61,6 +63,7 @@ class QPlayer : public QWidget, public Component {
     bool playing = 0;
     std::thread thr;
     HFX handle;
+    BASS_DX8_PARAMEQ *eq;
 
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
@@ -83,6 +86,8 @@ public slots:
     void setPosition();
     void setVolume(int pos);
     void setBass(int pos);
+    void setBandwidth(int pos);
+    void setCenter(int pos);
     void skipFwd();
     void skipBck();
     void displayData(int pos);

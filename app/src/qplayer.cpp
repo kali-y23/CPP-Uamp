@@ -3,6 +3,10 @@
 #include <iostream>
 
 QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator), thr(&QPlayer::threadFunction, this) {
+    eq = new BASS_DX8_PARAMEQ();
+    eq->fBandwidth = 12;
+    eq->fCenter = 8000;
+
     setMaximumHeight(140);
     button_play = new QPlayButton(ButtonType::Play);
     button_prev = new QToolButton();
@@ -55,11 +59,19 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     slider_sound->setMaximum(100);
     slider_sound->setValue(50);
 
-    slider_bass = new QSlider(Qt::Horizontal);
-    slider_bass->setMinimumSize(100, 10);
-    slider_bass->setMaximumSize(100, 10);
-    slider_bass->setMaximum(30);
-    slider_bass->setValue(15);
+    slider_gain = new QSlider(Qt::Vertical);
+    slider_gain->setMaximum(30);
+    slider_gain->setValue(15);
+
+    slider_bandwidth = new QSlider(Qt::Vertical);
+    slider_bandwidth->setMaximum(16000);
+    slider_bandwidth->setMinimum(1);
+    slider_bandwidth->setValue(8000);
+
+    slider_center = new QSlider(Qt::Vertical);
+    slider_center->setMaximum(36);
+    slider_bandwidth->setMinimum(1);
+    slider_center->setValue(12);
 
     icon_quiet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
@@ -94,7 +106,9 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addWidget(icon_quiet);
     main->addWidget(slider_sound);
     main->addWidget(icon_loud);
-    main->addWidget(slider_bass);
+    main->addWidget(slider_gain);
+    main->addWidget(slider_bandwidth);
+    main->addWidget(slider_center);
     main->addSpacing(30);
     main->addWidget(edit_search);
     main->addSpacing(30);
@@ -111,14 +125,14 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
     connect(button_skip_bck, SIGNAL(clicked()), this, SLOT(skipBck()));
     connect(slider_sound, SIGNAL(sliderMoved(int)), this, SLOT(setVolume(int)));
-    connect(slider_bass, SIGNAL(sliderMoved(int)), this, SLOT(setBass(int)));
+    connect(slider_gain, SIGNAL(sliderMoved(int)), this, SLOT(setBass(int)));
+    connect(slider_bandwidth, SIGNAL(sliderMoved(int)), this, SLOT(setBandwidth(int)));
+    connect(slider_center, SIGNAL(sliderMoved(int)), this, SLOT(setCenter(int)));
     connect(slider_song, SIGNAL(sliderMoved(int)), this, SLOT(setPosition(int)));
     connect(slider_song, SIGNAL(sliderPressed()), this, SLOT(setPosition()));
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), SLOT(setWidget(QWidget *, bool)));
-
     connect(this, SIGNAL(signalEnd()), this, SLOT(processEndSong()));
-    
 }
 
 QPlayer::~QPlayer() {
@@ -208,15 +222,22 @@ void QPlayer::setPosition() {
 }
 
 void QPlayer::setBass(int pos) {
-    BASS_DX8_PARAMEQ *eq = new BASS_DX8_PARAMEQ();
-    eq->fBandwidth = 12;
-    eq->fCenter = 100;
     eq->fGain = pos - 15;
     BASS_FXSetParameters(handle, eq);
 }
 
+void QPlayer::setBandwidth(int pos) {
+    eq->fBandwidth = pos;
+    BASS_FXSetParameters(handle, eq);
+}
+
+void QPlayer::setCenter(int pos) {
+    eq->fCenter = pos;
+    BASS_FXSetParameters(handle, eq);
+}
+
 void QPlayer::setVolume(int pos) {
-    BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, pos / 10);
+    BASS_ChannelSetAttribute(stream, BASS_ATTRIB_VOL, static_cast<float>(pos) / 10);
 }
 
 
