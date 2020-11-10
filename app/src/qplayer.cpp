@@ -26,10 +26,10 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     button_shuffle = new QSuperButton(ButtonType::Shuffle);
     button_loop = new QSuperButton(ButtonType::Loop);
 
-    label_title = new QLabel("Title of this awesome song");
-    label_artist = new QLabel("Artist Name");
-    label_start_time = new QLabel("00:00");
-    label_end_time = new QLabel("99:99");
+    label_title = new QLabel();
+    label_artist = new QLabel();
+    label_start_time = new QLabel();
+    label_end_time = new QLabel();
 
     icon_quiet = new QLabel();
     icon_loud = new QLabel();
@@ -37,7 +37,6 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
 
     player_widget = new QWidget();
     player_widget->setObjectName("Player");
-    player_widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     playerEnabled = new QWidget();
     playerDisabled = new QWidget();
@@ -73,8 +72,6 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     slider_bandwidth->setMinimum(1);
     slider_center->setValue(12);
 
-    icon_quiet->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
     button_playlist = new QSuperButton(ButtonType::Playlist);
 
     edit_search = new QLineEdit();
@@ -97,7 +94,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     player->addWidget(label_artist, 1, 1, 1, 2, Qt::AlignCenter);
     player->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
     player->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
-    player->addWidget(slider_song, 3, 0, 1, 5);
+    player->addWidget(slider_song, 3, 0, 1, 4);
 
     label->addWidget(label1, 0, 0, 1, 1);
     label->addWidget(label2, 0, 1, 1, 1);
@@ -276,7 +273,6 @@ void QPlayer::threadFunction() {
 
             // float fft[512]; // fft data buffer
             // BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
-            // sliderTest->setMaximum(static_cast<int>(100));
             // sliderTest->setValue(static_cast<int>(fft[0] * 100));
 
             QWORD time = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
