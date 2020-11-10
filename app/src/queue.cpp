@@ -32,12 +32,12 @@ void Queue::addToQueue(Tags *song) {
         return;
     }
 
-    int i = 0;
-    int size = queue.size();
+    // int i = 0;
+    // int size = queue.size();
 
-    while (i < size) {
-        
-    }
+    // while (i < size) {
+    //     if 
+    // }
 }
 
 void Queue::removeFromQueue(Tags *song) {
