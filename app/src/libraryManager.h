@@ -24,6 +24,7 @@ class LibraryManager : public QObject, public Component {
 
     void processSong(const QString& path);
     bool saveToDb(Tags *tags);
+    bool savePlaylist(const QString& text);
 
 public:
     LibraryManager(Mediator *mediator);
@@ -31,11 +32,13 @@ public:
 
     QLineEdit * getMask() const;
     std::deque<Tags *> getUserSongs();
-    std::list<Playlist *> getUserPlaylists();
+    std::vector<Playlist *> getUserPlaylists();
 
 public slots:
     void addSongsToLibrary(const QString& path);
+    void createPlaylist(const QString& text);
 
 signals:
     void addSongToTreeView(Tags *tags);
+    void addPlaylist(Playlist *playlist);
 };

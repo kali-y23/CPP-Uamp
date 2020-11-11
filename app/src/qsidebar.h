@@ -22,6 +22,7 @@ class QSideBar : public QWidget, public Component {
     QWidget *widget_playlists;
     QVBoxLayout *layout_playlists;
     MyList *playlists_view;
+    QPushButton *createButton;
 
 public:
     QSideBar(const Mediator *mediator, QWidget *parent = nullptr);
@@ -29,6 +30,16 @@ public:
 
     void switchToTreeView();
     void switchToPlaylists();
+
+    MyList *getList() {
+        return playlists_view;
+    }
+
+public slots:
+    void createPlaylist();
+
+signals:
+    void createPlaylist(const QString& text);
 
 private:
     void setupTreeView();

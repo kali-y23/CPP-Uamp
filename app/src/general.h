@@ -52,6 +52,7 @@ public:
 
 public slots:
     void showInView(Tags *tags);
+    void showInList(Playlist *playlist);
     void loadSongs();
     void loadPlaylists();
     void toggleQueue(void);

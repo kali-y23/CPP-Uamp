@@ -2,6 +2,7 @@
 
 LibraryManager::LibraryManager(Mediator *mediator) : Component(mediator) {
     QObject::connect(this, SIGNAL(addSongToTreeView(Tags *)), reinterpret_cast<QObject *>(mediator), SLOT(slotAddSong(Tags *)));
+    QObject::connect(this, SIGNAL(addPlaylist(Playlist *)), reinterpret_cast<QObject *>(mediator), SLOT(slotAddPlaylist(Playlist *)));
 }
 
 LibraryManager::~LibraryManager() {
@@ -54,6 +55,7 @@ bool LibraryManager::saveToDb(Tags *tags) {
             query.bindValue(":user_id", mediator->user->getId());
             query.bindValue(":song_id", songId);
             query.exec();
+            tags->setId(songId);
             return 1;
         }
         return 0;
@@ -82,6 +84,7 @@ bool LibraryManager::saveToDb(Tags *tags) {
         query.bindValue(":user_id", mediator->user->getId());
         query.bindValue(":song_id", songId);
         query.exec();
+        tags->setId(songId);
     }
     return 1;
 }
@@ -94,10 +97,10 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
     query.bindValue(":user_id", mediator->user->getId());
     query.exec();
     while (query.next()) {
-        Tags *tags = new Tags(query.value(1).toString().toStdString(), query.value(2).toString().toStdString(),
-                              query.value(3).toString().toStdString(), query.value(4).toString().toStdString(),
-                              query.value(5).toInt(), query.value(6).toInt(),
-                              query.value(7).toString().toStdString());
+        Tags *tags = new Tags(query.value(0).toInt(), query.value(1).toString().toStdString(),
+                              query.value(2).toString().toStdString(),query.value(3).toString().toStdString(),
+                              query.value(4).toString().toStdString(), query.value(5).toInt(),
+                              query.value(6).toInt(), query.value(7).toString().toStdString());
 
         data.push_back(tags);
     }
@@ -105,8 +108,44 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
     return data;
 }
 
-std::list<Playlist *> LibraryManager::getUserPlaylists() {
-    std::list<Playlist *> data;
+std::vector<Playlist *> LibraryManager::getUserPlaylists() {
+    std::vector<Playlist *> data;
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("SELECT * FROM playlists WHERE user_id=:user_id");
+    query.bindValue(":user_id", mediator->user->getId());
+    query.exec();
+    while (query.next()) {
+        Playlist *playlist = new Playlist(query.value(1).toString(), query.value(0).toInt());
+
+        data.push_back(playlist);
+    }
 
     return data;
+}
+
+void LibraryManager::createPlaylist(const QString& text) {
+    if (savePlaylist(text)) {
+        QSqlQuery query(QSqlDatabase::database("myDb"));
+        int Id;
+
+        query.prepare("SELECT last_insert_rowid();");
+        query.exec();
+        query.first();
+        Id = query.value(0).toInt();
+        Playlist *playlist = new Playlist(text, Id);
+        emit addPlaylist(playlist);
+    }
+}
+
+bool LibraryManager::savePlaylist(const QString& text) {
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("INSERT INTO playlists (name, user_id) VALUES (:name, :user_id);");
+    query.bindValue(":user_id", mediator->user->getId());
+    query.bindValue(":name", text);
+    if (query.exec()) {
+        return 1;
+    }
+    return 0;
 }

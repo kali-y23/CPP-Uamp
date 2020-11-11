@@ -45,11 +45,11 @@ Tags::Tags(const std::string& path)
     }
 }
 
-Tags::Tags(const std::string& title_, const std::string& artist_,
+Tags::Tags(int id_, const std::string& title_, const std::string& artist_,
            const std::string& album_, const std::string& genre_,
            int year_, int trackNumber_, const std::string& fullPath_) :
            title(title_), artist(artist_), album(album_), genre(genre_), fullPath(fullPath_),
-           year(year_), trackNumber(trackNumber_)
+           id(id_), year(year_), trackNumber(trackNumber_)
 {
 
 }
@@ -179,3 +179,11 @@ void Tags::setPath(const QVariant& value) {
     fullPath = newValue;
 }
 
+
+void Tags::setId(int value) {
+    id = value;
+}
+
+int Tags::getId() {
+    return id;
+}

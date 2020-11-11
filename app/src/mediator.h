@@ -60,12 +60,13 @@ public slots:
     void backToSignIn();
     void backToLibrary();
     void backToPlaylists();
-
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
+    void slotAddPlaylist(Playlist *);
     void playNextSong();
     void playPrevSong();
     void emitRepeatModeIndex(int index);
+    void createPlaylist(const QString& text);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
@@ -73,6 +74,7 @@ signals:
     void signInTry(QString login, QString password);
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
+    void showInList(Playlist *playlists);
     void loadSongs();
     void loadPlaylists();
     void nextSong();
@@ -80,4 +82,5 @@ signals:
     void repeatModeChanged(int index);
     void setPlayerData(const QModelIndex &index);
     void changeSidebar(int index);
+    void createNewPlaylist(const QString& text);
 };

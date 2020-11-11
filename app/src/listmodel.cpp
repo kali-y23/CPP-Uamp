@@ -25,7 +25,7 @@ bool ListModel::setData(const QModelIndex& index,
                       int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
-        // m_data[index.row()];
+        m_data[index.row()]->setName(value.toString());
 
         emit dataChanged(index, index);
         return true;

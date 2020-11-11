@@ -45,6 +45,10 @@ void GeneralScreen::showInView(Tags *tags) {
     getView()->getModel()->addData(tags);
 }
 
+void GeneralScreen::showInList(Playlist *playlist) {
+    sidebar_widget->getList()->getModel()->addData(playlist);
+}
+
 void GeneralScreen::loadSongs() {
     std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
@@ -53,9 +57,9 @@ void GeneralScreen::loadSongs() {
 }
 
 void GeneralScreen::loadPlaylists() {
-    std::list<Playlist *> data = mediator->getLibraryManager()->getUserPlaylists();
-
-    // sidebar_widget->showPlaylists(data);
+    std::vector<Playlist *> data = mediator->getLibraryManager()->getUserPlaylists();
+    
+    sidebar_widget->getList()->getModel()->setNewData(std::move(data));
 }
 
 void GeneralScreen::toggleQueue(void) {

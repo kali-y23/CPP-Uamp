@@ -22,5 +22,9 @@ public:
     int getId() {
         return id;
     }
+
+    void setName(const QString& name_) {
+        name = name_;
+    }
 };
 

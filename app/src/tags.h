@@ -17,7 +17,7 @@ typedef char *(*TagLib_StringHandler)(const char *);
 class Tags {
     QString ext;
     TagLib::String title, artist, album, genre, fullPath;
-    int year, trackNumber;
+    int id, year, trackNumber;
     TagLib::FileRef f;
 
     QVariant check(TagLib::String tag) const;
@@ -26,7 +26,7 @@ class Tags {
 
 public:
     Tags(const std::string& path);
-    Tags(const std::string& title_, const std::string& artist_,
+    Tags(int id, const std::string& title_, const std::string& artist_,
         const std::string& album_, const std::string& genre_,
         int year_, int trackNumber_, const std::string& fullPath_);
     Tags(Tags *other);
@@ -36,6 +36,8 @@ public:
     QVariant getTag(int column) const;
 
     void setTag(int column, const QVariant& value);
+
+    int getId();
 
     QVariant getArtist() const;
 
@@ -50,6 +52,8 @@ public:
     QVariant getYear() const;
 
     QVariant getTrack() const;
+
+    void setId(int value);
 
     void setArtist(const QVariant& value);
 
