@@ -10,8 +10,10 @@ RegistrationScreen::RegistrationScreen(const Mediator *mediator_, QWidget *paren
     loginField->setMinimumWidth(300);
     passwordField = new QLineEdit(this);
     passwordField->setPlaceholderText("Enter password");
+    passwordField->setEchoMode(QLineEdit::Password);
     passwordRepeatField = new QLineEdit(this);
     passwordRepeatField->setPlaceholderText("Repeat password");
+    passwordRepeatField->setEchoMode(QLineEdit::Password);
     registrationButton = new QPushButton("Sign up", this);
     signInButton = new QPushButton("Go back", this);
 

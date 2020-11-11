@@ -2,7 +2,6 @@
 
 #include <QtWidgets>
 
-
 #include "component.h"
 #include "tags.h"
 #include "mymodel.h"

@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <utility>
 #include <thread>
+#include <vector>
 #include <chrono>
 
 #include "bass.h"
@@ -10,11 +11,13 @@
 #include "component.h"
 #include "qsuperbutton.h"
 #include "tags.h"
+#include "myitem.h"
 
 class QSuperButton;
 class QPlayButton;
 class Component;
 class Tags;
+class MyItem; 
 
 class QPlayer : public QWidget, public Component {
     Q_OBJECT
@@ -22,13 +25,18 @@ class QPlayer : public QWidget, public Component {
     QHBoxLayout *main;
     QGridLayout *player;
     QGridLayout *label;
+    QGridLayout *sceneLayout;
 
     QWidget *player_widget;
     QWidget *playerEnabled;
     QWidget *playerDisabled;
+    QWidget *scene_widget;
 
     QSlider *slider_song;
     QSlider *slider_sound;
+    QSlider *slider_gain;
+    QSlider *slider_bandwidth;
+    QSlider *slider_center;
 
     QPlayButton *button_play;
     QToolButton *button_next;
@@ -56,6 +64,11 @@ class QPlayer : public QWidget, public Component {
     HSTREAM stream = 0;
     bool playing = 0;
     std::thread thr;
+    HFX handle;
+    BASS_DX8_PARAMEQ *eq;
+
+    std::vector<MyItem *> items;
+    QGraphicsScene *scene;
 
 public:
     QPlayer(const Mediator *mediator, QWidget *parent = nullptr);
@@ -69,13 +82,17 @@ signals:
     void toggleQueueSignal(void);
     void nextSong();
     void prevSong();
-    void test();
+    void signalEnd();
 
 public slots:
     void playSound();
     void stopSound();
     void setPosition(int pos);
     void setPosition();
+    void setVolume(int pos);
+    void setBass(int pos);
+    void setBandwidth(int pos);
+    void setCenter(int pos);
     void skipFwd();
     void skipBck();
     void displayData(int pos);
@@ -83,8 +100,12 @@ public slots:
     void playlistButtonClicked(void);
     void threadFunction();
     void setData(Tags *tags);
-    void test1();
+    void processEndSong();
+
+    void initField();
 
 private:
     void setupLayouts(void);
 };
+
+

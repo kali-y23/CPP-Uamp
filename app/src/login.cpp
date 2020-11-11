@@ -10,6 +10,7 @@ LoginScreen::LoginScreen(const Mediator *mediator_, QWidget *parent) :
     loginField->setMinimumWidth(300);
     passwordField = new QLineEdit(this);
     passwordField->setPlaceholderText("Password");
+    passwordField->setEchoMode(QLineEdit::Password);
     signInButton = new QPushButton("Sign in", this);
     registrationButton = new QPushButton("Registration", this);
 
@@ -31,11 +32,24 @@ LoginScreen::LoginScreen(const Mediator *mediator_, QWidget *parent) :
     signInButton->setMinimumHeight(50);
     registrationButton->setMinimumHeight(50);
 
-    connect(signInButton, SIGNAL(clicked()), reinterpret_cast<const QObject *> (mediator), SLOT(signIn()));
+    connect(signInButton, SIGNAL(clicked()), reinterpret_cast<const QObject *> (mediator), SLOT(signInTry()));
     connect(registrationButton, SIGNAL(clicked()), reinterpret_cast<const QObject *> (mediator), SLOT(registrationOpen()));
 }
 
 LoginScreen::~LoginScreen()
 {
 
+}
+
+QString LoginScreen::getLogin(){
+    return loginField->text();
+}
+
+QString LoginScreen::getPassword() {
+    return passwordField->text();
+}
+
+void LoginScreen::clearData() {
+    loginField->clear();
+    passwordField->clear();
 }

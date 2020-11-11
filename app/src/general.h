@@ -2,10 +2,10 @@
 
 #include <QtWidgets>
 
-// #include "component.h"
 #include "qplayer.h"
 #include "qsidebar.h"
 #include "mytable.h"
+#include "mylist.h"
 #include "queuewidget.h"
 
 class Component;
@@ -13,6 +13,7 @@ class Mediator;
 class QPlayer;
 class QSideBar;
 class MyTable;
+class MyList;
 
 class GeneralScreen : public QWidget, public Component
 {
@@ -52,6 +53,8 @@ public:
 public slots:
     void showInView(Tags *tags);
     void loadSongs();
+    void loadPlaylists();
     void toggleQueue(void);
     void updatePlayerData(Tags *tags);
+    void changeSidebar(int index);
 };

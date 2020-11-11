@@ -12,14 +12,19 @@ QLineEdit *LibraryManager::getMask() const {
     return m_ptxtMask;
 }
 
-void LibraryManager::addSongsToLibrary(const QString& path) {
+void LibraryManager::addSongsToLibrary(const QString& path, bool recursive) {
     QFileInfo info(path);
 
     if (info.isDir()) {
         QDir dir(path);
-        QList<QFileInfo> dirs = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
+        QList<QFileInfo> files = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
+        QList<QFileInfo> dirs = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-        for (const QFileInfo& finf : dirs)
+        if (recursive)
+            for (const QFileInfo &dirinf : dirs)
+                addSongsToLibrary(dirinf.absoluteFilePath(), true);
+
+        for (const QFileInfo& finf : files)
             processSong(finf.absoluteFilePath());
     }
     else
@@ -36,27 +41,26 @@ void LibraryManager::processSong(const QString &path) {
 
 bool LibraryManager::saveToDb(Tags *tags) {
     QSqlQuery query(QSqlDatabase::database("myDb"));
-    char *command = new char[1024];
     int songId = 0;
     QString filePath = QDir::homePath() + "/.uamp/" + tags->getArtist().toString() + "/" + tags->getAlbum().toString() + "/";
     QString fileName = filePath + tags->getTitle().toString() + "." + tags->getExt();
 
-
-    std::sprintf(command, "SELECT id FROM songs WHERE path = '%s';",
-                fileName.toStdString().c_str());
-    query.exec(command);
+    query.prepare("SELECT id FROM songs WHERE path=:path;");
+    query.bindValue(":path", fileName);
+    query.exec();
     if (query.first() && !query.value(0).isNull()) {
-        query.first();
         songId = query.value(0).toInt();
-        std::sprintf(command, "SELECT * FROM user_songs WHERE user_id = '%d' AND song_id = '%d' AND songs.id = user_songs.song_id;",
-                    mediator->user->getId(), songId);
-        query.exec(command);
-        if (query.first() && !query.value(0).isNull()) {
-            std::sprintf(command, "INSERT INTO user_songs (user_id, song_id) VALUES ('%d', '%d');",
-                    mediator->user->getId(), songId);
-            query.exec(command);
+        query.prepare("SELECT * FROM user_songs, songs WHERE user_id=:user_id AND song_id=:song_id AND songs.id = user_songs.song_id;");
+        query.bindValue(":user_id", mediator->user->getId());
+        query.bindValue(":song_id", songId);
+        query.exec();
+        if (!query.first()) {
+            query.prepare("INSERT INTO user_songs (user_id, song_id) VALUES (:user_id, :song_id);");
+            query.bindValue(":user_id", mediator->user->getId());
+            query.bindValue(":song_id", songId);
+            query.exec();
+            return 1;
         }
-
         return 0;
     }
     else {
@@ -65,20 +69,24 @@ bool LibraryManager::saveToDb(Tags *tags) {
         appDir.mkpath(filePath);
         QFile::copy(tags->getPath().toString(), fileName);
         tags->setPath(fileName);
-        std::sprintf(command, "INSERT INTO songs (title, artist, album, genre, year, number, path)\
-                               VALUES ('%s', '%s', '%s', '%s', '%d', '%d', '%s');",
-                    tags->getTitle().toString().toStdString().c_str(), tags->getArtist().toString().toStdString().c_str(),
-                    tags->getAlbum().toString().toStdString().c_str(), tags->getGenre().toString().toStdString().c_str(),
-                    tags->getYear().toInt(), tags->getTrack().toInt(),
-                    tags->getPath().toString().toStdString().c_str());
-        query.exec(command);
-        std::sprintf(command, "SELECT last_insert_rowid();");
-        query.exec(command);
+        query.prepare("INSERT INTO songs (title, artist, album, genre, year, number, path)\
+                               VALUES (:title, :artist, :album, :genre, :year, :number, :path);");
+        query.bindValue(":title", tags->getTitle().toString());
+        query.bindValue(":artist", tags->getArtist().toString());
+        query.bindValue(":album", tags->getAlbum().toString());
+        query.bindValue(":genre", tags->getGenre().toString());
+        query.bindValue(":year", tags->getYear().toInt());
+        query.bindValue(":number", tags->getTrack().toInt());
+        query.bindValue(":path", tags->getPath().toString());
+        query.exec();
+        query.prepare("SELECT last_insert_rowid();");
+        query.exec();
         query.first();
         songId = query.value(0).toInt();
-        std::sprintf(command, "INSERT INTO user_songs (user_id, song_id) VALUES ('%d', '%d');",
-                    mediator->user->getId(), songId);
-        query.exec(command);
+        query.prepare("INSERT INTO user_songs (user_id, song_id) VALUES (:user_id, :song_id);");
+        query.bindValue(":user_id", mediator->user->getId());
+        query.bindValue(":song_id", songId);
+        query.exec();
     }
     return 1;
 }
@@ -86,11 +94,10 @@ bool LibraryManager::saveToDb(Tags *tags) {
 std::deque<Tags *> LibraryManager::getUserSongs() {
     std::deque<Tags *> data;
     QSqlQuery query(QSqlDatabase::database("myDb"));
-    char *command = new char[1024];
 
-    std::sprintf(command, "SELECT * FROM songs, user_songs ON user_songs.user_id = '%d' AND songs.id = user_songs.song_id;",
-                    mediator->user->getId());
-    query.exec(command);
+    query.prepare("SELECT * FROM songs, user_songs ON user_songs.user_id=:user_id AND songs.id = user_songs.song_id;");
+    query.bindValue(":user_id", mediator->user->getId());
+    query.exec();
     while (query.next()) {
         Tags *tags = new Tags(query.value(1).toString().toStdString(), query.value(2).toString().toStdString(),
                               query.value(3).toString().toStdString(), query.value(4).toString().toStdString(),
@@ -99,6 +106,12 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
 
         data.push_back(tags);
     }
+
+    return data;
+}
+
+std::list<Playlist *> LibraryManager::getUserPlaylists() {
+    std::list<Playlist *> data;
 
     return data;
 }

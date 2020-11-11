@@ -12,7 +12,11 @@
 #include "general.h"
 #include "user.h"
 #include "libraryManager.h"
+#include "userManager.h"
 #include "myDb.h"
+
+#define LIBRARY 0
+#define PLAYLISTS 1
 
 class MainWindow;
 class LoginScreen;
@@ -20,6 +24,7 @@ class RegistrationScreen;
 class GeneralScreen;
 class User;
 class LibraryManager;
+class UserManager;
 class MyDb;
 
 class Mediator : public QObject
@@ -30,6 +35,7 @@ private:
     MainWindow *mainWindow;
 
     LibraryManager *libraryManager;
+    UserManager *userManager;
 
     LoginScreen *loginScreen;
     RegistrationScreen *registrationScreen;
@@ -39,19 +45,23 @@ public:
     Mediator();
     ~Mediator();
 
-    User *user;
+    User *user = nullptr;
     LibraryManager *getLibraryManager() const;
     GeneralScreen *getGeneralScreen() const;
+    RegistrationScreen *getRegistrationScreen() const;
+    MainWindow *getMainWindow() const;
     MyDb *db;
 
 public slots:
-    void signIn();
+    void signIn(int id, const QString &login);
+    void signInTry();
     void registrationOpen();
     void registrationTry();
     void backToSignIn();
+    void backToLibrary();
+    void backToPlaylists();
 
-    // void loadSongsFromDB();
-    void initImport(const QString& path);
+    void initImport(const QString& path, bool recursive);
     void slotAddSong(Tags *tags);
     void playNextSong();
     void playPrevSong();
@@ -60,11 +70,14 @@ public slots:
 signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
-    void addSongsToLibrary(const QString& path);
+    void signInTry(QString login, QString password);
+    void addSongsToLibrary(const QString& path, bool recursive);
     void showInLibrary(Tags *tags);
     void loadSongs();
+    void loadPlaylists();
     void nextSong();
     void prevSong();
     void repeatModeChanged(int index);
     void setPlayerData(const QModelIndex &index);
+    void changeSidebar(int index);
 };
