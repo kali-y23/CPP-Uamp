@@ -6,8 +6,10 @@ QSideBar::QSideBar(const Mediator *mediator, QWidget *parent) :
     layout_stacked = new QStackedLayout;
 
     setupTreeView();
+    setupPlaylists();
 
     layout_stacked->addWidget(widget_treeview);
+    layout_stacked->addWidget(widget_playlists);
 
     layout_main->addLayout(layout_stacked);
     setLayout(layout_main);
@@ -23,6 +25,10 @@ void QSideBar::switchToTreeView() {
     layout_stacked->setCurrentIndex(0);
 }
 
+void QSideBar::switchToPlaylists() {
+    layout_stacked->setCurrentIndex(1);
+}
+
 void QSideBar::setupTreeView() {
     widget_treeview = new QWidget;
     layout_treeview = new QVBoxLayout(widget_treeview);
@@ -31,6 +37,16 @@ void QSideBar::setupTreeView() {
     QLabel *label = new QLabel("  Choose a song or a directory with songs");
     layout_treeview->addWidget(label);
     layout_treeview->addWidget(tree_view);
+}
+
+void QSideBar::setupPlaylists() {
+    widget_playlists = new QWidget;
+    layout_playlists = new QVBoxLayout(widget_playlists);
+    playlists_view = new QListView(widget_playlists);
+
+    QLabel *label = new QLabel("  Playlists");
+    layout_playlists->addWidget(label);
+    layout_playlists->addWidget(playlists_view);
 }
 
 // void QAbstractItemView::mouseDoubleClickEvent(QMouseEvent *event)

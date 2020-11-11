@@ -52,6 +52,12 @@ void GeneralScreen::loadSongs() {
     getQueue()->setQueue(data);
 }
 
+void GeneralScreen::loadPlaylists() {
+    std::list<Playlist *> data = mediator->getLibraryManager()->getUserPlaylists();
+
+    // sidebar_widget->showPlaylists(data);
+}
+
 void GeneralScreen::toggleQueue(void) {
     if (queue_widget->isVisible())
         queue_widget->hide();
@@ -61,4 +67,14 @@ void GeneralScreen::toggleQueue(void) {
 
 void GeneralScreen::updatePlayerData(Tags *tags) {
     getPlayer()->updateData(tags);
+}
+
+
+void GeneralScreen::changeSidebar(int index) {
+    if (index == LIBRARY) {
+        sidebar_widget->switchToTreeView();
+    }
+    if (index == PLAYLISTS) {
+         sidebar_widget->switchToPlaylists();
+    }
 }

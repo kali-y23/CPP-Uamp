@@ -15,6 +15,9 @@
 #include "userManager.h"
 #include "myDb.h"
 
+#define LIBRARY 0
+#define PLAYLISTS 1
+
 class MainWindow;
 class LoginScreen;
 class RegistrationScreen;
@@ -55,6 +58,8 @@ public slots:
     void registrationOpen();
     void registrationTry();
     void backToSignIn();
+    void backToLibrary();
+    void backToPlaylists();
 
     void initImport(const QString& path);
     void slotAddSong(Tags *tags);
@@ -69,8 +74,10 @@ signals:
     void addSongsToLibrary(const QString& path);
     void showInLibrary(Tags *tags);
     void loadSongs();
+    void loadPlaylists();
     void nextSong();
     void prevSong();
     void repeatModeChanged(int index);
     void setPlayerData(const QModelIndex &index);
+    void changeSidebar(int index);
 };

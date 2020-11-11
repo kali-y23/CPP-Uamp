@@ -11,36 +11,13 @@
 #include "component.h"
 #include "qsuperbutton.h"
 #include "tags.h"
+#include "myitem.h"
 
 class QSuperButton;
 class QPlayButton;
 class Component;
 class Tags;
-
-
-class MyItem : public QObject, public QGraphicsItem
-{
-    Q_OBJECT
-public:
-    explicit MyItem(int x_, int y_, Qt::GlobalColor colour_, QObject *parent = 0);
-    ~MyItem();
-
-    float w = 1;
-    float h = 0;
-
-signals:
-
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
-private:
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-    int x;
-    int y;
-    Qt::GlobalColor colour;
-};
+class MyItem; 
 
 class QPlayer : public QWidget, public Component {
     Q_OBJECT
@@ -48,10 +25,12 @@ class QPlayer : public QWidget, public Component {
     QHBoxLayout *main;
     QGridLayout *player;
     QGridLayout *label;
+    QGridLayout *sceneLayout;
 
     QWidget *player_widget;
     QWidget *playerEnabled;
     QWidget *playerDisabled;
+    QWidget *scene_widget;
 
     QSlider *slider_song;
     QSlider *slider_sound;

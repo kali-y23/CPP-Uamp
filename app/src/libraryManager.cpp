@@ -104,3 +104,9 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
 
     return data;
 }
+
+std::list<Playlist *> LibraryManager::getUserPlaylists() {
+    std::list<Playlist *> data;
+
+    return data;
+}

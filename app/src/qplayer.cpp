@@ -1,39 +1,5 @@
 #include "qplayer.h"
 
-#include <iostream>
-
-MyItem::MyItem(int x_, int y_, Qt::GlobalColor colour_, QObject *parent)
-    : QObject(parent), QGraphicsItem(), x(x_), y(y_), colour(colour_)
-{
-
-}
-
-MyItem::~MyItem()
-{
-
-}
-
-QRectF MyItem::boundingRect() const
-{
-    return QRectF(x, y, w, -h);
-}
-
-void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    painter->setBrush(colour);
-    painter->setPen(QPen(Qt::NoPen));
-    painter->drawRect(QRectF(x, y, w, -h));
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
-}
-
-
-void MyItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    QGraphicsItem::mousePressEvent(event);
-}
-
-
 QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator), thr(&QPlayer::threadFunction, this) {
     eq = new BASS_DX8_PARAMEQ();
     eq->fBandwidth = 12;
@@ -111,13 +77,13 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     edit_search->setMinimumWidth(100);
     edit_search->setMaximumWidth(300);
 
-    main->addSpacing(30);
+    main->addSpacing(20);
     main->addWidget(button_prev);
     main->addWidget(button_skip_bck);
     main->addWidget(button_play);
     main->addWidget(button_skip_fwd);
     main->addWidget(button_next);
-    main->addSpacing(80);
+    main->addSpacing(50);
     main->addWidget(player_widget);
 
     player->addWidget(button_shuffle, 0, 0, 1, 1);
@@ -131,18 +97,18 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     label->addWidget(label1, 0, 0, 1, 1);
     label->addWidget(label2, 0, 1, 1, 1);
 
-    main->addSpacing(80);
+    main->addSpacing(30);
     main->addWidget(icon_quiet);
     main->addWidget(slider_sound);
     main->addWidget(icon_loud);
+    main->addSpacing(30);
+    initField();
     main->addWidget(slider_gain);
     main->addWidget(slider_bandwidth);
     main->addWidget(slider_center);
-    main->addSpacing(30);
-    main->addWidget(edit_search);
-    main->addSpacing(30);
+    main->addSpacing(20);
     main->addWidget(button_playlist);
-    main->addSpacing(30);
+    main->addSpacing(20);
 
     connect(button_playlist, SIGNAL(clicked()), this, SLOT(playlistButtonClicked()));
     connect(button_next, SIGNAL(clicked()), mediator, SLOT(playNextSong()));
@@ -162,8 +128,6 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(slider_song, SIGNAL(valueChanged(int)), this, SLOT(displayData(int)));
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), SLOT(setWidget(QWidget *, bool)));
     connect(this, SIGNAL(signalEnd()), this, SLOT(processEndSong()));
-
-    initField();
 }
 
 QPlayer::~QPlayer() {
@@ -174,12 +138,12 @@ void QPlayer::initField() {
     scene = new QGraphicsScene;
     QGraphicsView *view = new QGraphicsView;
 
-    for (int i = 0; i < 512; ++i) {
+    for (int i = 0; i < 300; ++i) {
         items.push_back(new MyItem(i, 100, Qt::black));
         scene->addItem(items[i]);
     }
-    scene->setSceneRect(0, 0, 512, 100);
-    view->setFixedSize(512 + 2, 100 + 2);
+    scene->setSceneRect(0, 0, 300, 100);
+    view->setFixedSize(300 + 2, 100 + 2);
     view->setScene(scene);
     main->addWidget(view);
 }
@@ -323,8 +287,8 @@ void QPlayer::threadFunction() {
 
             float fft[512]; // fft data buffer
             BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
-            for (int i = 0; i < 512; ++i) {
-                items[i]->h = (items[i]->h + fft[i] * 250) / 2;
+            for (int i = 0; i < 300; ++i) {
+                items[i]->h = (items[i]->h + std::abs(fft[i] * 100)) / 2;
             }
             scene->update();
 

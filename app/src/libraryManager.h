@@ -3,13 +3,16 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QtWidgets>
+
 #include <string>
 #include <cstdio>
 #include <deque>
+#include <list>
 
 #include "component.h"
 #include "mediator.h"
 #include "tags.h"
+#include "playlist.h"
 
 class Component;
 class Mediator;
@@ -28,6 +31,7 @@ public:
 
     QLineEdit * getMask() const;
     std::deque<Tags *> getUserSongs();
+    std::list<Playlist *> getUserPlaylists();
 
 public slots:
     void addSongsToLibrary(const QString& path);
