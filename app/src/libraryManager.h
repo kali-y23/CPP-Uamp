@@ -30,7 +30,7 @@ public:
     std::deque<Tags *> getUserSongs();
 
 public slots:
-    void addSongsToLibrary(const QString& path);
+    void addSongsToLibrary(const QString& path, bool recursive);
 
 signals:
     void addSongToTreeView(Tags *tags);

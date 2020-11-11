@@ -18,7 +18,7 @@ Mediator::Mediator() : QObject() {
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
     connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
-    connect(this, SIGNAL(addSongsToLibrary(const QString&)), libraryManager, SLOT(addSongsToLibrary(const QString&)));
+    connect(this, SIGNAL(addSongsToLibrary(const QString&, bool)), libraryManager, SLOT(addSongsToLibrary(const QString&, bool)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
     connect(this, SIGNAL(nextSong()), generalScreen->getQueue(), SLOT(nextSong()));
     connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
@@ -89,8 +89,8 @@ void Mediator::backToSignIn() {
     emit changeWidget(loginScreen, false);
 }
 
-void Mediator::initImport(const QString& path) {
-    emit addSongsToLibrary(path);
+void Mediator::initImport(const QString& path, bool recursive) {
+    emit addSongsToLibrary(path, recursive);
 }
 
 void Mediator::slotAddSong(Tags *tags) {

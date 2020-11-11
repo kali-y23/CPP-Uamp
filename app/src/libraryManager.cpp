@@ -12,14 +12,19 @@ QLineEdit *LibraryManager::getMask() const {
     return m_ptxtMask;
 }
 
-void LibraryManager::addSongsToLibrary(const QString& path) {
+void LibraryManager::addSongsToLibrary(const QString& path, bool recursive) {
     QFileInfo info(path);
 
     if (info.isDir()) {
         QDir dir(path);
-        QList<QFileInfo> dirs = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
+        QList<QFileInfo> files = dir.entryInfoList(m_ptxtMask->text().split(" "), QDir::Files);
+        QList<QFileInfo> dirs = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-        for (const QFileInfo& finf : dirs)
+        if (recursive)
+            for (const QFileInfo &dirinf : dirs)
+                addSongsToLibrary(dirinf.absoluteFilePath(), true);
+
+        for (const QFileInfo& finf : files)
             processSong(finf.absoluteFilePath());
     }
     else

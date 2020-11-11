@@ -56,7 +56,7 @@ public slots:
     void registrationTry();
     void backToSignIn();
 
-    void initImport(const QString& path);
+    void initImport(const QString& path, bool recursive);
     void slotAddSong(Tags *tags);
     void playNextSong();
     void playPrevSong();
@@ -66,7 +66,7 @@ signals:
     void changeWidget(QWidget *widget, bool tool);
     void registrationTry(QString login, QString password, QString passwordRepeat);
     void signInTry(QString login, QString password);
-    void addSongsToLibrary(const QString& path);
+    void addSongsToLibrary(const QString& path, bool recursive);
     void showInLibrary(Tags *tags);
     void loadSongs();
     void nextSong();
