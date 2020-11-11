@@ -29,8 +29,8 @@ void MainWindow::initToolbar() {
     addToolBar(Qt::LeftToolBarArea, toolBar);
     toolBar->hide();
 
-    // connect(actionLibrary, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
-    // connect(actionPlaylists, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
+    connect(actionLibrary, SIGNAL(triggered()), mediator, SLOT(backToLibrary()));
+    connect(actionPlaylists, SIGNAL(triggered()), mediator, SLOT(backToPlaylists()));
     QObject::connect(actionSignOut, SIGNAL(triggered()), mediator, SLOT(backToSignIn()));
 }
 
