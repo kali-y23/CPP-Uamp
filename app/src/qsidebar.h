@@ -4,8 +4,10 @@
 
 #include "component.h"
 #include "mytreeview.h"
+#include "mylist.h"
 
 class MyTreeView;
+class MyList;
 class Component;
 
 class QSideBar : public QWidget, public Component {
@@ -19,7 +21,7 @@ class QSideBar : public QWidget, public Component {
     MyTreeView *tree_view;
     QWidget *widget_playlists;
     QVBoxLayout *layout_playlists;
-    QListView *playlists_view;
+    MyList *playlists_view;
 
 public:
     QSideBar(const Mediator *mediator, QWidget *parent = nullptr);

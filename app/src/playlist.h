@@ -14,5 +14,13 @@ class Playlist {
 public:
     Playlist(QString name_, int id_);
     ~Playlist();
+
+    QVariant getName() {
+        return name;
+    }
+
+    int getId() {
+        return id;
+    }
 };
 

@@ -42,7 +42,7 @@ void QSideBar::setupTreeView() {
 void QSideBar::setupPlaylists() {
     widget_playlists = new QWidget;
     layout_playlists = new QVBoxLayout(widget_playlists);
-    playlists_view = new QListView(widget_playlists);
+    playlists_view = new MyList(mediator);
 
     QLabel *label = new QLabel("  Playlists");
     layout_playlists->addWidget(label);
