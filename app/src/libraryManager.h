@@ -35,8 +35,8 @@ public:
     std::vector<Playlist *> getUserPlaylists();
 
 public slots:
-    void addSongsToLibrary(const QString& path);
     void createPlaylist(const QString& text);
+    void addSongsToLibrary(const QString& path, bool recursive);
 
 signals:
     void addSongToTreeView(Tags *tags);
