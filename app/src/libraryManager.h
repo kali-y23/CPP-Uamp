@@ -34,6 +34,8 @@ public:
     std::deque<Tags *> getUserSongs();
     std::deque<Tags *> getPlaylistSongs(int playlistId);
     void getUserPlaylists();
+    void deleteFromLibrary(int songId);
+    void deleteFromPlaylist(int playlistId, int songId);
 
 public slots:
     void createPlaylist(const QString& text);

@@ -17,7 +17,7 @@ Mediator::Mediator() : QObject() {
     mainWindow->show();
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
-    connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
+    connect(this, SIGNAL(loadSongs(bool)), generalScreen, SLOT(loadSongs(bool)));
     connect(this, SIGNAL(loadPlaylists()), generalScreen, SLOT(loadPlaylists()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&, bool)), libraryManager, SLOT(addSongsToLibrary(const QString&, bool)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
@@ -66,7 +66,7 @@ void Mediator::signIn(int id, const QString &login) {
     generalScreen->getSidebar()->getList()->getModel()->clear();
     generalScreen->getSidebar()->switchToTreeView();
 
-    emit loadSongs();
+    emit loadSongs(true);
     emit loadPlaylists();
     loginScreen->clearData();
     emit changeWidget(generalScreen, true);
@@ -109,7 +109,7 @@ void Mediator::initImport(const QString& path, bool recursive) {
 
 void Mediator::backToLibrary() {
     currentPlaylist = -1;
-    emit loadSongs();
+    emit loadSongs(false);
     emit changeSidebar(LIBRARY);
 }
 
@@ -141,4 +141,14 @@ void Mediator::emitRepeatModeIndex(int index) {
 
 void Mediator::createPlaylist(const QString& text) {
     emit createNewPlaylist(text);
+}
+
+
+void Mediator::removeSong(int id) {
+    if (currentPlaylist == -1) {
+        libraryManager->deleteFromLibrary(id);
+    }   
+    else {
+        libraryManager->deleteFromPlaylist(currentPlaylist, id);
+    }
 }

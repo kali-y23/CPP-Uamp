@@ -181,3 +181,33 @@ void LibraryManager::addSongToPlaylist(int playlistId, int songId) {
     query.bindValue(":song_id", songId);
     query.exec();
 }
+
+void LibraryManager::deleteFromLibrary(int songId) {
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("DELETE FROM songs WHERE id=:song_id;");
+    query.bindValue(":song_id", songId);
+    query.exec();
+    query.prepare("DELETE FROM user_songs WHERE song_id=:song_id;");
+    query.bindValue(":song_id", songId);
+    query.exec();
+    query.prepare("SELECT id FROM playlists WHERE user_id=:user_id");
+    query.bindValue(":user_id", mediator->user->getId());
+    query.exec();
+    while (query.next()) {
+        int playlistId = query.value(0).toInt();
+        query.prepare("DELETE FROM playlist_content WHERE playlist_id=:playlist_id AND song_id=:song_id;");
+        query.bindValue(":playlist_id", playlistId);
+        query.bindValue(":song_id", songId);
+        query.exec();
+    }
+}
+
+void LibraryManager::deleteFromPlaylist(int playlistId, int songId) {
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("DELETE FROM playlist_content WHERE playlist_id=:playlist_id AND song_id=:song_id;");
+    query.bindValue(":playlist_id", playlistId);
+    query.bindValue(":song_id", songId);
+    query.exec();
+}

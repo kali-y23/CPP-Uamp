@@ -49,11 +49,13 @@ void GeneralScreen::showInList(Playlist *playlist) {
     sidebar_widget->getList()->getModel()->addData(playlist);
 }
 
-void GeneralScreen::loadSongs() {
+void GeneralScreen::loadSongs(bool queue) {
     std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
-    getQueue()->setQueue(data);
+    if (queue) {
+        getQueue()->setQueue(data);
+    }
 }
 
 void GeneralScreen::loadSongs(int playlistId) {

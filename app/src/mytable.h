@@ -31,8 +31,10 @@ public:
 
 signals:
     void sendSongToPlayer(Tags *tags);
+    void removeSong(int id);
 
 public slots:
     void sendNextSong(const QModelIndex &index);
     void showContextMenuRequested(const QPoint &pos);
+    void removeSong();
 };

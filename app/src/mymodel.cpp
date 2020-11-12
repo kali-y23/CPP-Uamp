@@ -119,3 +119,9 @@ void MyModel::sort(int column, Qt::SortOrder order) {
     });
     emit layoutChanged();
 }
+
+void MyModel::remove(const QModelIndex& index) {
+    delete m_data[index.row()];
+    m_data.erase(m_data.begin() + index.row());
+    emit layoutChanged();
+}

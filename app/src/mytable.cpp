@@ -20,11 +20,18 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
 
     connect(this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(sendNextSong(const QModelIndex &)));
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuRequested(const QPoint &))); 
+    connect(removeAction, SIGNAL(triggered()), this, SLOT(removeSong()));
+    connect(this , SIGNAL(removeSong(int)), reinterpret_cast<const QObject *>(mediator), SLOT(removeSong(int)));
 }
 
 MyTable::~MyTable()
 {
 
+}
+
+void MyTable::removeSong() {
+    emit removeSong(model->rowData(currentIndex())->getId());
+    model->remove(currentIndex());
 }
 
 void MyTable::sendNextSong(const QModelIndex &index) {
@@ -47,6 +54,12 @@ void MyTable::showContextMenuRequested(const QPoint &pos) {
                         });
                 playlistMenu->addAction(playlistActions[playlistActions.size() - 1]);
             }
+        }
+        if (mediator->currentPlaylist == -1) {
+            removeAction->setText(tr("&Remove from media"));
+        }
+        else {
+            removeAction->setText(tr("&Remove from playlist"));
         }
         mainMenu->popup(viewport()->mapToGlobal(pos));
     }

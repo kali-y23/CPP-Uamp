@@ -70,6 +70,7 @@ public slots:
     void emitRepeatModeIndex(int index);
     void createPlaylist(const QString& text);
     void selectPlaylist(int id);
+    void removeSong(int id);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
@@ -78,7 +79,7 @@ signals:
     void addSongsToLibrary(const QString& path, bool recursive);
     void showInLibrary(Tags *tags);
     void showInList(Playlist *playlists);
-    void loadSongs();
+    void loadSongs(bool queue);
     void loadPlaylists();
     void nextSong();
     void prevSong();

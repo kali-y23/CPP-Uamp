@@ -55,4 +55,6 @@ public:
     void addData(Tags *tags);
 
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
+    void remove(const QModelIndex& index);
 };
