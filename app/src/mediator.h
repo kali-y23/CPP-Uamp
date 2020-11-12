@@ -14,6 +14,7 @@
 #include "libraryManager.h"
 #include "userManager.h"
 #include "myDb.h"
+#include "mylist.h"
 
 #define LIBRARY 0
 #define PLAYLISTS 1
@@ -26,6 +27,7 @@ class User;
 class LibraryManager;
 class UserManager;
 class MyDb;
+class MyList;
 
 class Mediator : public QObject
 {

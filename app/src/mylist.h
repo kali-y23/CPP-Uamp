@@ -1,8 +1,12 @@
 #pragma once
 
 #include <QtWidgets>
+#include <QMediaPlaylist>
+
+#include <deque>
 
 #include "component.h"
+#include "mediator.h"
 #include "tags.h"
 #include "listmodel.h"
 
@@ -34,4 +38,6 @@ public slots:
     void getSelected(const QModelIndex &index);
     void showContextMenuRequested(const QPoint &pos);
     void removePlaylist();
+    void exportPlaylist();
+    void importPlaylist();
 };
