@@ -41,4 +41,16 @@ public:
 
     void addData(Playlist *data);
 
+    void clear() {
+        m_data.clear();
+    }
+
+    std::vector<Playlist *> data() {
+        return m_data;
+    }
+
+    Playlist *data(int row) {
+        return m_data[row];
+    }
+
 };

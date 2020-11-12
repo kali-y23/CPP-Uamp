@@ -32,11 +32,13 @@ public:
 
     QLineEdit * getMask() const;
     std::deque<Tags *> getUserSongs();
-    std::vector<Playlist *> getUserPlaylists();
+    std::deque<Tags *> getPlaylistSongs(int playlistId);
+    void getUserPlaylists();
 
 public slots:
     void createPlaylist(const QString& text);
     void addSongsToLibrary(const QString& path, bool recursive);
+    void addSongToPlaylist(int playlistId, int songId);
 
 signals:
     void addSongToTreeView(Tags *tags);

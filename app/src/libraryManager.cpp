@@ -113,8 +113,28 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
     return data;
 }
 
-std::vector<Playlist *> LibraryManager::getUserPlaylists() {
-    std::vector<Playlist *> data;
+std::deque<Tags *> LibraryManager::getPlaylistSongs(int playlistId) {
+    std::deque<Tags *> data;
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("SELECT * FROM songs INNER JOIN user_songs INNER JOIN playlist_content ON user_songs.user_id=:user_id AND songs.id = user_songs.song_id\
+                   AND playlist_content.playlist_id=:playlist_id AND playlist_content.song_id=songs.id;");
+    query.bindValue(":user_id", mediator->user->getId());
+    query.bindValue(":playlist_id", playlistId);
+    query.exec();
+    while (query.next()) {
+        Tags *tags = new Tags(query.value(0).toInt(), query.value(1).toString().toStdString(),
+                              query.value(2).toString().toStdString(),query.value(3).toString().toStdString(),
+                              query.value(4).toString().toStdString(), query.value(5).toInt(),
+                              query.value(6).toInt(), query.value(7).toString().toStdString());
+
+        data.push_back(tags);
+    }
+
+    return data;
+}
+
+void LibraryManager::getUserPlaylists() {
     QSqlQuery query(QSqlDatabase::database("myDb"));
 
     query.prepare("SELECT * FROM playlists WHERE user_id=:user_id");
@@ -123,10 +143,8 @@ std::vector<Playlist *> LibraryManager::getUserPlaylists() {
     while (query.next()) {
         Playlist *playlist = new Playlist(query.value(1).toString(), query.value(0).toInt());
 
-        data.push_back(playlist);
+        emit addPlaylist(playlist);
     }
-
-    return data;
 }
 
 void LibraryManager::createPlaylist(const QString& text) {
@@ -153,4 +171,13 @@ bool LibraryManager::savePlaylist(const QString& text) {
         return 1;
     }
     return 0;
+}
+
+void LibraryManager::addSongToPlaylist(int playlistId, int songId) {
+    QSqlQuery query(QSqlDatabase::database("myDb"));
+
+    query.prepare("INSERT INTO playlist_content (playlist_id, song_id) VALUES (:playlist_id, :song_id);");
+    query.bindValue(":playlist_id", playlistId);
+    query.bindValue(":song_id", songId);
+    query.exec();
 }

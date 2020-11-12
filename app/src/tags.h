@@ -12,8 +12,6 @@
 #include <map>
 #include <vector>
 
-typedef char *(*TagLib_StringHandler)(const char *);
-
 class Tags {
     QString ext;
     TagLib::String title, artist, album, genre, fullPath;

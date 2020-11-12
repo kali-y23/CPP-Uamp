@@ -56,10 +56,14 @@ void GeneralScreen::loadSongs() {
     getQueue()->setQueue(data);
 }
 
+void GeneralScreen::loadSongs(int playlistId) {
+    std::deque<Tags *> data = mediator->getLibraryManager()->getPlaylistSongs(playlistId);
+
+    getView()->getModel()->setNewData(std::move(data));
+}
+
 void GeneralScreen::loadPlaylists() {
-    std::vector<Playlist *> data = mediator->getLibraryManager()->getUserPlaylists();
-    
-    sidebar_widget->getList()->getModel()->setNewData(std::move(data));
+    mediator->getLibraryManager()->getUserPlaylists();
 }
 
 void GeneralScreen::toggleQueue(void) {

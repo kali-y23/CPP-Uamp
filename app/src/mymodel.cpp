@@ -85,7 +85,7 @@ Qt::ItemFlags MyModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags flags = QAbstractTableModel::flags(index);
 
-    if (index.isValid() && index.column() != columnCount() - 1 && index.column() != 0 && editable == true) {
+    if (index.isValid() && editable == true) {
         flags |= Qt::ItemIsEditable;
     }
     return flags;

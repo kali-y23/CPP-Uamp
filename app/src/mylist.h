@@ -12,18 +12,18 @@ class Mediator;
 class MyList : public QListView, public Component
 {
     Q_OBJECT
-    ListModel *m_model = new ListModel(std::vector<Playlist *>());
+    ListModel *model = new ListModel(std::vector<Playlist *>());
 public:
     explicit MyList(const Mediator *mediator, QWidget *parent = nullptr);
     ~MyList();
 
     ListModel* getModel() {
-        return m_model;
+        return model;
     }
 
 signals:
-
+    void getSelected(int id);
 
 public slots:
-
+    void getSelected(const QModelIndex &index);
 };

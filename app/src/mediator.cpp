@@ -62,6 +62,10 @@ void Mediator::signIn(int id, const QString &login) {
     user->setId(id);
     user->setLogin(login);
 
+    currentPlaylist = -1;
+    generalScreen->getSidebar()->getList()->getModel()->clear();
+    generalScreen->getSidebar()->switchToTreeView();
+
     emit loadSongs();
     emit loadPlaylists();
     loginScreen->clearData();
@@ -94,11 +98,18 @@ void Mediator::backToSignIn() {
     emit changeWidget(loginScreen, false);
 }
 
+void Mediator::selectPlaylist(int id) {
+    currentPlaylist = id;
+    getGeneralScreen()->loadSongs(id);
+}
+
 void Mediator::initImport(const QString& path, bool recursive) {
     emit addSongsToLibrary(path, recursive);
 }
 
 void Mediator::backToLibrary() {
+    currentPlaylist = -1;
+    emit loadSongs();
     emit changeSidebar(LIBRARY);
 }
 
@@ -112,6 +123,7 @@ void Mediator::slotAddSong(Tags *tags) {
 
 void Mediator::slotAddPlaylist(Playlist *playlist) {
     emit showInList(playlist);
+    // emit addPlaylistAction(playlist);
 }
 
 void Mediator::playNextSong() {

@@ -51,6 +51,7 @@ public:
     RegistrationScreen *getRegistrationScreen() const;
     MainWindow *getMainWindow() const;
     MyDb *db;
+    int currentPlaylist = -1;
 
 public slots:
     void signIn(int id, const QString &login);
@@ -68,6 +69,7 @@ public slots:
     void playPrevSong();
     void emitRepeatModeIndex(int index);
     void createPlaylist(const QString& text);
+    void selectPlaylist(int id);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
