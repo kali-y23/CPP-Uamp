@@ -52,6 +52,9 @@ class QueueWidget : public QListWidget, public Component {
     int repeat_mode = NO_REPEAT;
     bool shuffle = false;
 
+    QMenu *remove_item_menu;
+    QAction *remove_item_action;
+
 public:
     QueueWidget(Mediator *mediator, QWidget *parent = nullptr);
     ~QueueWidget();
@@ -61,6 +64,7 @@ public:
 private:
     void showQueue();
     void clearElements();
+    void mousePressEvent(QMouseEvent *event);
 
 public slots:
     void setQueue(const std::deque<Tags *>& queue_, Qt::SortOrder order, int tag);
@@ -70,12 +74,12 @@ public slots:
     void changeRepeatMode(int index);
     void insertToQueue(Tags *song);
     void jumpToSong(Tags *song);
-    // void removeFromQueue(int index);
+    void removeFromQueue();
 
 signals:
     void sendFirstSongToPlayer(Tags *tags);
     void sendSongToPlayer(Tags *tags);
-
+    void rightClick(QPoint *pos);
 };
 
 #endif

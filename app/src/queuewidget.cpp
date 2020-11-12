@@ -23,6 +23,7 @@ Element::Element(Tags *tags_) : QListWidgetItem() {
 }
 
 Element::~Element() {
+    qDebug() << "destructor called";
     delete widget;
 }
 
@@ -35,11 +36,18 @@ QWidget *Element::getWidget(void) const {
 }
 
 QueueWidget::QueueWidget(Mediator *mediator, QWidget *parent) : QListWidget(parent), Component(mediator) {
+    remove_item_menu = new QMenu(this);
+    remove_item_action = new QAction("Remove song from queue", this);
+    remove_item_menu->addAction(remove_item_action);
+
     connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(sendNextSong(QListWidgetItem *)));
+    connect(remove_item_action, SIGNAL(triggered()), this, SLOT(removeFromQueue()));
 }
 
 QueueWidget::~QueueWidget() {
     clearElements();
+    delete remove_item_menu;
+    delete remove_item_action;
 }
 
 void QueueWidget::setQueue(const std::deque<Tags *>& queue_, Qt::SortOrder order, int tag) {
@@ -88,7 +96,8 @@ void QueueWidget::clearElements() {
 void QueueWidget::nextSong() {
     if (elements.empty())
         return;
-    else if (repeat_mode == REPEAT_SONG) {
+    else if (repeat_mode == REPEAT_SONG && !elements.empty()) {
+        emit sendSongToPlayer(elements[0]->getTags());
         return;
     }
     takeItem(0);
@@ -102,6 +111,9 @@ void QueueWidget::nextSong() {
         }
         showQueue();
     }
+
+    if (!elements.empty())
+        emit sendSongToPlayer(elements[0]->getTags());
 }
 
 Tags *QueueWidget::getNextSong(void) {
@@ -131,6 +143,9 @@ void QueueWidget::prevSong() {
 
     if (repeat_mode == REPEAT_PLAYLIST)
         showQueue();
+
+    if (!elements.empty())
+        emit sendSongToPlayer(elements[0]->getTags());
 }
 
 void QueueWidget::changeRepeatMode(int index) {
@@ -170,14 +185,40 @@ void QueueWidget::insertToQueue(Tags *song) {
 void QueueWidget::jumpToSong(Tags *song) {
     const std::deque<Tags *>& queue_ = queue.getQueue();
     int i = 0;
+    bool found = false;
 
     for (const Tags *tag : queue_) {
         if (tag == song) {
             current_song = i;
             showQueue();
-            return;
+            found = true;
+            break;
         }
         ++i;
     }
 
+    if (!found) {
+        insertToQueue(song);
+        jumpToSong(song);
+    }
+}
+
+void QueueWidget::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::RightButton) {
+        setCurrentItem(itemAt(event->pos()));
+        remove_item_menu->popup(this->mapToGlobal(event->pos()));
+    } else {
+        QListWidget::mousePressEvent(event);
+    }
+}
+
+void QueueWidget::removeFromQueue() {
+    QListWidgetItem *item = currentItem();
+    int index = currentRow();
+
+    takeItem(index);
+    elements.erase(elements.begin() + index);
+    queue.removeFromQueue(current_song + index);
+
+    delete item;
 }

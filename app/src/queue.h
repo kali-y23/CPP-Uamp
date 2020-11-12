@@ -38,7 +38,7 @@ public:
 
     int addToQueue(Tags *song);
     void removeFromQueue(Tags *song);
-    void removeFromQueue(std::deque<Tags *>::iterator song);
+    void removeFromQueue(int index);
 
     const std::deque<Tags *>& getQueue(void) const;
     int getQueueSize(void) const;

@@ -107,8 +107,9 @@ void Queue::removeFromQueue(Tags *song) {
     }
 }
 
-void Queue::removeFromQueue(std::deque<Tags *>::iterator song) {
-    queue.erase(song);
+void Queue::removeFromQueue(int index) {
+    if (index < queue.size())
+        queue.erase(queue.begin() + index);
 }
 
 const std::deque<Tags *>& Queue::getQueue(void) const {
@@ -126,5 +127,3 @@ int Queue::getQueueSize(void) const {
 void Queue::setShuffle(bool shuffle_) {
     shuffle = shuffle_;
 }
-
-
