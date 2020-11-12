@@ -78,3 +78,8 @@ void ListModel::addData(Playlist *data) {
     m_data.push_back(data);
     emit layoutChanged();
 }
+
+void ListModel::remove(const QModelIndex& index) {
+    m_data.erase(m_data.begin() + index.row());
+    emit layoutChanged();
+}

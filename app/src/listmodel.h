@@ -53,4 +53,6 @@ public:
         return m_data[row];
     }
 
+    void remove(const QModelIndex& index);
+
 };

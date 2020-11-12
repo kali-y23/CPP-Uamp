@@ -39,7 +39,8 @@ void MyTable::sendNextSong(const QModelIndex &index) {
 }
 
 void MyTable::showContextMenuRequested(const QPoint &pos) {
-    QModelIndex index = currentIndex();
+    QModelIndex index = indexAt(pos);
+    // QModelIndex index = currentIndex();
 
     if (index.isValid()) {
         for (QAction *action : playlistActions) {

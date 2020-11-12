@@ -152,3 +152,10 @@ void Mediator::removeSong(int id) {
         libraryManager->deleteFromPlaylist(currentPlaylist, id);
     }
 }
+
+void Mediator::removePlaylist(int id) {
+    if (currentPlaylist == id) {
+        backToLibrary();
+    }
+    libraryManager->deletePlaylist(id);
+}

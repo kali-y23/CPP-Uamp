@@ -13,6 +13,11 @@ class MyList : public QListView, public Component
 {
     Q_OBJECT
     ListModel *model = new ListModel(std::vector<Playlist *>());
+    QMenu* mainMenu;
+    QAction* removeAction;
+    QAction* importAction;
+    QAction* exportAction;
+    
 public:
     explicit MyList(const Mediator *mediator, QWidget *parent = nullptr);
     ~MyList();
@@ -23,7 +28,10 @@ public:
 
 signals:
     void getSelected(int id);
+    void removePlaylist(int id);
 
 public slots:
     void getSelected(const QModelIndex &index);
+    void showContextMenuRequested(const QPoint &pos);
+    void removePlaylist();
 };
