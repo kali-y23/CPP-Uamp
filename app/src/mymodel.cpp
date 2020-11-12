@@ -101,6 +101,7 @@ void MyModel::setNewData(std::deque<Tags *>&& data) {
 void MyModel::addData(Tags *data) {
     m_data.push_back(data);
     emit layoutChanged();
+    emit insertToQueue(data);
 }
 
 void MyModel::sort(int column, Qt::SortOrder order) {
@@ -118,5 +119,11 @@ void MyModel::sort(int column, Qt::SortOrder order) {
             return row1->getTag(column).toInt() < row2->getTag(column).toInt();
         }
     });
+
     emit layoutChanged();
+    emit sortQueue(m_data, order, column);
+}
+
+std::deque<Tags *> MyModel::getData(void) const {
+    return m_data;
 }

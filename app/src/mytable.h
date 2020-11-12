@@ -23,6 +23,7 @@ public:
 
 signals:
     void sendSongToPlayer(Tags *tags);
+    void updateQueue(Tags *tags);
 
 public slots:
     void sendNextSong(const QModelIndex &index);

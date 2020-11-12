@@ -55,4 +55,10 @@ public:
     void addData(Tags *tags);
 
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
+    std::deque<Tags *> getData(void) const;
+
+signals:
+    void insertToQueue(Tags *song);
+    void sortQueue(std::deque<Tags *> data, Qt::SortOrder order, int tag);
 };

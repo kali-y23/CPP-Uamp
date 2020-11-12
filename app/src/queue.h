@@ -18,7 +18,8 @@ enum class SortBy {
     Artist,
     Album,
     Genre,
-    Year
+    Year,
+    Track
 };
 
 class Component;
@@ -28,13 +29,14 @@ class Queue {
     SortBy mode = SortBy::Title;
     Qt::SortOrder order = Qt::DescendingOrder;
     bool shuffle = false;
+
 public:
     Queue();
     ~Queue();
 
-    void createQueue(const std::deque<Tags *>& queue_);
+    void createQueue(const std::deque<Tags *>& queue_, Qt::SortOrder order_, int tag);
 
-    void addToQueue(Tags *song);
+    int addToQueue(Tags *song);
     void removeFromQueue(Tags *song);
     void removeFromQueue(std::deque<Tags *>::iterator song);
 
@@ -42,7 +44,8 @@ public:
     int getQueueSize(void) const;
 
     // void shuffleSongs(Tags *song);
-    void sortByTag(SortBy tag);
+
+    void setShuffle(bool shuffle_);
 
 private:
     void clearQueue(void);

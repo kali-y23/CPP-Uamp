@@ -1,5 +1,17 @@
 #include "tags.h"
 
+    // TagLib::String title, artist, album, genre, fullPath;
+    // int year, trackNumber;
+bool Tags::operator==(const Tags *other) {
+    if (getTitle() == other->getTitle() && getArtist() == other->getArtist()
+        && getAlbum() == other->getAlbum() && getGenre() == other->getGenre()
+        && getYear() == other->getYear() && getTrack() == other->getTrack()
+        && getExt() == other->getExt()) {
+        return true;
+    }
+    return false;
+}
+
 QVariant Tags::check(TagLib::String tag) const {
     if (tag.isEmpty()) {
         return "Unknown";
@@ -60,7 +72,7 @@ Tags::Tags(Tags *other) :
 
 }
 
-QString Tags::getExt() {
+QString Tags::getExt() const {
     return ext;
 }
 

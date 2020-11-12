@@ -49,7 +49,8 @@ class QueueWidget : public QListWidget, public Component {
     unsigned int current_song;
     Queue queue;
     std::deque<Element *> elements;
-    int repeat_mode;
+    int repeat_mode = NO_REPEAT;
+    bool shuffle = false;
 
 public:
     QueueWidget(Mediator *mediator, QWidget *parent = nullptr);
@@ -62,12 +63,13 @@ private:
     void clearElements();
 
 public slots:
+    void setQueue(const std::deque<Tags *>& queue_, Qt::SortOrder order, int tag);
     void sendNextSong(QListWidgetItem *item);
-    void setQueue(const std::deque<Tags *>& queue_);
     void nextSong();
     void prevSong();
     void changeRepeatMode(int index);
-    // void chooseFromQueue(int index);
+    void insertToQueue(Tags *song);
+    void jumpToSong(Tags *song);
     // void removeFromQueue(int index);
 
 signals:

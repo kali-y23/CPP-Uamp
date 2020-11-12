@@ -31,7 +31,9 @@ public:
         int year_, int trackNumber_, const std::string& fullPath_);
     Tags(Tags *other);
 
-    QString getExt();
+    bool operator==(const Tags *other);
+
+    QString getExt() const;
 
     QVariant getTag(int column) const;
 

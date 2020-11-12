@@ -42,9 +42,9 @@ QueueWidget::~QueueWidget() {
     clearElements();
 }
 
-void QueueWidget::setQueue(const std::deque<Tags *>& queue_) {
+void QueueWidget::setQueue(const std::deque<Tags *>& queue_, Qt::SortOrder order, int tag) {
     current_song = 0;
-    queue.createQueue(queue_);
+    queue.createQueue(queue_, order, tag);
     showQueue();
 
     if (!elements.empty())
@@ -53,9 +53,11 @@ void QueueWidget::setQueue(const std::deque<Tags *>& queue_) {
 
 void QueueWidget::showQueue() {
     clearElements();
-    const std::deque<Tags *> queue_ = queue.getQueue();
+    const std::deque<Tags *>& queue_ = queue.getQueue();
+
     for (auto it = queue_.begin() + current_song; it != queue_.end(); ++it) {
-        Element *el = new Element(*it);
+        Tags *tags = *it;
+        Element *el = new Element(tags);
         addItem(reinterpret_cast<QListWidgetItem *>(el));
         setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());
         elements.push_back(el);
@@ -140,4 +142,42 @@ void QueueWidget::sendNextSong(QListWidgetItem *item) {
     current_song += indexFromItem(item).row();
     emit sendSongToPlayer(reinterpret_cast<Element *>(item)->getTags());
     showQueue();
+}
+
+void QueueWidget::insertToQueue(Tags *song) {
+    int queue_index = queue.addToQueue(song);
+
+    if (queue_index == -2) {
+        qDebug() << "WTF index == -2";
+        return;
+    }
+
+    if (shuffle)
+        showQueue();
+    else {
+        if (queue_index > current_song) {
+            Element *el = new Element(song);
+            insertItem(queue_index - current_song, el);
+            setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());
+            elements.push_back(el);
+        }
+        else {
+            current_song += 1;
+        }
+    }
+}
+
+void QueueWidget::jumpToSong(Tags *song) {
+    const std::deque<Tags *>& queue_ = queue.getQueue();
+    int i = 0;
+
+    for (const Tags *tag : queue_) {
+        if (tag == song) {
+            current_song = i;
+            showQueue();
+            return;
+        }
+        ++i;
+    }
+
 }

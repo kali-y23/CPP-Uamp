@@ -21,8 +21,8 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
 
     sidebar_widget = new QSideBar(mediator, content_widget);
     sidebar_widget->setObjectName("sidebar");
-    view_songs = new MyTable(mediator, content_widget);
     queue_widget = new QueueWidget(mediator, content_widget);
+    view_songs = new MyTable(mediator, content_widget);
 
     splitter->addWidget(sidebar_widget);
     splitter->addWidget(view_songs);
@@ -32,8 +32,11 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     queue_widget->hide();
 
     connect(view_songs, SIGNAL(sendSongToPlayer(Tags *)), this, SLOT(updatePlayerData(Tags *)));
+    connect(view_songs, SIGNAL(updateQueue(Tags *)), queue_widget, SLOT(jumpToSong(Tags *)));
     connect(queue_widget, SIGNAL(sendSongToPlayer(Tags *)), this, SLOT(updatePlayerData(Tags *)));
     connect(queue_widget, SIGNAL(sendFirstSongToPlayer(Tags *)), player, SLOT(setData(Tags *)));
+    connect(view_songs->getModel(), SIGNAL(insertToQueue(Tags *)), queue_widget, SLOT(insertToQueue(Tags *)));
+    connect(view_songs->getModel(), SIGNAL(sortQueue(std::deque<Tags *>, Qt::SortOrder, int)), queue_widget, SLOT(setQueue(std::deque<Tags *>, Qt::SortOrder, int)));
 }
 
 GeneralScreen::~GeneralScreen()
@@ -49,7 +52,7 @@ void GeneralScreen::loadSongs() {
     std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
-    getQueue()->setQueue(data);
+    getQueue()->setQueue(getView()->getModel()->getData(), Qt::DescendingOrder, 0);
 }
 
 void GeneralScreen::loadPlaylists() {

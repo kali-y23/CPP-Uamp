@@ -23,4 +23,5 @@ MyTable::~MyTable()
 
 void MyTable::sendNextSong(const QModelIndex &index) {
     emit sendSongToPlayer(getModel()->rowData(index));
+    emit updateQueue(getModel()->rowData(index));
 }
