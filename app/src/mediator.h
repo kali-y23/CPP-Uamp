@@ -74,6 +74,7 @@ public slots:
     void selectPlaylist(int id);
     void removeSong(int id);
     void removePlaylist(int id);
+    void importPlaylist(QString path);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);

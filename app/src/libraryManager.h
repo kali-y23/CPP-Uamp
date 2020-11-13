@@ -8,6 +8,8 @@
 #include <cstdio>
 #include <deque>
 #include <list>
+#include <fstream>
+#include <regex>
 
 #include "component.h"
 #include "mediator.h"
@@ -42,6 +44,7 @@ public slots:
     void addSongsToLibrary(const QString& path, bool recursive);
     void addSongToPlaylist(int playlistId, int songId);
     void deletePlaylist(int id);
+    void importPlaylist(QString path);
 
 signals:
     void addSongToTreeView(Tags *tags);

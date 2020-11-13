@@ -4,6 +4,7 @@ QSideBar::QSideBar(const Mediator *mediator, QWidget *parent) :
                    QWidget(parent), Component(mediator) {
     layout_main = new QVBoxLayout(this);
     layout_stacked = new QStackedLayout;
+    createButton = new QPushButton("Create New");
 
     setupTreeView();
     setupPlaylists();
@@ -46,7 +47,6 @@ void QSideBar::setupPlaylists() {
     widget_playlists = new QWidget;
     layout_playlists = new QVBoxLayout(widget_playlists);
     playlists_view = new MyList(mediator);
-    createButton = new QPushButton("Create New");
 
     layout_playlists->addWidget(createButton);
     layout_playlists->setAlignment(createButton, Qt::AlignHCenter);

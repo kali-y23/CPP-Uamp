@@ -159,3 +159,7 @@ void Mediator::removePlaylist(int id) {
     }
     libraryManager->deletePlaylist(id);
 }
+
+void Mediator::importPlaylist(QString path) {
+    libraryManager->importPlaylist(path);
+}

@@ -33,6 +33,7 @@ public:
 signals:
     void getSelected(int id);
     void removePlaylist(int id);
+    void importPlaylist(QString path);
 
 public slots:
     void getSelected(const QModelIndex &index);

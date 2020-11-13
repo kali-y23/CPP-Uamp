@@ -20,6 +20,7 @@ MyList::MyList(const Mediator *mediator, QWidget *parent) :
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportPlaylist()));
     connect(importAction, SIGNAL(triggered()), this, SLOT(importPlaylist()));
     connect(this , SIGNAL(removePlaylist(int)), reinterpret_cast<const QObject *>(mediator), SLOT(removePlaylist(int)));
+    connect(this , SIGNAL(importPlaylist(QString)), reinterpret_cast<const QObject *>(mediator), SLOT(importPlaylist(QString)));
 }
 
 MyList::~MyList()
@@ -35,18 +36,26 @@ void MyList::removePlaylist() {
 void MyList::exportPlaylist() {
     Playlist *playlist = model->data(currentIndex().row());
     std::deque<Tags *> songs = mediator->getLibraryManager()->getPlaylistSongs(playlist->getId());
-    QMediaPlaylist *mediaPlaylist = new QMediaPlaylist;
     QString path = QFileDialog::getExistingDirectory(this);
 
-    for (Tags *song : songs) {
-        mediaPlaylist->addMedia(QMediaContent(QUrl::fromLocalFile(song->getPath().toString())));
+    if (!path.isNull()) {
+        QMediaPlaylist *mediaPlaylist = new QMediaPlaylist;
+
+        for (Tags *song : songs) {
+            mediaPlaylist->addMedia(QMediaContent(QUrl::fromLocalFile(song->getPath().toString())));
+            qDebug() << song->getPath().toString();
+        }
+        mediaPlaylist->save(QUrl::fromLocalFile(path + "/" + playlist->getName().toString() + ".m3u"), "m3u");
+        delete mediaPlaylist;
     }
-    mediaPlaylist->save(QUrl::fromLocalFile(path + "/" + playlist->getName().toString() + ".m3u"), "m3u");
-    delete mediaPlaylist;
 }
 
 void MyList::importPlaylist() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Import playlist"), "", "*.m3u");
+    
+    if (!fileName.isNull()) {
+        emit importPlaylist(fileName);
+    }
 }
 
 void MyList::getSelected(const QModelIndex &index) {

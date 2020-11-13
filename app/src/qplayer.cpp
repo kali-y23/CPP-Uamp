@@ -163,12 +163,22 @@ void QPlayer::setupLayouts() {
 
 void QPlayer::setData(Tags *tags) {
     data = tags;
-    label_title->setText(data->getTitle().toString());
-    label_artist->setText(data->getArtist().toString());
-    BASS_StreamFree(
-        stream
-    );
+    QFileInfo info(data->getPath().toString());
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+
+    if (stream && info.exists() && info.isReadable()) {
+        label_title->setText(data->getTitle().toString());
+        label_artist->setText(data->getArtist().toString());
+        // BASS_StreamFree(
+        //     stream
+        // );
+        // stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+    }
+    else {
+        // stream = 0;
+        playing = 0;
+        setWidget(playerDisabled, 1);
+    }
 }
 
 

@@ -20,7 +20,7 @@ Tags::Tags(const std::string& path)
 {
     QFileInfo info(path.c_str());
 
-    ext = info.completeSuffix();
+    ext = info.suffix();
     fullPath = path;
     if (info.isReadable()) {
         f = TagLib::FileRef(path.c_str());

@@ -45,6 +45,7 @@ bool LibraryManager::saveToDb(Tags *tags) {
     int songId = 0;
     QString filePath = QDir::homePath() + "/.uamp/" + tags->getArtist().toString() + "/" + tags->getAlbum().toString() + "/";
     QString fileName = filePath + tags->getTitle().toString() + "." + tags->getExt();
+    qDebug() << fileName;
 
     query.prepare("SELECT id FROM songs WHERE path=:path;");
     query.bindValue(":path", fileName);
@@ -79,7 +80,7 @@ bool LibraryManager::saveToDb(Tags *tags) {
         query.bindValue(":genre", tags->getGenre().toString());
         query.bindValue(":year", tags->getYear().toInt());
         query.bindValue(":number", tags->getTrack().toInt());
-        query.bindValue(":path", tags->getPath().toString());
+        query.bindValue(":path", fileName);
         query.exec();
         query.prepare("SELECT last_insert_rowid();");
         query.exec();
@@ -227,4 +228,36 @@ void LibraryManager::deletePlaylist(int id) {
     query.prepare("DELETE FROM playlist_content WHERE playlist_id=:playlist_id");
     query.bindValue(":playlist_id", id);
     query.exec();
+}
+
+void LibraryManager::importPlaylist(QString path) {
+    QFileInfo info(path);
+    QString name = info.baseName();
+    std::ifstream file(path.toStdString());
+
+    if (savePlaylist(name)) {
+        QSqlQuery query(QSqlDatabase::database("myDb"));
+        std::string line;
+        int playlistId, songId;
+
+        query.prepare("SELECT last_insert_rowid();");
+        query.exec();
+        query.first();
+        playlistId = query.value(0).toInt();
+        Playlist *playlist = new Playlist(name, playlistId);
+        emit addPlaylist(playlist);
+        if (file.is_open()) {
+            while (std::getline(file, line)) {
+                if (std::regex_match (line, std::regex(".*\.[(mp3) | (mp4)]"))) {
+                    if (line.find("file:") == 0) {
+                        processSong(line.substr(5).c_str());
+                    }
+                    else {
+                        processSong(line.c_str());
+                    }
+                }
+            }
+            file.close();
+        }
+    }
 }
