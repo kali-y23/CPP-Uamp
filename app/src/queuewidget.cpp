@@ -23,7 +23,6 @@ Element::Element(Tags *tags_) : QListWidgetItem() {
 }
 
 Element::~Element() {
-    qDebug() << "destructor called";
     delete widget;
 }
 

@@ -26,6 +26,7 @@ void Tags::setAllTagsView(TagLib::String str) {
     genre = str;
     year = 0;
     trackNumber = 0;
+    album_cover = QImage(":no_cover.jpg");
 }
 
 Tags::Tags(const std::string& path)
@@ -35,6 +36,7 @@ Tags::Tags(const std::string& path)
     ext = info.completeSuffix();
     fullPath = path;
     if (info.isReadable()) {
+        album_cover = extractAlbumCover();
         f = TagLib::FileRef(path.c_str());
 
         if (!f.isNull() && f.tag()) {
@@ -70,6 +72,29 @@ Tags::Tags(Tags *other) :
            title(other->title), artist(other->artist), album(other->album), genre(other->genre), fullPath(other->fullPath),
            year(other->year), trackNumber(other->trackNumber){
 
+}
+
+void Tags::extractAlbumCover() {
+    TagLib::MPEG::File mpegFile(fullPath);
+    TagLib::ID3v2::AttachedPictureFrame *PicFrame;
+
+    if (mpegFile.ID3v2Tag()) {
+        TagLib::ID3v2::FrameListMap frame = id3v2tag->frameListMap()["APIC"];
+        for (const auto& [key, val] : frame)
+            qDebug() << key;
+//         if (!Frame.isEmpty()) {
+//             for (TagLib::ID3v2::FrameList::ConstIterator it = Frame.begin(); it != Frame.end(); ++it) {
+//                 PicFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame * >(*it);
+//                 {
+//                     if (PicFrame)
+//                     {
+//                         coverQImg.loadFromData((const uchar *)PicFrame->picture().data(), PicFrame->picture().size());
+// //                        coverQImg = coverQImg.scaled(190, 190);
+//                     }
+//                 }
+//             }
+//         }
+    }
 }
 
 QString Tags::getExt() const {
@@ -135,6 +160,10 @@ QVariant Tags::getYear() const {
 
 QVariant Tags::getTrack() const {
     return trackNumber;
+}
+
+QImage *Tags::getImage() const {
+    return album_cover;
 }
 
 void Tags::setArtist(const QVariant& value) {

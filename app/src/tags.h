@@ -19,6 +19,7 @@ class Tags {
     TagLib::String title, artist, album, genre, fullPath;
     int year, trackNumber;
     TagLib::FileRef f;
+    QImage *album_cover;
 
     QVariant check(TagLib::String tag) const;
 
@@ -39,6 +40,8 @@ public:
 
     void setTag(int column, const QVariant& value);
 
+    void extractAlbumCover();
+
     QVariant getArtist() const;
 
     QVariant getTitle() const;
@@ -52,6 +55,8 @@ public:
     QVariant getYear() const;
 
     QVariant getTrack() const;
+
+    QImage *getImage() const;
 
     void setArtist(const QVariant& value);
 

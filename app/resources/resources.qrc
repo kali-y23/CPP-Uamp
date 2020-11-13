@@ -16,5 +16,6 @@
         <file>shuffle_on.png</file>
         <file>playlist.png</file>
         <file>playlist_on.png</file>
+        <file>no_cover.jpg</file>
     </qresource>
 </RCC>
