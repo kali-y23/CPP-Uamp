@@ -8,7 +8,8 @@ Element::Element(Tags *tags_) : QListWidgetItem() {
     layoutOuter = new QHBoxLayout(widget);
     layoutInner = new QVBoxLayout();
 
-    labelAlbumCover = new QLabel("ALBUM COVER\nWILL BE HERE");
+    labelAlbumCover = new QLabel();
+    labelAlbumCover->setPixmap(tags->getImage()->scaled(40, 40));
     labelTitle = new QLabel(tags->getTitle().toString());
     labelArtist = new QLabel(tags->getArtist().toString());
 

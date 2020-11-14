@@ -4,6 +4,15 @@
 
 #include "../../../taglib/taglib/tag.h"
 #include <../../taglib/fileref.h>
+#include <../../taglib/mpeg/mpegfile.h>
+#include <../../taglib/ape/apefile.h>
+#include <../../taglib/ape/apetag.h>
+#include <../../taglib/asf/asffile.h>
+#include <../../taglib/asf/asftag.h>
+#include <../../taglib/flac/flacfile.h>
+#include <../../taglib/mp4/mp4file.h>
+#include <../../taglib/mp4/mp4tag.h>
+#include <../../taglib/mpc/mpcfile.h>
 #include <toolkit/tpropertymap.h>
 #include <id3v2tag.h>
 
@@ -19,7 +28,7 @@ class Tags {
     TagLib::String title, artist, album, genre, fullPath;
     int year, trackNumber;
     TagLib::FileRef f;
-    QImage *album_cover;
+    QPixmap *album_cover;
 
     QVariant check(TagLib::String tag) const;
 
@@ -32,6 +41,8 @@ public:
         int year_, int trackNumber_, const std::string& fullPath_);
     Tags(Tags *other);
 
+    ~Tags();
+
     bool operator==(const Tags *other);
 
     QString getExt() const;
@@ -40,7 +51,13 @@ public:
 
     void setTag(int column, const QVariant& value);
 
-    void extractAlbumCover();
+    void extractAlbumCover(const TagLib::FileRef& fr);
+
+    bool extractAPE(TagLib::APE::Tag* tag, TagLib::ByteVector& pic);
+    bool extractID3(TagLib::ID3v2::Tag* tag, TagLib::ByteVector& pic);
+    bool extractASF(TagLib::ASF::File* file, TagLib::ByteVector& pic);
+    bool extractFLAC(TagLib::FLAC::File* file, TagLib::ByteVector& pic);
+    bool extractMP4(TagLib::MP4::File* file, TagLib::ByteVector& pic);
 
     QVariant getArtist() const;
 
@@ -56,7 +73,7 @@ public:
 
     QVariant getTrack() const;
 
-    QImage *getImage() const;
+    QPixmap *getImage() const;
 
     void setArtist(const QVariant& value);
 

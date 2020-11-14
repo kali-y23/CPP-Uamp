@@ -26,7 +26,7 @@ void Tags::setAllTagsView(TagLib::String str) {
     genre = str;
     year = 0;
     trackNumber = 0;
-    album_cover = QImage(":no_cover.jpg");
+    album_cover = new QPixmap(":no_cover.jpg");
 }
 
 Tags::Tags(const std::string& path)
@@ -36,8 +36,8 @@ Tags::Tags(const std::string& path)
     ext = info.completeSuffix();
     fullPath = path;
     if (info.isReadable()) {
-        album_cover = extractAlbumCover();
         f = TagLib::FileRef(path.c_str());
+        extractAlbumCover(f);
 
         if (!f.isNull() && f.tag()) {
             TagLib::Tag *tag = f.tag();
@@ -65,36 +65,19 @@ Tags::Tags(const std::string& title_, const std::string& artist_,
            title(title_), artist(artist_), album(album_), genre(genre_), fullPath(fullPath_),
            year(year_), trackNumber(trackNumber_)
 {
-
+    f = TagLib::FileRef(fullPath.toCString());
+    album_cover = nullptr;
+    extractAlbumCover(f);
 }
 
 Tags::Tags(Tags *other) :
            title(other->title), artist(other->artist), album(other->album), genre(other->genre), fullPath(other->fullPath),
-           year(other->year), trackNumber(other->trackNumber){
+           year(other->year), trackNumber(other->trackNumber), album_cover(other->album_cover) {
 
 }
 
-void Tags::extractAlbumCover() {
-    TagLib::MPEG::File mpegFile(fullPath);
-    TagLib::ID3v2::AttachedPictureFrame *PicFrame;
-
-    if (mpegFile.ID3v2Tag()) {
-        TagLib::ID3v2::FrameListMap frame = id3v2tag->frameListMap()["APIC"];
-        for (const auto& [key, val] : frame)
-            qDebug() << key;
-//         if (!Frame.isEmpty()) {
-//             for (TagLib::ID3v2::FrameList::ConstIterator it = Frame.begin(); it != Frame.end(); ++it) {
-//                 PicFrame = static_cast<TagLib::ID3v2::AttachedPictureFrame * >(*it);
-//                 {
-//                     if (PicFrame)
-//                     {
-//                         coverQImg.loadFromData((const uchar *)PicFrame->picture().data(), PicFrame->picture().size());
-// //                        coverQImg = coverQImg.scaled(190, 190);
-//                     }
-//                 }
-//             }
-//         }
-    }
+Tags::~Tags() {
+    delete album_cover;
 }
 
 QString Tags::getExt() const {
@@ -162,7 +145,7 @@ QVariant Tags::getTrack() const {
     return trackNumber;
 }
 
-QImage *Tags::getImage() const {
+QPixmap *Tags::getImage() const {
     return album_cover;
 }
 
