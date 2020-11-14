@@ -169,9 +169,6 @@ void QPlayer::setData(Tags *tags) {
     if (stream && info.exists() && info.isReadable()) {
         label_title->setText(data->getTitle().toString());
         label_artist->setText(data->getArtist().toString());
-        // BASS_StreamFree(
-        //     stream
-        // );
     }
     else {
         playing = 0;

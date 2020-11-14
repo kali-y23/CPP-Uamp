@@ -14,9 +14,12 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
     setAlternatingRowColors(true);
 
     mainMenu = new QMenu(this);
+    editAction = new QAction(tr("&Edit tag"), this);
+    mainMenu->addAction(editAction); 
     removeAction = new QAction(tr("&Remove from media"), this);
     mainMenu->addAction(removeAction);
-    playlistMenu = mainMenu->addMenu(tr("&Add to playlist"));
+    playlistMenu = new QMenu(tr("&Add to playlist"));
+    mainMenu->addMenu(playlistMenu);
 
     connect(this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(sendNextSong(const QModelIndex &)));
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuRequested(const QPoint &))); 
@@ -40,7 +43,6 @@ void MyTable::sendNextSong(const QModelIndex &index) {
 
 void MyTable::showContextMenuRequested(const QPoint &pos) {
     QModelIndex index = indexAt(pos);
-    // QModelIndex index = currentIndex();
 
     if (index.isValid()) {
         for (QAction *action : playlistActions) {
@@ -62,6 +64,19 @@ void MyTable::showContextMenuRequested(const QPoint &pos) {
         else {
             removeAction->setText(tr("&Remove from playlist"));
         }
+        editAction->disconnect();
+        connect(editAction, &QAction::triggered, [this, index]() {
+            // QFileInfo info(this->model->getPath(index).toString());
+
+            if (index.column() != this->model->columnCount() - 1 /*&& info.isWritable() && info.isReadable()*/) {
+                this->model->setEditable(true);
+                edit(index);
+                this->model->setEditable(false);
+            }
+            else {
+                QMessageBox::warning(this, "Alert", "You do not have permissions\nto change this file.");
+            }
+        });
         mainMenu->popup(viewport()->mapToGlobal(pos));
     }
 }
