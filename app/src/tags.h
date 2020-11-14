@@ -66,5 +66,7 @@ public:
     void setTrack(const QVariant& value);
 
     void setPath(const QVariant& value);
+
+    int valid = 1;
 };
 

@@ -42,6 +42,7 @@ Tags::Tags(const std::string& path)
     }
     else {
         setAllTagsView("You do not have permissions to read this file.");
+        valid = 0;
     }
 }
 

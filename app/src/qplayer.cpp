@@ -172,10 +172,8 @@ void QPlayer::setData(Tags *tags) {
         // BASS_StreamFree(
         //     stream
         // );
-        // stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
     }
     else {
-        // stream = 0;
         playing = 0;
         setWidget(playerDisabled, 1);
     }

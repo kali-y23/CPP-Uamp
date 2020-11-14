@@ -24,8 +24,8 @@ class LibraryManager : public QObject, public Component {
 
     QLineEdit *m_ptxtMask = new QLineEdit("*.mp3 *.flac *.wav *.mp4");
 
-    void processSong(const QString& path);
-    bool saveToDb(Tags *tags);
+    int processSong(const QString& path);
+    bool saveToDb(Tags *tags, int *songId);
     bool savePlaylist(const QString& text);
 
 public:

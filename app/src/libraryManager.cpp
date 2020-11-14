@@ -32,67 +32,72 @@ void LibraryManager::addSongsToLibrary(const QString& path, bool recursive) {
         processSong(path);
 }
 
-void LibraryManager::processSong(const QString &path) {
+int LibraryManager::processSong(const QString &path) {
     Tags *tags = new Tags(path.toStdString());
+    int songId = 0;
 
-    if (saveToDb(tags)) {
+    if (saveToDb(tags, &songId)) {
         emit addSongToTreeView(tags);
     }
+    return songId;
 }
 
-bool LibraryManager::saveToDb(Tags *tags) {
+bool LibraryManager::saveToDb(Tags *tags, int *songId) {
     QSqlQuery query(QSqlDatabase::database("myDb"));
-    int songId = 0;
     QString filePath = QDir::homePath() + "/.uamp/" + tags->getArtist().toString() + "/" + tags->getAlbum().toString() + "/";
     QString fileName = filePath + tags->getTitle().toString() + "." + tags->getExt();
-    qDebug() << fileName;
 
     query.prepare("SELECT id FROM songs WHERE path=:path;");
     query.bindValue(":path", fileName);
     query.exec();
     if (query.first() && !query.value(0).isNull()) {
-        songId = query.value(0).toInt();
+        *songId = query.value(0).toInt();
         query.prepare("SELECT * FROM user_songs, songs WHERE user_id=:user_id AND song_id=:song_id AND songs.id = user_songs.song_id;");
         query.bindValue(":user_id", mediator->user->getId());
-        query.bindValue(":song_id", songId);
+        query.bindValue(":song_id", *songId);
         query.exec();
         if (!query.first()) {
             query.prepare("INSERT INTO user_songs (user_id, song_id) VALUES (:user_id, :song_id);");
             query.bindValue(":user_id", mediator->user->getId());
-            query.bindValue(":song_id", songId);
+            query.bindValue(":song_id", *songId);
             query.exec();
-            tags->setId(songId);
+            tags->setId(*songId);
             return 1;
         }
         return 0;
     }
     else {
-        QDir appDir;
+        QFileInfo info(tags->getPath().toString());
+        
+        if (tags->valid && info.exists() && info.isReadable()) {
+            QDir appDir;
 
-        appDir.mkpath(filePath);
-        QFile::copy(tags->getPath().toString(), fileName);
-        tags->setPath(fileName);
-        query.prepare("INSERT INTO songs (title, artist, album, genre, year, number, path)\
-                               VALUES (:title, :artist, :album, :genre, :year, :number, :path);");
-        query.bindValue(":title", tags->getTitle().toString());
-        query.bindValue(":artist", tags->getArtist().toString());
-        query.bindValue(":album", tags->getAlbum().toString());
-        query.bindValue(":genre", tags->getGenre().toString());
-        query.bindValue(":year", tags->getYear().toInt());
-        query.bindValue(":number", tags->getTrack().toInt());
-        query.bindValue(":path", fileName);
-        query.exec();
-        query.prepare("SELECT last_insert_rowid();");
-        query.exec();
-        query.first();
-        songId = query.value(0).toInt();
-        query.prepare("INSERT INTO user_songs (user_id, song_id) VALUES (:user_id, :song_id);");
-        query.bindValue(":user_id", mediator->user->getId());
-        query.bindValue(":song_id", songId);
-        query.exec();
-        tags->setId(songId);
+            appDir.mkpath(filePath);
+            QFile::copy(tags->getPath().toString(), fileName);
+            tags->setPath(fileName);
+            query.prepare("INSERT INTO songs (title, artist, album, genre, year, number, path)\
+                                VALUES (:title, :artist, :album, :genre, :year, :number, :path);");
+            query.bindValue(":title", tags->getTitle().toString());
+            query.bindValue(":artist", tags->getArtist().toString());
+            query.bindValue(":album", tags->getAlbum().toString());
+            query.bindValue(":genre", tags->getGenre().toString());
+            query.bindValue(":year", tags->getYear().toInt());
+            query.bindValue(":number", tags->getTrack().toInt());
+            query.bindValue(":path", fileName);
+            query.exec();
+            query.prepare("SELECT last_insert_rowid();");
+            query.exec();
+            query.first();
+            *songId = query.value(0).toInt();
+            query.prepare("INSERT INTO user_songs (user_id, song_id) VALUES (:user_id, :song_id);");
+            query.bindValue(":user_id", mediator->user->getId());
+            query.bindValue(":song_id", *songId);
+            query.exec();
+            tags->setId(*songId);
+            return 1;
+        }
     }
-    return 1;
+    return 0;
 }
 
 std::deque<Tags *> LibraryManager::getUserSongs() {
@@ -250,11 +255,12 @@ void LibraryManager::importPlaylist(QString path) {
             while (std::getline(file, line)) {
                 if (std::regex_match (line, std::regex(".*\.[(mp3) | (mp4)]"))) {
                     if (line.find("file:") == 0) {
-                        processSong(line.substr(5).c_str());
+                        songId = processSong(line.substr(5).c_str());
                     }
                     else {
-                        processSong(line.c_str());
+                        songId = processSong(line.c_str());
                     }
+                    addSongToPlaylist(playlistId, songId);
                 }
             }
             file.close();
