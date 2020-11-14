@@ -75,14 +75,15 @@ bool LibraryManager::saveToDb(Tags *tags, int *songId) {
             appDir.mkpath(filePath);
             QFile::copy(tags->getPath().toString(), fileName);
             tags->setPath(fileName);
-            query.prepare("INSERT INTO songs (title, artist, album, genre, year, number, path)\
-                                VALUES (:title, :artist, :album, :genre, :year, :number, :path);");
+            query.prepare("INSERT INTO songs (title, artist, album, genre, year, number, rating, path)\
+                                VALUES (:title, :artist, :album, :genre, :year, :number, :rating, :path);");
             query.bindValue(":title", tags->getTitle().toString());
             query.bindValue(":artist", tags->getArtist().toString());
             query.bindValue(":album", tags->getAlbum().toString());
             query.bindValue(":genre", tags->getGenre().toString());
             query.bindValue(":year", tags->getYear().toInt());
             query.bindValue(":number", tags->getTrack().toInt());
+            query.bindValue(":rating", tags->getRating().toInt());
             query.bindValue(":path", fileName);
             query.exec();
             query.prepare("SELECT last_insert_rowid();");
@@ -111,7 +112,7 @@ std::deque<Tags *> LibraryManager::getUserSongs() {
         Tags *tags = new Tags(query.value(0).toInt(), query.value(1).toString().toStdString(),
                               query.value(2).toString().toStdString(),query.value(3).toString().toStdString(),
                               query.value(4).toString().toStdString(), query.value(5).toInt(),
-                              query.value(6).toInt(), query.value(7).toString().toStdString());
+                              query.value(6).toInt(), query.value(7).toInt(), query.value(8).toString().toStdString());
 
         data.push_back(tags);
     }
@@ -132,7 +133,7 @@ std::deque<Tags *> LibraryManager::getPlaylistSongs(int playlistId) {
         Tags *tags = new Tags(query.value(0).toInt(), query.value(1).toString().toStdString(),
                               query.value(2).toString().toStdString(),query.value(3).toString().toStdString(),
                               query.value(4).toString().toStdString(), query.value(5).toInt(),
-                              query.value(6).toInt(), query.value(7).toString().toStdString());
+                              query.value(6).toInt(), query.value(7).toInt(), query.value(8).toString().toStdString());
 
         data.push_back(tags);
     }

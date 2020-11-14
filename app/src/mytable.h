@@ -11,6 +11,7 @@
 
 class Component;
 class Mediator;
+class MyModel;
 
 class MyTable : public QTableView, public Component
 {

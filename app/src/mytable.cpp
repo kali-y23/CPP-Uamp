@@ -66,16 +66,15 @@ void MyTable::showContextMenuRequested(const QPoint &pos) {
         }
         editAction->disconnect();
         connect(editAction, &QAction::triggered, [this, index]() {
-            // QFileInfo info(this->model->getPath(index).toString());
 
-            if (index.column() != this->model->columnCount() - 1 /*&& info.isWritable() && info.isReadable()*/) {
+            // if (index.column() != this->model->columnCount() - 1) {
                 this->model->setEditable(true);
                 edit(index);
                 this->model->setEditable(false);
-            }
-            else {
-                QMessageBox::warning(this, "Alert", "You do not have permissions\nto change this file.");
-            }
+            // }
+            // else {
+            //     QMessageBox::warning(this, "Alert", "You do not have permissions\nto change this file.");
+            // }
         });
         mainMenu->popup(viewport()->mapToGlobal(pos));
     }

@@ -1,9 +1,10 @@
 #include "mymodel.h"
 
 MyModel::MyModel(const std::deque<Tags *> data, QObject* pobj)
-        : QAbstractTableModel(pobj)
-        , m_data(data)
+        : QAbstractTableModel(pobj),
+          m_data(data)
 {
+    
 }
 
 QVariant MyModel::data(const QModelIndex& index, int nRole) const
@@ -38,7 +39,6 @@ bool MyModel::setData(const QModelIndex& index,
 {
     if (index.isValid() && nRole == Qt::EditRole) {
         m_data[index.row()]->setTag(index.column(), value);
-
         emit dataChanged(index, index);
         return true;
     }
