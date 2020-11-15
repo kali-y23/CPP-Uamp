@@ -25,7 +25,7 @@ void UserManager::addUser(const QString& login_, const QString& password_, const
     query.prepare("INSERT INTO users (login, password) "
                   "VALUES (:login, :password)");
     query.bindValue(":login", login_);
-    query.bindValue(":password", password_);
+    query.bindValue(":password", QString(QCryptographicHash::hash((password_.toStdString().data()),QCryptographicHash::Sha256).toHex()));
     query.exec();
     QMessageBox::information(mediator->getMainWindow(), "Alert", "Registration sucseeded.");
     emit signUp();
@@ -37,7 +37,7 @@ void UserManager::checkUser(const QString& login_, const QString& password_) {
 
     query.prepare("SELECT id FROM users WHERE login=:login AND password=:password");
     query.bindValue(":login", login_);
-    query.bindValue(":password", password_);
+    query.bindValue(":password", QString(QCryptographicHash::hash((password_.toStdString().data()),QCryptographicHash::Sha256).toHex()));
     query.exec();
     if (!query.first()) {
         QMessageBox::warning(mediator->getMainWindow(), "Alert", "Entered data is invalid.");
