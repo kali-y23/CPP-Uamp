@@ -25,7 +25,7 @@ bool ListModel::setData(const QModelIndex& index,
                       int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
-        // m_data[index.row()];
+        m_data[index.row()]->setName(value.toString());
 
         emit dataChanged(index, index);
         return true;
@@ -76,5 +76,10 @@ void ListModel::setNewData(std::vector<Playlist *>&& data) {
 
 void ListModel::addData(Playlist *data) {
     m_data.push_back(data);
+    emit layoutChanged();
+}
+
+void ListModel::remove(const QModelIndex& index) {
+    m_data.erase(m_data.begin() + index.row());
     emit layoutChanged();
 }

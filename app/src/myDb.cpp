@@ -37,6 +37,7 @@ void MyDb::createIfNotExist() {
                                                       genre varchar(255),\
                                                       year INTEGER,\
                                                       number INTEGER,\
+                                                      rating INTEGER,\
                                                       path varchar(255));\
                     ");
         query.exec("create table if not exists user_songs (id INTEGER PRIMARY KEY AUTOINCREMENT,\

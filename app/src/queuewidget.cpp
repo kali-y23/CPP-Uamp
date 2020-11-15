@@ -39,6 +39,7 @@ QueueWidget::QueueWidget(Mediator *mediator, QWidget *parent) : QListWidget(pare
     remove_item_menu = new QMenu(this);
     remove_item_action = new QAction("Remove song from queue", this);
     remove_item_menu->addAction(remove_item_action);
+    current_song = 0;
 
     connect(this, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(sendNextSong(QListWidgetItem *)));
     connect(remove_item_action, SIGNAL(triggered()), this, SLOT(removeFromQueue()));
@@ -153,6 +154,27 @@ void QueueWidget::changeRepeatMode(int index) {
     showQueue();
 }
 
+void QueueWidget::changeShuffleMode(int index) {
+    Tags *current_tag = queue.getQueue()[current_song];
+
+    if (index == 0) {
+        shuffle = false;
+        queue.sort();
+    }
+    else {
+        shuffle = true;
+        queue.shuffle();
+    }
+
+    queue.setShuffle(shuffle);
+    current_song = queue.getIndexByTag(current_tag);
+    if (current_song == -1) {
+        qDebug() << "getIndexByTag returned -1!";
+        current_song = 0;
+    }
+    showQueue();
+}
+
 void QueueWidget::sendNextSong(QListWidgetItem *item) {
     current_song += indexFromItem(item).row();
     emit sendSongToPlayer(reinterpret_cast<Element *>(item)->getTags());
@@ -162,15 +184,10 @@ void QueueWidget::sendNextSong(QListWidgetItem *item) {
 void QueueWidget::insertToQueue(Tags *song) {
     int queue_index = queue.addToQueue(song);
 
-    if (queue_index == -2) {
-        qDebug() << "WTF index == -2";
-        return;
-    }
-
     if (shuffle)
         showQueue();
     else {
-        if (queue_index > current_song) {
+        if (queue_index > current_song || (queue_index == 0 && current_song == 0)) {
             Element *el = new Element(song);
             insertItem(queue_index - current_song, el);
             setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());

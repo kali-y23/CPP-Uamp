@@ -48,17 +48,27 @@ void GeneralScreen::showInView(Tags *tags) {
     getView()->getModel()->addData(tags);
 }
 
-void GeneralScreen::loadSongs() {
+void GeneralScreen::showInList(Playlist *playlist) {
+    sidebar_widget->getList()->getModel()->addData(playlist);
+}
+
+void GeneralScreen::loadSongs(bool queue) {
     std::deque<Tags *> data = mediator->getLibraryManager()->getUserSongs();
 
     getView()->getModel()->setNewData(std::move(data));
-    getQueue()->setQueue(getView()->getModel()->getData(), Qt::DescendingOrder, 0);
+    if (queue) {
+        getQueue()->setQueue(data, Qt::DescendingOrder, 0);
+    }
+}
+
+void GeneralScreen::loadSongs(int playlistId) {
+    std::deque<Tags *> data = mediator->getLibraryManager()->getPlaylistSongs(playlistId);
+
+    getView()->getModel()->setNewData(std::move(data));
 }
 
 void GeneralScreen::loadPlaylists() {
-    std::list<Playlist *> data = mediator->getLibraryManager()->getUserPlaylists();
-
-    // sidebar_widget->showPlaylists(data);
+    mediator->getLibraryManager()->getUserPlaylists();
 }
 
 void GeneralScreen::toggleQueue(void) {

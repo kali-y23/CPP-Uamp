@@ -1,19 +1,18 @@
 #pragma once
 
 #include <QtWidgets>
+
 #include <deque>
 
 #include "tags.h"
 
-namespace Ui {
-    class MyModel;
-}
+class MyTable;
 
 class MyModel : public QAbstractTableModel
 {
     Q_OBJECT
 private:
-    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number"};
+    QVector<QString> m_headers = {"Title", "Artist", "Album", "Genre", "Year", "Track Number", "Rating"};
     std::deque<Tags *> m_data;
     bool editable = false;
     int m_cols = m_headers.size();
@@ -57,6 +56,8 @@ public:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
     std::deque<Tags *> getData(void) const;
+
+    void remove(const QModelIndex& index);
 
 signals:
     void insertToQueue(Tags *song);

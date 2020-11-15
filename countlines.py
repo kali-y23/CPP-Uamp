@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 
 def getList(dirname):
-    onlyfiles = [join(dirname, f) for f in listdir(dirname) if isfile(join(dirname, f)) and f[-3:] == "cpp"]
+    onlyfiles = [join(dirname, f) for f in listdir(dirname) if isfile(join(dirname, f)) and f[-1] == "h"]
     return onlyfiles
 
 def countLines(list):

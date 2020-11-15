@@ -10,6 +10,7 @@
 
 #include <deque>
 #include <algorithm>
+#include <random>
 
 #include "tags.h"
 
@@ -26,9 +27,9 @@ class Component;
 
 class Queue {
     std::deque<Tags *> queue;
-    SortBy mode = SortBy::Title;
+    SortBy tag = SortBy::Title;
     Qt::SortOrder order = Qt::DescendingOrder;
-    bool shuffle = false;
+    bool shuffled = false;
 
 public:
     Queue();
@@ -43,9 +44,11 @@ public:
     const std::deque<Tags *>& getQueue(void) const;
     int getQueueSize(void) const;
 
-    // void shuffleSongs(Tags *song);
+    void sort();
+    void shuffle();
 
     void setShuffle(bool shuffle_);
+    int getIndexByTag(Tags *tag);
 
 private:
     void clearQueue(void);

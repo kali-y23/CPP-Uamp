@@ -17,13 +17,15 @@ Mediator::Mediator() : QObject() {
     mainWindow->show();
 
     connect(this, SIGNAL(changeWidget(QWidget *, bool)), mainWindow, SLOT(setWidget(QWidget *, bool)));
-    connect(this, SIGNAL(loadSongs()), generalScreen, SLOT(loadSongs()));
+    connect(this, SIGNAL(loadSongs(bool)), generalScreen, SLOT(loadSongs(bool)));
     connect(this, SIGNAL(loadPlaylists()), generalScreen, SLOT(loadPlaylists()));
     connect(this, SIGNAL(addSongsToLibrary(const QString&, bool)), libraryManager, SLOT(addSongsToLibrary(const QString&, bool)));
     connect(this, SIGNAL(showInLibrary(Tags *)), generalScreen, SLOT(showInView(Tags *)));
+    connect(this, SIGNAL(showInList(Playlist *)), generalScreen, SLOT(showInList(Playlist *)));
     connect(this, SIGNAL(nextSong()), generalScreen->getQueue(), SLOT(nextSong()));
     connect(this, SIGNAL(prevSong()), generalScreen->getQueue(), SLOT(prevSong()));
     connect(this, SIGNAL(repeatModeChanged(int)), generalScreen->getQueue(), SLOT(changeRepeatMode(int)));
+    connect(this, SIGNAL(shuffleModeChanged(int)), generalScreen->getQueue(), SLOT(changeShuffleMode(int)));
     connect(generalScreen->getPlayer(), SIGNAL(toggleQueueSignal()), generalScreen, SLOT(toggleQueue()));
     connect(this, SIGNAL(registrationTry(const QString&, const QString&, const QString&)),
             userManager, SLOT(addUser(const QString&, const QString&, const QString&)));
@@ -32,6 +34,7 @@ Mediator::Mediator() : QObject() {
             userManager, SLOT(checkUser(const QString&, const QString&)));
     connect(userManager, SIGNAL(signIn(int, const QString&)), this, SLOT(signIn(int, const QString&)));
     connect(this, SIGNAL(changeSidebar(int)), generalScreen, SLOT(changeSidebar(int)));
+    connect(this, SIGNAL(createNewPlaylist(const QString&)), libraryManager, SLOT(createPlaylist(const QString&)));
 }
 
 
@@ -60,7 +63,11 @@ void Mediator::signIn(int id, const QString &login) {
     user->setId(id);
     user->setLogin(login);
 
-    emit loadSongs();
+    currentPlaylist = -1;
+    generalScreen->getSidebar()->getList()->getModel()->clear();
+    generalScreen->getSidebar()->switchToTreeView();
+
+    emit loadSongs(true);
     emit loadPlaylists();
     loginScreen->clearData();
     emit changeWidget(generalScreen, true);
@@ -92,11 +99,18 @@ void Mediator::backToSignIn() {
     emit changeWidget(loginScreen, false);
 }
 
+void Mediator::selectPlaylist(int id) {
+    currentPlaylist = id;
+    getGeneralScreen()->loadSongs(id);
+}
+
 void Mediator::initImport(const QString& path, bool recursive) {
     emit addSongsToLibrary(path, recursive);
 }
 
 void Mediator::backToLibrary() {
+    currentPlaylist = -1;
+    emit loadSongs(false);
     emit changeSidebar(LIBRARY);
 }
 
@@ -106,6 +120,11 @@ void Mediator::backToPlaylists() {
 
 void Mediator::slotAddSong(Tags *tags) {
     emit showInLibrary(tags);
+}
+
+void Mediator::slotAddPlaylist(Playlist *playlist) {
+    emit showInList(playlist);
+    // emit addPlaylistAction(playlist);
 }
 
 void Mediator::playNextSong() {
@@ -120,7 +139,31 @@ void Mediator::emitRepeatModeIndex(int index) {
     emit repeatModeChanged(index);
 }
 
-void Mediator::emitShuffleIndex(int index) {
+void Mediator::emitShuffleModeIndex(int index) {
     emit shuffleModeChanged(index);
 }
 
+
+void Mediator::createPlaylist(const QString& text) {
+    emit createNewPlaylist(text);
+}
+
+void Mediator::removeSong(int id) {
+    if (currentPlaylist == -1) {
+        libraryManager->deleteFromLibrary(id);
+    }   
+    else {
+        libraryManager->deleteFromPlaylist(currentPlaylist, id);
+    }
+}
+
+void Mediator::removePlaylist(int id) {
+    if (currentPlaylist == id) {
+        backToLibrary();
+    }
+    libraryManager->deletePlaylist(id);
+}
+
+void Mediator::importPlaylist(QString path) {
+    libraryManager->importPlaylist(path);
+}

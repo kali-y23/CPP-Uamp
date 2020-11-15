@@ -51,6 +51,7 @@ class QPlayer : public QWidget, public Component {
     QLabel *label_end_time;
     QLabel *label_title;
     QLabel *label_artist;
+    QLabel *label_album_cover;
 
     QLabel *icon_quiet;
     QLabel *icon_loud;

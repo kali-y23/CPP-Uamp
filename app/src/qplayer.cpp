@@ -28,6 +28,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     label_artist = new QLabel();
     label_start_time = new QLabel();
     label_end_time = new QLabel();
+    label_album_cover = new QLabel();
 
     icon_quiet = new QLabel();
     icon_loud = new QLabel();
@@ -86,6 +87,7 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     main->addSpacing(50);
     main->addWidget(player_widget);
 
+    player->addWidget(label_album_cover, 0, 4, 4, 4);
     player->addWidget(button_shuffle, 0, 0, 1, 1);
     player->addWidget(button_loop, 0, 3, 1, 1);
     player->addWidget(label_title, 0, 1, 1, 2, Qt::AlignCenter);
@@ -93,6 +95,22 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     player->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
     player->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
     player->addWidget(slider_song, 3, 0, 1, 4);
+
+    // player->addWidget(button_shuffle, 0, 4, 1, 1);
+    // player->addWidget(button_loop, 0, 7, 1, 1);
+    // player->addWidget(label_title, 0, 5, 1, 2, Qt::AlignCenter);
+    // player->addWidget(label_artist, 1, 5, 1, 2, Qt::AlignCenter);
+    // player->addWidget(label_start_time, 2, 4, 1, 1, Qt::AlignCenter);
+    // player->addWidget(label_end_time, 2, 7, 1, 1, Qt::AlignCenter);
+    // player->addWidget(slider_song, 3, 4, 1, 4);
+
+    // player->addWidget(button_shuffle, 0, 0, 1, 1);
+    // player->addWidget(button_loop, 0, 3, 1, 1);
+    // player->addWidget(label_title, 0, 1, 1, 2, Qt::AlignCenter);
+    // player->addWidget(label_artist, 1, 1, 1, 2, Qt::AlignCenter);
+    // player->addWidget(label_start_time, 2, 0, 1, 1, Qt::AlignCenter);
+    // player->addWidget(label_end_time, 2, 3, 1, 1, Qt::AlignCenter);
+    // player->addWidget(slider_song, 3, 0, 1, 4);
 
     label->addWidget(label1, 0, 0, 1, 1);
     label->addWidget(label2, 0, 1, 1, 1);
@@ -115,10 +133,8 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_prev, SIGNAL(clicked()), mediator, SLOT(playPrevSong()));
     connect(button_loop, SIGNAL(clicked()), button_loop, SLOT(emitIndex()));
     connect(button_loop, SIGNAL(indexChanged(int)), mediator, SLOT(emitRepeatModeIndex(int)));
-//
     connect(button_shuffle, SIGNAL(clicked()), button_shuffle, SLOT(emitIndex()));
-    connect(button_shuffle, SIGNAL(indexChanged(int)), button_shuffle, SLOT(emitRepeatModeIndex(int)));
-//
+    connect(button_shuffle, SIGNAL(indexChanged(int)), mediator, SLOT(emitShuffleModeIndex(int)));
     connect(button_play, SIGNAL(play()), this, SLOT(playSound()));
     connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
     connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
@@ -167,12 +183,18 @@ void QPlayer::setupLayouts() {
 
 void QPlayer::setData(Tags *tags) {
     data = tags;
-    label_title->setText(data->getTitle().toString());
-    label_artist->setText(data->getArtist().toString());
-    BASS_StreamFree(
-        stream
-    );
+    QFileInfo info(data->getPath().toString());
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
+
+    if (stream && info.exists() && info.isReadable()) {
+        label_title->setText(data->getTitle().toString());
+        label_artist->setText(data->getArtist().toString());
+        label_album_cover->setPixmap(data->getImage()->scaled(80, 80));
+    }
+    else {
+        playing = 0;
+        setWidget(playerDisabled, 1);
+    }
 }
 
 

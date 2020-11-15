@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtWidgets>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 #include "../../../taglib/taglib/tag.h"
 #include <../../taglib/fileref.h>
@@ -21,12 +23,10 @@
 #include <map>
 #include <vector>
 
-typedef char *(*TagLib_StringHandler)(const char *);
-
 class Tags {
     QString ext;
     TagLib::String title, artist, album, genre, fullPath;
-    int year, trackNumber;
+    int id, year, trackNumber, rating = 0;
     TagLib::FileRef f;
     QPixmap *album_cover;
 
@@ -36,9 +36,9 @@ class Tags {
 
 public:
     Tags(const std::string& path);
-    Tags(const std::string& title_, const std::string& artist_,
+    Tags(int id, const std::string& title_, const std::string& artist_,
         const std::string& album_, const std::string& genre_,
-        int year_, int trackNumber_, const std::string& fullPath_);
+        int year_, int trackNumber_, int rating_, const std::string& fullPath_);
     Tags(Tags *other);
 
     ~Tags();
@@ -58,6 +58,8 @@ public:
     bool extractASF(TagLib::ASF::File* file, TagLib::ByteVector& pic);
     bool extractFLAC(TagLib::FLAC::File* file, TagLib::ByteVector& pic);
     bool extractMP4(TagLib::MP4::File* file, TagLib::ByteVector& pic);
+    
+    int getId();
 
     QVariant getArtist() const;
 
@@ -74,6 +76,9 @@ public:
     QVariant getTrack() const;
 
     QPixmap *getImage() const;
+    QVariant getRating() const;
+
+    void setId(int value);
 
     void setArtist(const QVariant& value);
 
@@ -88,5 +93,9 @@ public:
     void setTrack(const QVariant& value);
 
     void setPath(const QVariant& value);
+
+    void setRating(const QVariant& value);
+
+    int valid = 1;
 };
 

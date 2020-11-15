@@ -1,9 +1,11 @@
 #include "mymodel.h"
+#include "stardelegate.h"
 
 MyModel::MyModel(const std::deque<Tags *> data, QObject* pobj)
-        : QAbstractTableModel(pobj)
-        , m_data(data)
+        : QAbstractTableModel(pobj),
+          m_data(data)
 {
+    
 }
 
 QVariant MyModel::data(const QModelIndex& index, int nRole) const
@@ -37,8 +39,14 @@ bool MyModel::setData(const QModelIndex& index,
                       int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
-        m_data[index.row()]->setTag(index.column(), value);
+        if (index.data().canConvert<StarRating>()) {
+            StarRating starRating = qvariant_cast<StarRating>(value);
 
+            m_data[index.row()]->setTag(index.column(), starRating.starCount());
+        }
+        else {
+            m_data[index.row()]->setTag(index.column(), value);
+        }
         emit dataChanged(index, index);
         return true;
     }
@@ -85,7 +93,7 @@ Qt::ItemFlags MyModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags flags = QAbstractTableModel::flags(index);
 
-    if (index.isValid() && index.column() != columnCount() - 1 && index.column() != 0 && editable == true) {
+    if (index.isValid() && editable == true) {
         flags |= Qt::ItemIsEditable;
     }
     return flags;
@@ -126,4 +134,10 @@ void MyModel::sort(int column, Qt::SortOrder order) {
 
 std::deque<Tags *> MyModel::getData(void) const {
     return m_data;
+}
+
+void MyModel::remove(const QModelIndex& index) {
+    delete m_data[index.row()];
+    m_data.erase(m_data.begin() + index.row());
+    emit layoutChanged();
 }

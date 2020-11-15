@@ -50,9 +50,15 @@ public:
         return player;
     }
 
+    QSideBar *getSidebar() {
+        return sidebar_widget;
+    }
+
 public slots:
     void showInView(Tags *tags);
-    void loadSongs();
+    void showInList(Playlist *playlist);
+    void loadSongs(bool queue);
+    void loadSongs(int playlistId);
     void loadPlaylists();
     void toggleQueue(void);
     void updatePlayerData(Tags *tags);

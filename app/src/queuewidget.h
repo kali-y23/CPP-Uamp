@@ -49,7 +49,7 @@ public:
 class QueueWidget : public QListWidget, public Component {
     Q_OBJECT
 
-    unsigned int current_song;
+    unsigned int current_song = 0;
     Queue queue;
     std::deque<Element *> elements;
     int repeat_mode = NO_REPEAT;
@@ -75,6 +75,7 @@ public slots:
     void nextSong();
     void prevSong();
     void changeRepeatMode(int index);
+    void changeShuffleMode(int index);
     void insertToQueue(Tags *song);
     void jumpToSong(Tags *song);
     void removeFromQueue();

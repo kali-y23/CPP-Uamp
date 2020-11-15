@@ -14,6 +14,7 @@
 #include "libraryManager.h"
 #include "userManager.h"
 #include "myDb.h"
+#include "mylist.h"
 
 #define LIBRARY 0
 #define PLAYLISTS 1
@@ -26,6 +27,7 @@ class User;
 class LibraryManager;
 class UserManager;
 class MyDb;
+class MyList;
 
 class Mediator : public QObject
 {
@@ -51,6 +53,7 @@ public:
     RegistrationScreen *getRegistrationScreen() const;
     MainWindow *getMainWindow() const;
     MyDb *db;
+    int currentPlaylist = -1;
 
 public slots:
     void signIn(int id, const QString &login);
@@ -63,10 +66,16 @@ public slots:
 
     void initImport(const QString& path, bool recursive);
     void slotAddSong(Tags *tags);
+    void slotAddPlaylist(Playlist *);
     void playNextSong();
     void playPrevSong();
     void emitRepeatModeIndex(int index);
-    void emitShuffleChanged(int index);
+    void emitShuffleModeIndex(int index);
+    void createPlaylist(const QString& text);
+    void selectPlaylist(int id);
+    void removeSong(int id);
+    void removePlaylist(int id);
+    void importPlaylist(QString path);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
@@ -74,7 +83,8 @@ signals:
     void signInTry(QString login, QString password);
     void addSongsToLibrary(const QString& path, bool recursive);
     void showInLibrary(Tags *tags);
-    void loadSongs();
+    void showInList(Playlist *playlists);
+    void loadSongs(bool queue);
     void loadPlaylists();
     void nextSong();
     void prevSong();
@@ -82,4 +92,5 @@ signals:
     void shuffleModeChanged(int index);
     void setPlayerData(const QModelIndex &index);
     void changeSidebar(int index);
+    void createNewPlaylist(const QString& text);
 };

@@ -3,6 +3,8 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QtWidgets>
+#include <QCryptographicHash>
+
 #include <string>
 #include <cstdio>
 
