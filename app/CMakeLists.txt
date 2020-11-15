@@ -27,7 +27,8 @@ set(SOURCES main.cpp src/mainwindow.cpp src/qplayer.cpp src/qsuperbutton.cpp
             src/registration.cpp src/general.cpp src/qsidebar.cpp src/user.cpp
             src/mymodel.cpp src/tags.cpp src/mytable.cpp src/mytreeview.cpp
             src/libraryManager.cpp src/queue.cpp src/queuewidget.cpp src/userManager.cpp
-            src/playlist.cpp src/myitem.cpp src/mylist.cpp src/listmodel.cpp)
+            src/playlist.cpp src/myitem.cpp src/mylist.cpp src/listmodel.cpp
+            src/stardelegate.cpp)
 
 qt5_add_resources(SOURCES resources/resources.qrc)
 

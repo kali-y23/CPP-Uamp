@@ -1,4 +1,5 @@
 #include "tags.h"
+#include "stardelegate.h"
 
 QVariant Tags::check(TagLib::String tag) const {
     if (tag.isEmpty()) {
@@ -155,7 +156,7 @@ QVariant Tags::getTrack() const {
 }
 
 QVariant Tags::getRating() const {
-    return rating;
+    return QVariant::fromValue(StarRating(rating));
 }
 
 void Tags::setArtist(const QVariant& value) {

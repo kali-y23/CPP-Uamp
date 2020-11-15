@@ -1,4 +1,5 @@
 #include "mymodel.h"
+#include "stardelegate.h"
 
 MyModel::MyModel(const std::deque<Tags *> data, QObject* pobj)
         : QAbstractTableModel(pobj),
@@ -38,7 +39,14 @@ bool MyModel::setData(const QModelIndex& index,
                       int nRole)
 {
     if (index.isValid() && nRole == Qt::EditRole) {
-        m_data[index.row()]->setTag(index.column(), value);
+        if (index.data().canConvert<StarRating>()) {
+            StarRating starRating = qvariant_cast<StarRating>(value);
+
+            m_data[index.row()]->setTag(index.column(), starRating.starCount());
+        }
+        else {
+            m_data[index.row()]->setTag(index.column(), value);
+        }
         emit dataChanged(index, index);
         return true;
     }

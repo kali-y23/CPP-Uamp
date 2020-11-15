@@ -25,6 +25,8 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuRequested(const QPoint &))); 
     connect(removeAction, SIGNAL(triggered()), this, SLOT(removeSong()));
     connect(this , SIGNAL(removeSong(int)), reinterpret_cast<const QObject *>(mediator), SLOT(removeSong(int)));
+
+    setItemDelegate(new StarDelegate);
 }
 
 MyTable::~MyTable()

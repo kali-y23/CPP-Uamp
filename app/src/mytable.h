@@ -8,6 +8,7 @@
 #include "tags.h"
 #include "playlist.h"
 #include "mymodel.h"
+#include "stardelegate.h"
 
 class Component;
 class Mediator;
