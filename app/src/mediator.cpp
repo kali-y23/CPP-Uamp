@@ -120,3 +120,7 @@ void Mediator::emitRepeatModeIndex(int index) {
     emit repeatModeChanged(index);
 }
 
+void Mediator::emitShuffleIndex(int index) {
+    emit shuffleModeChanged(index);
+}
+

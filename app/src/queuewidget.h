@@ -18,6 +18,9 @@
 #define REPEAT_PLAYLIST 1
 #define REPEAT_SONG 2
 
+#define NO_SHUFFLE 0
+#define SHUFFLE 1
+
 class Component;
 class Queue;
 

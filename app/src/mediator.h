@@ -66,6 +66,7 @@ public slots:
     void playNextSong();
     void playPrevSong();
     void emitRepeatModeIndex(int index);
+    void emitShuffleChanged(int index);
 
 signals:
     void changeWidget(QWidget *widget, bool tool);
@@ -78,6 +79,7 @@ signals:
     void nextSong();
     void prevSong();
     void repeatModeChanged(int index);
+    void shuffleModeChanged(int index);
     void setPlayerData(const QModelIndex &index);
     void changeSidebar(int index);
 };

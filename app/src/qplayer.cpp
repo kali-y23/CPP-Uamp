@@ -115,6 +115,10 @@ QPlayer::QPlayer(const Mediator *mediator, QWidget *parent) : Component(mediator
     connect(button_prev, SIGNAL(clicked()), mediator, SLOT(playPrevSong()));
     connect(button_loop, SIGNAL(clicked()), button_loop, SLOT(emitIndex()));
     connect(button_loop, SIGNAL(indexChanged(int)), mediator, SLOT(emitRepeatModeIndex(int)));
+//
+    connect(button_shuffle, SIGNAL(clicked()), button_shuffle, SLOT(emitIndex()));
+    connect(button_shuffle, SIGNAL(indexChanged(int)), button_shuffle, SLOT(emitRepeatModeIndex(int)));
+//
     connect(button_play, SIGNAL(play()), this, SLOT(playSound()));
     connect(button_play, SIGNAL(stop()), this, SLOT(stopSound()));
     connect(button_skip_fwd, SIGNAL(clicked()), this, SLOT(skipFwd()));
