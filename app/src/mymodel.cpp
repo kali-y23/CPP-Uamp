@@ -120,11 +120,17 @@ void MyModel::sort(int column, Qt::SortOrder order) {
             }
             return row1->getTag(column).toString() < row2->getTag(column).toString();
         }
-        else {
+        else if (column < 6) {
             if (order == Qt::AscendingOrder) {
                 return row1->getTag(column).toInt() > row2->getTag(column).toInt();
             }
             return row1->getTag(column).toInt() < row2->getTag(column).toInt();
+        }
+        else {
+            if (order == Qt::AscendingOrder) {
+                return qvariant_cast<StarRating>(row1->getTag(column)).starCount() > qvariant_cast<StarRating>(row2->getTag(column)).starCount();
+            }
+            return qvariant_cast<StarRating>(row1->getTag(column)).starCount() < qvariant_cast<StarRating>(row2->getTag(column)).starCount();
         }
     });
 
