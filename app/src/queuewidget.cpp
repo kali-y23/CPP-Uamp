@@ -191,7 +191,7 @@ void QueueWidget::insertToQueue(Tags *song) {
             Element *el = new Element(song);
             insertItem(queue_index - current_song, el);
             setItemWidget(reinterpret_cast<QListWidgetItem *>(el), el->getWidget());
-            elements.push_back(el);
+            elements.insert(elements.begin() + queue_index - current_song, el);
         }
         else {
             current_song += 1;
@@ -229,13 +229,35 @@ void QueueWidget::mousePressEvent(QMouseEvent *event) {
     }
 }
 
-void QueueWidget::removeFromQueue() {
-    QListWidgetItem *item = currentItem();
-    int index = currentRow();
+void QueueWidget::removeFromQueue(Tags *song) {
+    int index = -1;
+    QListWidgetItem *item = nullptr;
 
-    takeItem(index);
-    elements.erase(elements.begin() + index);
-    queue.removeFromQueue(current_song + index);
+    if (!song) {
+        item = currentItem();
+        index = currentRow();
+    }
+    else {
+        int i = 0;
 
-    delete item;
+        for (const auto& el : elements) {
+            if (el->getTags() == song) {
+                index = i;
+                break;
+            }
+            ++i;
+        }
+    }
+
+    if (index != -1) {
+        takeItem(index);
+        elements.erase(elements.begin() + index);
+        queue.removeFromQueue(current_song + index);
+    }
+    else {
+        queue.removeFromQueue(queue.getIndexByTag(song));
+    }
+
+    if (item)
+        delete item;
 }

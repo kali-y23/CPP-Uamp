@@ -15,14 +15,14 @@ MyTable::MyTable(Mediator *mediator, QWidget *parent) :
 
     mainMenu = new QMenu(this);
     editAction = new QAction(tr("&Edit tag"), this);
-    mainMenu->addAction(editAction); 
+    mainMenu->addAction(editAction);
     removeAction = new QAction(tr("&Remove from media"), this);
     mainMenu->addAction(removeAction);
     playlistMenu = new QMenu(tr("&Add to playlist"));
     mainMenu->addMenu(playlistMenu);
 
     connect(this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(sendNextSong(const QModelIndex &)));
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuRequested(const QPoint &))); 
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showContextMenuRequested(const QPoint &)));
     connect(removeAction, SIGNAL(triggered()), this, SLOT(removeSong()));
     connect(this , SIGNAL(removeSong(int)), reinterpret_cast<const QObject *>(mediator), SLOT(removeSong(int)));
 

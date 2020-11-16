@@ -78,8 +78,8 @@ public slots:
     void changeShuffleMode(int index);
     void insertToQueue(Tags *song);
     void jumpToSong(Tags *song);
-    void removeFromQueue();
-
+    void removeFromQueue(Tags *song = nullptr);
+ 
 signals:
     void sendFirstSongToPlayer(Tags *tags);
     void sendSongToPlayer(Tags *tags);

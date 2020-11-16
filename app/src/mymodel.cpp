@@ -143,6 +143,7 @@ std::deque<Tags *> MyModel::getData(void) const {
 }
 
 void MyModel::remove(const QModelIndex& index) {
+    emit removeFromQueue(m_data[index.row()]);
     delete m_data[index.row()];
     m_data.erase(m_data.begin() + index.row());
     emit layoutChanged();

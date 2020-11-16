@@ -37,6 +37,7 @@ GeneralScreen::GeneralScreen(Mediator *mediator, QWidget *parent) :
     connect(queue_widget, SIGNAL(sendFirstSongToPlayer(Tags *)), player, SLOT(setData(Tags *)));
     connect(view_songs->getModel(), SIGNAL(insertToQueue(Tags *)), queue_widget, SLOT(insertToQueue(Tags *)));
     connect(view_songs->getModel(), SIGNAL(sortQueue(std::deque<Tags *>, Qt::SortOrder, int)), queue_widget, SLOT(setQueue(std::deque<Tags *>, Qt::SortOrder, int)));
+    connect(view_songs->getModel(), SIGNAL(removeFromQueue(Tags *)), queue_widget, SLOT(removeFromQueue(Tags *)));
 }
 
 GeneralScreen::~GeneralScreen()

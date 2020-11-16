@@ -62,4 +62,5 @@ public:
 signals:
     void insertToQueue(Tags *song);
     void sortQueue(std::deque<Tags *> data, Qt::SortOrder order, int tag);
+    void removeFromQueue(Tags *song);
 };
