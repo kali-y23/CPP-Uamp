@@ -5,7 +5,7 @@ MyModel::MyModel(const std::deque<Tags *> data, QObject* pobj)
         : QAbstractTableModel(pobj),
           m_data(data)
 {
-    
+
 }
 
 QVariant MyModel::data(const QModelIndex& index, int nRole) const

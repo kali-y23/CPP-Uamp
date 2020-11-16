@@ -184,6 +184,9 @@ void QPlayer::setupLayouts() {
 void QPlayer::setData(Tags *tags) {
     data = tags;
     QFileInfo info(data->getPath().toString());
+    BASS_StreamFree(
+        stream
+    );
     stream = BASS_StreamCreateFile(FALSE, data->getPath().toString().toStdString().c_str(), 0, 0, 0);
 
     if (stream && info.exists() && info.isReadable()) {
@@ -312,7 +315,7 @@ void QPlayer::threadFunction() {
         if (playing && stream) {
 
             float fft[512]; // fft data buffer
-            BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);
+            BASS_ChannelGetData(stream, fft, BASS_DATA_FFT1024);;
             for (int i = 0; i < 300; ++i) {
                 items[i]->h = (items[i]->h + std::abs(fft[i] * 100)) / 2;
             }
