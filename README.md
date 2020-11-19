@@ -1,20 +1,21 @@
-# Utag
+# UAMP
 ___
 ​
 ### Description:
-    Ucode project: uamp - audioplayer.
+   [UCode](https://ucode.world) project - audioplayer. Contains a music library, playback queue; supports creating, importing and exporting playlists.
+   ___
+​
+ ![Examplw](./example.png)
+
 ### Developers:
  [Maxim Libovych](https://github.com/mlibovych)
 
  [Yulia Bondarenko](https://github.com/kali-y23)
 
-​
-### Screenshot:
- ![Examplw](./example.png)
-​
 #### 1.Built with
 ​
  [CMake](https://cmake.org)
+ [Bass](https://www.un4seen.com)
 ​
 #### 2.GUI library
 ​
