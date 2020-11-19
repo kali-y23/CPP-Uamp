@@ -1,6 +1,5 @@
 # UAMP
 ___
-​
 ### Description:
    [UCode](https://ucode.world) project - audioplayer. Contains a music library, playback queue; supports creating, importing and exporting playlists.
    ___
